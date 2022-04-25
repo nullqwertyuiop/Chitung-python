@@ -1,15 +1,19 @@
 # Public Version of Chitung (Python)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/08a8c365dd25419b811b0b77435c46ec)](https://app.codacy.com/gh/nullqwertyuiop/Chitung-python?utm_source=github.com&utm_medium=referral&utm_content=nullqwertyuiop/Chitung-python&utm_campaign=Badge_Grade_Settings)
+[![CodeQL](https://github.com/nullqwertyuiop/Chitung-python/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/nullqwertyuiop/Chitung-python/actions/workflows/codeql-analysis.yml)
+![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)
 
 This project aims to provide users with a lite and open version of Chitung.
 
 ## 七筒：开放版 (Python)
+
 ### - 基于Mirai框架的QQ机器人
 
 本项目基于七筒开放版与七筒本体开发，由七筒爱好者 Nullqwertyuiop 维护，旨在为用户提供可于 Python 环境使用的开放版七筒插件。
 
 ## 已移植的功能
+
 Chitung-python 已完成以下功能的移植：
 
 - /funct
@@ -59,6 +63,7 @@ Chitung-python 已完成以下功能的移植：
 ## 正在开发
 
 ### 正在移植的功能
+
 - /set
     - 正在从 `Project. Null` 未删除源码重写
 
@@ -85,6 +90,7 @@ Chitung-python 已完成以下功能的移植：
 - /roulette
 
 ### 正在进行的改进
+
 - 支持设置最低群组人数
 
 - 引入依赖注入
@@ -100,27 +106,41 @@ Chitung-python 已完成以下功能的移植：
 ## 部署使用
 
 ### 作为插件使用
+
 若正在使用基于 Ariadne 框架开发的机器人，且已安装 Saya 及 GraiaScheduler 支持，可直接克隆本仓库并复制仓库中 `chitung` 文件夹至目标机器人的自定义插件目录
 
 ### 直接使用
+
 <! Placeholder !>
 
 ### 特性
+
 得益于本项目使用的插件管理器 Saya，用户可灵活控制机器人使用的插件。
+
 #### 安装插件
+
 ##### 正在运行时卸载（热加载）
+
 <! Placeholder !>
+
 ##### 已关闭时安装
+
 直接将所需安装的插件文件或文件夹复制至 `chitung` 文件夹即可。
+
 #### 卸载插件
+
 ##### 正在运行时卸载
+
 <! Placeholder !>
+
 ##### 已关闭时安装
+
 直接删除所需删除的插件目录即可，对应插件位置可于本须知 [已移植的功能](#已移植的功能) 中查看。
 
 ## 版权
 
 ### 美术素材
+
 `以下内容与 Chitung-public 一致`
 
 七筒绝非是他的城市里唯一的居民。开发者为七筒设计了形象的同时，也为钓鱼场老板、赌场老板、以及未来其他功能出现的角色设计形象。我们感谢如下艺术创作者赋予七筒世界里的形象帅气的外表。
