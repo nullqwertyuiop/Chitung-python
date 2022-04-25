@@ -12,5 +12,7 @@ channel.description("七筒")
 
 ignore_list = ["assets", "data", "__init__.py", "__pycache__"]
 submodules = [module for module in os.listdir(str(Path(__file__).parent)) if module not in ignore_list]
-for submodule in submodules:
-    saya.require(os.path.relpath(Path(Path(__file__).parent) / submodule).replace("\\", ".").replace("/", "."))
+
+with saya.module_context():
+    for submodule in submodules:
+        saya.require(os.path.relpath(Path(Path(__file__).parent) / submodule).replace("\\", ".").replace("/", "."))

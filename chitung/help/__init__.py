@@ -5,14 +5,13 @@ from graia.ariadne.event.message import GroupMessage, MessageEvent
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image
 from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult
-from graia.saya import Saya, Channel
+from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-saya = Saya.current()
 channel = Channel.current()
 
 channel.name("ChitungHelp")
-channel.author("角川烈、白门守望者（原作者）、nullqwertyuiop（移植）")
+channel.author("角川烈、白门守望者")
 channel.description("七筒")
 
 
@@ -33,6 +32,7 @@ async def chitung_vanilla_image_handler(
         event: MessageEvent,
         which: MatchResult
 ):
+    print(event)
     await app.sendGroupMessage(event.sender.group, MessageChain.create([
         Image(path=Path(Path(__file__).parent / "assets" / "help" / f"{which.result.asDisplay()[1:]}.png"))
     ]))

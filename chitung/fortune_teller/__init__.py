@@ -10,10 +10,9 @@ from graia.ariadne.message.element import Image
 from graia.ariadne.message.element import Plain, At
 from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, WildcardMatch
 from graia.ariadne.model import Member
-from graia.saya import Saya, Channel
+from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-saya = Saya.current()
 channel = Channel.current()
 
 channel.name("ChitungFortuneTeller")

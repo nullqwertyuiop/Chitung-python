@@ -7,14 +7,13 @@ from graia.ariadne.event.message import GroupMessage, MessageEvent
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.parser.twilight import Twilight, FullMatch
 from graia.ariadne.model import MemberPerm, MemberInfo
-from graia.saya import Saya, Channel
+from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-saya = Saya.current()
 channel = Channel.current()
 
 channel.name("ChitungShuffle")
-channel.author("角川烈、白门守望者（原作者）、nullqwertyuiop（移植）")
+channel.author("角川烈、白门守望者")
 channel.description("七筒")
 
 lock = False
