@@ -49,7 +49,7 @@ async def chitung_fortune_teller_handler(
     if random.random() <= 0.02:
         await app.sendGroupMessage(event.sender.group, MessageChain.create([
             At(supplicant) if isinstance(supplicant, Member) else Plain(text=f"@{supplicant.nickname}"),
-            Plain(text=f"\n今天的占卜麻将牌是: 寄\n运势是: 寄吧\n是寄吧，寄吧寄吧寄吧"),
+            Plain(text="\n今天的占卜麻将牌是: 寄\n运势是: 寄吧\n是寄吧，寄吧寄吧寄吧"),
             Image(path=Path(assets_dir / "寄.jpg"))
         ]))
     mahjong_of_the_day = random.randint(1, 144)

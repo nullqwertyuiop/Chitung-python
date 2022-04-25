@@ -4,7 +4,7 @@ from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image
-from graia.ariadne.message.parser.twilight import Twilight, FullMatch, UnionMatch, MatchResult, SpacePolicy
+from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult
 from graia.saya import Saya, Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
