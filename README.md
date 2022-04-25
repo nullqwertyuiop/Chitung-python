@@ -1,5 +1,7 @@
 # Public Version of Chitung (Python)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/08a8c365dd25419b811b0b77435c46ec)](https://app.codacy.com/gh/nullqwertyuiop/Chitung-python?utm_source=github.com&utm_medium=referral&utm_content=nullqwertyuiop/Chitung-python&utm_campaign=Badge_Grade_Settings)
+
 This project aims to provide users with a lite and open version of Chitung.
 
 ## 七筒：开放版 (Python)
