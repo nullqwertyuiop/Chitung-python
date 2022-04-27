@@ -2,7 +2,8 @@ import asyncio
 
 from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage
-from graia.ariadne.event.mirai import *
+from graia.ariadne.event.mirai import BotJoinGroupEvent, BotInvitedJoinGroupRequestEvent, NewFriendRequestEvent, \
+    BotOnlineEvent, MemberJoinEvent, BotGroupPermissionChangeEvent, GroupNameChangeEvent, NudgeEvent
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import At
 from graia.ariadne.message.parser.twilight import Twilight, WildcardMatch, ElementMatch, ElementResult
