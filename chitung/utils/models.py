@@ -31,6 +31,7 @@ class CommonControl(BaseModel):
 
 class Config(BaseModel):
     botName: str
+    botID: int
     devGroupID: List[int]
     adminID: List[int]
     minimumMembers: int
