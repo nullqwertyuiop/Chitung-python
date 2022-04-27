@@ -31,7 +31,7 @@ class CommonControl(BaseModel):
 
 class Config(BaseModel):
     botName: str
-    botID: int
+    botID: int = 0
     devGroupID: List[int]
     adminID: List[int]
     minimumMembers: int
@@ -68,3 +68,9 @@ class UniversalRespond(BaseModel):
 
 class UniversalRespondList(BaseModel):
     universalRespondList: List[UniversalRespond]
+
+
+class BlacklistModel(BaseModel):
+    friendBlacklist: List[int]
+    groupBlacklist: List[int]
+    remoteBlacklist: List[int] = []

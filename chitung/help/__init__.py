@@ -8,7 +8,8 @@ from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchRes
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from chitung.utils.config import config
+from ..utils.config import config
+from ..utils.depends import BlacklistControl
 
 channel = Channel.current()
 
@@ -26,7 +27,8 @@ channel.description("七筒")
                     FullMatch("/funct")
                 ]
             )
-        ]
+        ],
+        decorators=[BlacklistControl.enable()]
     )
 )
 async def chitung_help_image_handler(
@@ -47,7 +49,8 @@ async def chitung_help_image_handler(
                     UnionMatch("/help", "intro", "/usage", "/conta") @ "which",
                 ]
             )
-        ]
+        ],
+        decorators=[BlacklistControl.enable()]
     )
 )
 async def chitung_help_desk_handler(

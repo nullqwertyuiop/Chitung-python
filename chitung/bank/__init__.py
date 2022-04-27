@@ -14,7 +14,8 @@ from graia.ariadne.model import Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from chitung.utils.config import config
+from ..utils.config import config
+from ..utils.depends import BlacklistControl
 
 channel = Channel.current()
 
@@ -47,15 +48,17 @@ class Vault:
 
     def get_bank_msg(self, member: Member, c_list: List[Currency]) -> MessageChain:
         user_bank = self.get_bank(member, c_list, chs=True)
-        return MessageChain.create([
-            At(member),
-            Plain(text=" 您的余额为"),
-        ] + [
-            Plain(text=f" {value} {key}") for key, value in user_bank.items()
-        ])
+        return MessageChain.create(
+            [
+                At(member),
+                Plain(text=" 您的余额为"),
+            ] + [
+                Plain(text=f" {value} {key}") for key, value in user_bank.items()
+            ]
+        )
 
     def get_bank(self, member: Member, c_list: Union[List[Currency]], *, chs: bool = False) -> Dict[str, int]:
-        if member.id in self.vault.keys():
+        if str(member.id) in self.vault.keys():
             user_bank = {c.value[0 if not chs else 1]: self.vault[str(member.id)].get(c.value[0]) for c in c_list}
         else:
             for c in c_list:
@@ -100,7 +103,8 @@ vault = Vault()
                     FullMatch("/bank")
                 ]
             )
-        ]
+        ],
+        decorators=[BlacklistControl.enable()]
     )
 )
 async def chitung_bank_handler(
@@ -121,7 +125,8 @@ async def chitung_bank_handler(
                     RegexMatch(r"\d+") @ "amount"
                 ]
             )
-        ]
+        ],
+        decorators=[BlacklistControl.enable()]
     )
 )
 async def chitung_bank_set_handler(
@@ -146,7 +151,8 @@ async def chitung_bank_set_handler(
                     RegexMatch(r"\d+") @ "amount"
                 ]
             )
-        ]
+        ],
+        decorators=[BlacklistControl.enable()]
     )
 )
 async def chitung_bank_laundry_handler(

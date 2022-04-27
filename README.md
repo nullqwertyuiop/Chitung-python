@@ -55,20 +55,34 @@ Chitung-python 已完成以下功能的移植：
     - 可用范围：群聊
     - **不建议卸载**
 
+- /set
+    - 插件位置：`chitung.bank`
+    - 可用范围：群聊
+    - **不建议卸载**
+
+- /laundry
+    - 插件位置：`chitung.bank`
+    - 可用范围：群聊
+    - **不建议卸载**
+
 - /shuffle
     - 插件位置：`chitung.shuffle`
     - 可用范围：群聊
     - 使用注意：使用本功能需要将七筒设置为管理员
 
+- 黑名单
+    - 组件位置：`chitung.utils.blacklist`
+    - 生效范围：全局、好友、群聊
+    - 本组件依赖于 `Project. Null API` 与 `Tail.ICU API` 的机器人数据与用户黑名单服务
+    - **不可卸载**
+
 ## 正在开发
 
 ### 正在移植的功能
 
-- /set
-    - 正在从 `Project. Null` 未删除源码重写
+- Responder
 
-- /laundry
-    - 正在从 `Project. Null` 未删除源码重写
+- UniversalResponder
 
 - 兽设
 
@@ -89,6 +103,8 @@ Chitung-python 已完成以下功能的移植：
 
 - /roulette
 
+- 骰宝
+
 ### 正在进行的改进
 
 - 支持设置最低群组人数
@@ -96,8 +112,6 @@ Chitung-python 已完成以下功能的移植：
 - 引入依赖注入
     - 群插件开关
     - 全局插件开关
-    - 群组黑名单
-    - 用户黑名单
 
 - 支持热加载、卸载插件
 
@@ -176,3 +190,7 @@ Chitung-python 已完成以下功能的移植：
 - DaaS(Dog-as-a-Service) [Dog.ceo]()
 
 - Hello World, This Is Dog [random.dog]()
+
+- Project. Null API [api.nullqwertyuiop.me]()
+
+- Tail.ICU API [api.tail.icu]()

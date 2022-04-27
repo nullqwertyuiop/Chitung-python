@@ -8,6 +8,8 @@ from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchRes
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
+from chitung.utils.depends import BlacklistControl
+
 channel = Channel.current()
 
 channel.name("ChitungLovelyImage")
@@ -53,7 +55,8 @@ cord = {
                                "Samoyed", "samoyed", "Cat", "cat", "猫咪") @ "animal"
                 ]
             )
-        ]
+        ],
+        decorators=[BlacklistControl.enable()]
     )
 )
 async def chitung_animal_handler(

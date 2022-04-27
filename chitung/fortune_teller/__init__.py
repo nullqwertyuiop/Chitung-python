@@ -13,6 +13,8 @@ from graia.ariadne.model import Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
+from chitung.utils.depends import BlacklistControl
+
 channel = Channel.current()
 
 channel.name("ChitungFortuneTeller")
@@ -31,7 +33,8 @@ channel.description("这就是你今天的签")
                     WildcardMatch()
                 ]
             )
-        ]
+        ],
+        decorators=[BlacklistControl.enable()]
     )
 )
 async def chitung_fortune_teller_handler(
