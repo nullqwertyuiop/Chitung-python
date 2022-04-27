@@ -13,7 +13,7 @@ from graia.saya.builtins.broadcast import ListenerSchema
 channel = Channel.current()
 
 channel.name("ChitungShuffle")
-channel.author("角川烈、白门守望者")
+channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
 lock = False

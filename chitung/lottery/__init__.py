@@ -21,7 +21,7 @@ from graia.scheduler.saya import SchedulerSchema
 channel = Channel.current()
 
 channel.name("ChitungLottery")
-channel.author("角川烈、白门守望者")
+channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
 winner_dir = Path(Path(__file__).parent / "assets")
