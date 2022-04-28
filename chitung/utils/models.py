@@ -4,52 +4,53 @@ from pydantic import BaseModel
 
 
 class FunctionControl(BaseModel):
-    fish: bool
-    casino: bool
-    responder: bool
-    lottery: bool
-    game: bool
+    fish: bool = True
+    casino: bool = True
+    responder: bool = True
+    lottery: bool = True
+    game: bool = True
 
 
 class RequestControl(BaseModel):
-    answerFriend: bool
-    answerGroup: bool
-    addFriend: bool
-    addGroup: bool
-    autoAnswer: bool
+    answerFriend: bool = True
+    answerGroup: bool = True
+    addFriend: bool = True
+    addGroup: bool = True
+    autoAnswer: bool = True
 
 
 class CommonControl(BaseModel):
-    joinGroupText: str
-    rejectGroupText: str
-    onlineText: str
-    welcomeText: str
-    permissionChangedText: str
-    groupNameChangedText: str
-    nudgeText: str
+    joinGroupText: str = "很高兴为您服务。在使用本 bot 之前，请仔细阅读下方的免责协议。"
+    rejectGroupText: str = "抱歉，机器人暂时不接受加群请求。"
+    onlineText: str = "机器人已经上线。"
+    welcomeText: str = "欢迎。"
+    permissionChangedText: str = "谢谢，各位将获得更多的乐趣。"
+    groupNameChangedText: str = "好名字。"
+    nudgeText: str = "啥事？"
 
 
 class Config(BaseModel):
-    botName: str
+    botName: str = ""
     botID: int = 0
-    devGroupID: List[int]
-    adminID: List[int]
-    minimumMembers: int
-    friendFC: FunctionControl
-    groupFC: FunctionControl
-    rc: RequestControl
-    cc: CommonControl
+    devGroupID: List[int] = []
+    adminID: List[int] = []
+    minimumMembers: int = 7
+    loadRemoteBlacklist: bool = False
+    friendFC: FunctionControl = FunctionControl()
+    groupFC: FunctionControl = FunctionControl()
+    rc: RequestControl = RequestControl()
+    cc: CommonControl = CommonControl()
 
 
 class GroupConfig(BaseModel):
     groupID: int
-    globalControl: bool
-    fish: bool
-    casino: bool
-    responder: bool
-    lottery: bool
-    game: bool
-    blockedUser: List[int]
+    globalControl: bool = True
+    fish: bool = True
+    casino: bool = True
+    responder: bool = True
+    lottery: bool = True
+    game: bool = True
+    blockedUser: List[int] = []
 
 
 class GroupConfigList(BaseModel):
@@ -71,6 +72,6 @@ class UniversalRespondList(BaseModel):
 
 
 class BlacklistModel(BaseModel):
-    friendBlacklist: List[int]
-    groupBlacklist: List[int]
+    friendBlacklist: List[int] = []
+    groupBlacklist: List[int] = []
     remoteBlacklist: List[int] = []

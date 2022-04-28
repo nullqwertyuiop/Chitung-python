@@ -14,8 +14,8 @@ from graia.ariadne.model import Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from ..utils.config import config
-from ..utils.depends import BlacklistControl
+from .utils.config import config
+from .utils.depends import BlacklistControl
 
 channel = Channel.current()
 

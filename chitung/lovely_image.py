@@ -8,7 +8,7 @@ from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchRes
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from chitung.utils.depends import BlacklistControl
+from .utils.depends import BlacklistControl
 
 channel = Channel.current()
 

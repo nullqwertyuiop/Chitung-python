@@ -17,17 +17,18 @@ channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chi
 channel.description("七筒")
 
 ignore_list = ["utils", "data", "__init__.py", "__pycache__"]
-submodules = [module for module in os.listdir(str(Path(__file__).parent)) if module not in ignore_list]
+submodules = [module.split(".")[0] for module in os.listdir(str(Path(__file__).parent)) if module not in ignore_list]
 
 with saya.module_context():
     for submodule in submodules:
         saya.require(os.path.relpath(Path(Path(__file__).parent) / submodule).replace("\\", ".").replace("/", "."))
 
+if config.botID == 0:
+    raise Exception("Required field in Config.json: botID")
+
 
 @channel.use(ListenerSchema(listening_events=[ApplicationLaunched]))
 async def chitung_initialize_handler():
-    logger.info("Getting remote blacklist...")
-    await get_remote_blacklist()
-    if config.botID == 0:
-        logger.error("Required field in Config.json: botID")
-        exit(0)
+    if config.loadRemoteBlacklist:
+        logger.info("Getting remote blacklist...")
+        await get_remote_blacklist()

@@ -18,7 +18,7 @@ from graia.saya.builtins.broadcast import ListenerSchema
 from graia.scheduler import timers
 from graia.scheduler.saya import SchedulerSchema
 
-from chitung.utils.depends import BlacklistControl
+from ..utils.depends import BlacklistControl
 
 channel = Channel.current()
 

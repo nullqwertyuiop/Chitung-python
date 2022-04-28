@@ -10,7 +10,7 @@ from graia.ariadne.model import MemberPerm, MemberInfo
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from chitung.utils.depends import BlacklistControl
+from .utils.depends import BlacklistControl
 
 channel = Channel.current()
 
