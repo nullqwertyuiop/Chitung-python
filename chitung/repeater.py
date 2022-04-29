@@ -17,7 +17,7 @@ group_repeat = {}
 
 
 @channel.use(ListenerSchema(listening_events=[GroupMessage]))
-async def repeater(app: Ariadne, message: MessageChain, group: Group):
+async def chitung_repeater_handler(app: Ariadne, message: MessageChain, group: Group):
     global group_repeat
     if message.has(Forward) or message.has(App) or message.has(Json) or message.has(Xml) or message.has(MarketFace):
         group_repeat[group.id] = {
@@ -52,7 +52,7 @@ async def repeater(app: Ariadne, message: MessageChain, group: Group):
 
 
 @channel.use(ListenerSchema(listening_events=[ActiveGroupMessage]))
-async def repeater(event: ActiveGroupMessage):
+async def chitung_repeater_flush_handler(event: ActiveGroupMessage):
     global group_repeat
     group_repeat[event.subject.id] = {
         "msg": event.messageChain.asPersistentString(),
