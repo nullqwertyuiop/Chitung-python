@@ -19,7 +19,7 @@ class RequestControl(BaseModel):
     autoAnswer: bool = True
 
 
-class CommonControl(BaseModel):
+class CustomizedConfig(BaseModel):
     joinGroupText: str = "很高兴为您服务。在使用本 bot 之前，请仔细阅读下方的免责协议。"
     rejectGroupText: str = "抱歉，机器人暂时不接受加群请求。"
     onlineText: str = "机器人已经上线。"
@@ -37,7 +37,7 @@ class Config(BaseModel):
     friendFC: FunctionControl = FunctionControl()
     groupFC: FunctionControl = FunctionControl()
     rc: RequestControl = RequestControl()
-    cc: CommonControl = CommonControl()
+    cc: CustomizedConfig = CustomizedConfig()
 
 
 class GroupConfig(BaseModel):

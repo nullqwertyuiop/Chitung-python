@@ -46,7 +46,7 @@ async def chitung_help_image_handler(
         inline_dispatchers=[
             Twilight(
                 [
-                    UnionMatch("/help", "intro", "/usage", "/conta") @ "which",
+                    UnionMatch("/help", "intro", "/usage", "/conta") @ "which"
                 ]
             )
         ],

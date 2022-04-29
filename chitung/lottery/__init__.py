@@ -37,7 +37,7 @@ c4_activation_flags = []
             Twilight(
                 [
                     UnionMatch("ok ", "Ok ", "OK ", "/").space(SpacePolicy.NOSPACE),
-                    UnionMatch("winner", "bummer", "c4") @ "function",
+                    UnionMatch("winner", "bummer", "c4") @ "function"
                 ]
             )
         ],

@@ -70,6 +70,23 @@ Chitung-python 已完成以下功能的移植：
     - 可用范围：群聊
     - 使用注意：使用本功能需要将七筒设置为管理员
 
+- /adminhelp
+    - 插件位置：`chitung.utils`
+    - 可用范围：群聊
+
+- /num
+    - 插件位置：`chitung.utils`
+    - 必要参数：`-g`或`-f`
+    - 可用范围：群聊
+
+- /coverage
+    - 插件位置：`chitung.utils`
+    - 可用范围：群聊
+
+- 复读
+    - 插件位置：`chitung.repeater`
+    - 可用范围：群聊
+
 - 黑名单
     - 组件位置：`chitung.utils.blacklist`
     - 生效范围：全局、好友、群聊

@@ -29,7 +29,7 @@ shuffle_flags = {}
         inline_dispatchers=[
             Twilight(
                 [
-                    FullMatch("/shuffle"),
+                    FullMatch("/shuffle")
                 ]
             )
         ],

@@ -1,8 +1,8 @@
 import json
 import os
+from pathlib import Path
 
 from ..utils.models import Config
-from pathlib import Path
 
 config_path = Path(Path(__file__).parent.parent) / "data" / "Config.json"
 
