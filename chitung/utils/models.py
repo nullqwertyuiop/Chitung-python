@@ -31,11 +31,9 @@ class CommonControl(BaseModel):
 
 class Config(BaseModel):
     botName: str = ""
-    botID: int = 0
     devGroupID: List[int] = []
     adminID: List[int] = []
     minimumMembers: int = 7
-    loadRemoteBlacklist: bool = False
     friendFC: FunctionControl = FunctionControl()
     groupFC: FunctionControl = FunctionControl()
     rc: RequestControl = RequestControl()

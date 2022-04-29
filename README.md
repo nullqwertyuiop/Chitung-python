@@ -48,7 +48,7 @@ Chitung-python 已完成以下功能的移植：
     - 可用范围：群聊
     - 使用注意：
         - 由于随机函数算法不同，可能得出与官方版七筒不同的结果
-        - 可能包含 Chitung-python 作者的恶趣味，如需保持和官方版七筒一致的使用效果，请注释 `chitung.fortune_teller` 的 `第 48 - 53 行`
+        - 可能包含 Chitung-python 作者的恶趣味，如需保持和官方版七筒一致的使用效果，请注释 `chitung.fortune_teller` 的 `第 51 - 56 行`
 
 - /bank
     - 插件位置：`chitung.bank`
@@ -73,7 +73,6 @@ Chitung-python 已完成以下功能的移植：
 - 黑名单
     - 组件位置：`chitung.utils.blacklist`
     - 生效范围：全局、好友、群聊
-    - 本组件依赖于 `Project. Null API` 与 `Tail.ICU API` 的机器人数据与用户黑名单服务
     - **不可卸载**
 
 ## 正在开发
@@ -171,7 +170,3 @@ Chitung-python 已完成以下功能的移植：
 - DaaS(Dog-as-a-Service) [Dog.ceo]()
 
 - Hello World, This Is Dog [random.dog]()
-
-- Project. Null API [api.nullqwertyuiop.me]()
-
-- Tail.ICU API [api.tail.icu]()

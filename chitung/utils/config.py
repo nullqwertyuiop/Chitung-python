@@ -6,8 +6,8 @@ from pathlib import Path
 
 config_path = Path(Path(__file__).parent.parent) / "data" / "Config.json"
 
-if not os.path.isdir(Path(Path(__file__).parent) / "data"):
-    os.mkdir(Path(Path(__file__).parent) / "data")
+if not os.path.isdir(Path(Path(__file__).parent.parent) / "data"):
+    os.mkdir(Path(Path(__file__).parent.parent) / "data")
 
 
 def load_config() -> Config:

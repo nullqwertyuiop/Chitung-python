@@ -1,12 +1,8 @@
 import os.path
 from pathlib import Path
 
-from graia.ariadne.event.lifecycle import ApplicationLaunched
 from graia.saya import Saya, Channel
-from graia.saya.builtins.broadcast import ListenerSchema
-from loguru import logger
 
-from .utils.blacklist import get_remote_blacklist
 from .utils.config import config
 
 saya = Saya.current()
@@ -22,13 +18,3 @@ submodules = [module.split(".")[0] for module in os.listdir(str(Path(__file__).p
 with saya.module_context():
     for submodule in submodules:
         saya.require(os.path.relpath(Path(Path(__file__).parent) / submodule).replace("\\", ".").replace("/", "."))
-
-if config.botID == 0:
-    raise Exception("Required field in Config.json: botID")
-
-
-@channel.use(ListenerSchema(listening_events=[ApplicationLaunched]))
-async def chitung_initialize_handler():
-    if config.loadRemoteBlacklist:
-        logger.info("Getting remote blacklist...")
-        await get_remote_blacklist()
