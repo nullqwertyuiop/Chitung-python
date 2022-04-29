@@ -72,4 +72,3 @@ class UniversalRespondList(BaseModel):
 class BlacklistModel(BaseModel):
     friendBlacklist: List[int] = []
     groupBlacklist: List[int] = []
-    remoteBlacklist: List[int] = []
