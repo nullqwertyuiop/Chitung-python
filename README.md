@@ -48,7 +48,7 @@ Chitung-python 已完成以下功能的移植：
     - 可用范围：群聊
     - 使用注意：
         - 由于随机函数算法不同，可能得出与官方版七筒不同的结果
-        - 可能包含 Chitung-python 作者的恶趣味，如需保持和官方版七筒一致的使用效果，请注释 `chitung.fortune_teller` 的 `第 51 - 56 行`
+        - 可能包含 Chitung-python 作者的恶趣味，如需保持和官方版七筒一致的使用效果，请注释 `chitung.fortune_teller` 中 `random.seed(...)` 下的第一个 `if` 代码块
 
 - /bank
     - 插件位置：`chitung.bank`
@@ -85,6 +85,10 @@ Chitung-python 已完成以下功能的移植：
 
 - 复读
     - 插件位置：`chitung.repeater`
+    - 可用范围：群聊
+
+- /dice
+    - 插件位置：`chitung.dice`
     - 可用范围：群聊
 
 - 黑名单

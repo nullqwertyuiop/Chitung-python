@@ -43,11 +43,7 @@ async def chitung_fortune_teller_handler(
 ):
     supplicant = event.sender
     now = datetime.now()
-    random.seed(
-        int(
-            f"{supplicant.id}{now.year * 1000}{now.month * 100}{now.day}"
-        )
-    )
+    random.seed(int(f"{supplicant.id}{now.year * 1000}{now.month * 100}{now.day}"))
     if random.random() <= 0.02:
         await app.sendGroupMessage(event.sender.group, MessageChain.create([
             At(supplicant) if isinstance(supplicant, Member) else Plain(text=f"@{supplicant.nickname}"),
