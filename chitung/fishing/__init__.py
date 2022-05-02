@@ -2,13 +2,13 @@ import asyncio
 import datetime
 import json
 import math
+import os
 import random
 import time
 from asyncio import Lock
 from io import BytesIO
 from pathlib import Path
 
-import graia.ariadne.message.element
 from PIL import Image as PillowImage, ImageDraw
 from graia.ariadne import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent
@@ -55,13 +55,52 @@ async def chitung_fish_tool_handler(
         function: MatchResult,
 ):
     if function.result.asDisplay() == "endfish":
-        await endfish(app, event.sender.group, event.sender)
+        reply_msg = MessageChain.create(
+            [
+                At(event.sender.id)
+            ]
+        )
+        if event.sender.id in fishing_process_flag:
+            reply_msg = reply_msg + Plain(text="已经停止钓鱼。")
+            fishing_process_flag.remove(event.sender.id)
+        else:
+            reply_msg = reply_msg + Plain(text="您未在钓鱼中。")
+        await app.sendGroupMessage(event.sender.group, reply_msg)
+
     elif function.result.asDisplay() == "collection":
-        await collection(app, event.sender.group, event.sender)
+        collected = get_collected(event.sender.id)
+        collected = sum(fish_collected for fish_collected in collected)
+        reply_msg = MessageChain.create(
+            [
+                At(event.sender.id),
+                Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n")
+            ]
+        )
+        handbook_img = await async_get_handbook(event.sender.id)
+        reply_msg += Image(data_bytes=handbook_img)
+        await app.sendGroupMessage(event.sender.group, reply_msg)
+
     elif function.result.asDisplay() == "fishhelp":
-        await fishhelp(app, event)
+        image_path = Path(assets_dir / "fishinfo.png")
+        await app.sendGroupMessage(
+            event.sender.group,
+            MessageChain.create(
+                [
+                    Image(path=image_path)
+                ]
+            )
+        )
+
     elif function.result.asDisplay() == "handbook":
-        await handbook(app, event)
+        image_path = Path(assets_dir / "handbook.png")
+        await app.sendGroupMessage(
+            event.sender.group,
+            MessageChain.create(
+                [
+                    Image(path=image_path)
+                ]
+            )
+        )
 
 
 @channel.use(
@@ -88,9 +127,7 @@ async def chitung_fish_handler(
     global fishing_record
     water = fish_command.result.asDisplay().replace("/fish", "").strip().upper()
     if event.sender.id in fishing_process_flag:
-        await app.sendGroupMessage(event.sender.group, MessageChain.create(
-            [Plain(text="上次抛竿还在进行中。")]
-        ))
+        await app.sendGroupMessage(event.sender.group, MessageChain("上次抛竿还在进行中。"))
     else:
         w = get_water(water)
         reply_msg = MessageChain.create(At(event.sender.id))
@@ -114,9 +151,10 @@ async def chitung_fish_handler(
             text=f"本次钓鱼预计时间为{_time}分钟。"
                  f"麦氏渔业公司提醒您使用/fishhelp查询钓鱼功能的相关信息，如果长时间钓鱼未收杆，请使用/endfish 强制停止钓鱼。"
         )
-        await app.sendGroupMessage(event.sender.group, MessageChain.create(
-            reply_msg
-        ))
+        await app.sendGroupMessage(
+            event.sender.group,
+            MessageChain.create(reply_msg)
+        )
         # 这就是钓鱼开始了，在这躺下，躺够了起来
         await asyncio.sleep(_time * 60)
         # 起来一看，flag没了，被end了。
@@ -135,50 +173,28 @@ async def chitung_fish_handler(
         time_fix_coeff = 1.0 + record_in_one_hour * 0.05
         total_value = int(time_fix_coeff * total_value)
         reply_msg += f"\n时间修正系数为{time_fix_coeff}，共值{total_value}南瓜比索。\n\n"
-        reply_msg += graia.ariadne.message.element.Image(data_bytes=fish_img)
+        reply_msg += Image(data_bytes=fish_img)
         vault.update_bank(event.sender.id, Currency.PUMPKIN_PESO, total_value)
         await save_record(event.sender.id, fish_map.keys())
         fishing_process_flag.remove(event.sender.id)
-        await app.sendGroupMessage(event.sender.group, MessageChain.create(
-            reply_msg
-        ))
-
-
-async def endfish(app: Ariadne, group: Group, member: Member):
-    reply_msg = MessageChain.create(At(member.id))
-    if member.id in fishing_process_flag:
-        reply_msg = reply_msg + Plain(text="已经停止钓鱼。")
-        fishing_process_flag.remove(member.id)
-    else:
-        reply_msg = reply_msg + Plain(text="您未在钓鱼中。")
-    await app.sendGroupMessage(group, reply_msg)
+        await app.sendGroupMessage(
+            event.sender.group,
+            MessageChain.create(reply_msg)
+        )
 
 
 async def collection(app: Ariadne, group: Group, member: Member):
     collected = get_collected(member.id)
     collected = sum(fish_collected for fish_collected in collected)
-    reply_msg = MessageChain.create(At(member.id), Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n"))
+    reply_msg = MessageChain.create(
+        [
+            At(member.id),
+            Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n")
+        ]
+    )
     handbook_img = await async_get_handbook(member.id)
-    reply_msg += graia.ariadne.message.element.Image(data_bytes=handbook_img)
+    reply_msg += Image(data_bytes=handbook_img)
     await app.sendGroupMessage(group, reply_msg)
-
-
-async def fishhelp(app: Ariadne, event: MessageEvent):
-    image_path = Path(assets_dir / "fishinfo.png")
-    await app.sendGroupMessage(
-        event.sender.group, MessageChain.create(
-            [Image(path=image_path)]
-        )
-    )
-
-
-async def handbook(app: Ariadne, event: MessageEvent):
-    image_path = Path(assets_dir / "handbook.png")
-    await app.sendGroupMessage(
-        event.sender.group, MessageChain.create(
-            [Image(path=image_path)]
-        )
-    )
 
 
 def get_water(water: str):
@@ -279,8 +295,8 @@ async def save_record(record_id, fish_list):
             collected = list(records[i]["recordList"])
             collected.extend(fish_list)
             records[i]["recordList"] = list(set(collected))
-    with Path(assets_dir / "fishRecord.json").open("w", encoding="utf-8") as f:
-        f.write(json.dumps({"singleRecords": records}))
+    with Path(record_dir).open("w", encoding="utf-8") as f:
+        f.write(json.dumps({"singleRecords": records}, indent=4))
     write_lock.release()
 
 
@@ -294,7 +310,7 @@ def load_fishing_list():
 
 
 def load_fishing_records():
-    with Path(assets_dir / "fishRecord.json").open("r", encoding="utf-8") as f:
+    with Path(record_dir).open("r", encoding="utf-8") as f:
         return json.loads(f.read())["singleRecords"]
 
 
@@ -367,7 +383,12 @@ async def async_get_handbook(record_id):
 
 
 assets_dir = Path(Path(__file__).parent / "assets" / "fishing")
+record_dir = Path(Path(__file__).parent.parent / "data" / "fishRecord.json")
 FISHING_LIST = load_fishing_list()
 FISHING_COST = 800
 fishing_record = []  # 为了计算过去一小时内的钓鱼人数，存时间戳
 write_lock = Lock()
+
+if not os.path.isfile(record_dir):
+    with Path(record_dir).open("w", encoding="utf-8") as _:
+        _.write(json.dumps({"singleRecords": [{"ID": 0, "recordList": [101]}]}, indent=4))
