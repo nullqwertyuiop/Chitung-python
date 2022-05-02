@@ -6,3 +6,9 @@ class Waters(Enum):
     Caroline = 2  # B
     Chishima = 3  # C
     General = 4
+
+
+class Time(Enum):
+    Day = "Day"
+    Night = "Night"
+    All = "All"

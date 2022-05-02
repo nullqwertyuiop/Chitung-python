@@ -4,8 +4,13 @@ import json
 import math
 import random
 import time
+from asyncio import Lock
+from io import BytesIO
 from pathlib import Path
 
+import PIL
+import graia.ariadne.message.element
+from PIL import Image, ImageDraw
 from graia.ariadne import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent
 from graia.ariadne.message.chain import MessageChain
@@ -16,7 +21,7 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
 from chitung.bank import vault, Currency
-from .waters import Waters
+from .FishEnum import Waters, Time
 from ..utils.depends import BlacklistControl
 
 channel = Channel.current()
@@ -113,6 +118,26 @@ async def chitung_fish_handler(
         if event.sender.id not in fishing_process_flag:
             return
 
+        fish_map = get_item_id_randomly(item_number, w)
+        reply_msg = MessageChain.create(At(event.sender.id), Plain(text="您钓到了：\n\n"))
+        total_value = 0
+        for fish_code, count in fish_map.items():
+            fish = get_fish_by_code(fish_code)
+            value = fish['price'] * count
+            total_value += value
+            reply_msg += f"{fish['name']}x{count}，价值{value}南瓜比索\n"
+        fish_img = get_image(fish_map.keys())
+        time_fix_coeff = 1.0 + record_in_one_hour * 0.05
+        total_value = int(time_fix_coeff * total_value)
+        reply_msg += f"\n时间修正系数为{time_fix_coeff}，共值{total_value}南瓜比索。\n\n"
+        reply_msg += graia.ariadne.message.element.Image(data_bytes=fish_img)
+        vault.update_bank(event.sender.id, Currency.PUMPKIN_PESO, total_value)
+        await save_record(event.sender.id, fish_map.keys())
+        fishing_process_flag.remove(event.sender.id)
+        await app.sendGroupMessage(event.sender.group, MessageChain.create(
+            reply_msg
+        ))
+
 
 async def endfish(app: Ariadne, group: Group, member: Member):
     reply_msg = MessageChain.create(At(member.id))
@@ -125,7 +150,12 @@ async def endfish(app: Ariadne, group: Group, member: Member):
 
 
 async def collection(app: Ariadne, group: Group, member: Member):
-    return
+    collected = get_collected(member.id)
+    collected = sum(fish_collected for fish_collected in collected)
+    reply_msg = MessageChain.create(At(member.id), Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n"))
+    handbook_img = get_handbook(member.id)
+    reply_msg += graia.ariadne.message.element.Image(data_bytes=handbook_img)
+    await app.sendGroupMessage(group, reply_msg)
 
 
 async def fishhelp(app: Ariadne, event: MessageEvent):
@@ -159,8 +189,45 @@ def get_water(water: str):
             return Waters.Chishima
 
 
-def get_item_id_randomly(amount, waters):
+def get_item_id_randomly(amount, w: Waters):
     fish_map = {}
+    is_day_time = is_in_day_time()
+
+    def filter_fish(fish_to_filter):
+        if fish_to_filter["code"] // 100 != w.value:
+            return False
+        if fish_to_filter["time"] == Time.All.value:
+            return True
+        elif is_day_time and fish_to_filter["time"] == Time.Day.value:
+            return True
+        elif not is_day_time and fish_to_filter["time"] == Time.Night.value:
+            return True
+
+    actual_fish_list = list(filter(filter_fish, FISHING_LIST))
+    # 降序第一
+    max_price = sorted(actual_fish_list, key=lambda f: -f["price"])[0]["price"]
+
+    weight_list = list(map(lambda f: max_price + 50 - f["price"], actual_fish_list))
+    total_weight = sum(weight_list)
+
+    for i in range(amount):
+        random_number = random.randint(0, total_weight)
+        random_index = 0
+
+        for fi, temp_fish in enumerate(actual_fish_list):
+            if random_number - weight_list[fi] < 0:
+                random_index = fi
+                break
+            else:
+                random_number = random_number - weight_list[fi]
+
+        fish = actual_fish_list[random_index]
+        if fish["code"] in fish_map:
+            fish_map[fish["code"]] += 1
+        else:
+            fish_map[fish["code"]] = 1
+
+    return fish_map
 
 
 def calculate_daytime() -> tuple:
@@ -199,15 +266,89 @@ def is_in_day_time() -> bool:
     return sun[0] < now < sun[1]
 
 
+async def save_record(record_id, fish_list):
+    await write_lock.acquire()
+    records = load_fishing_records()
+    for i, record in enumerate(records):
+        if record["ID"] == record_id:
+            collected = list(records[i]["recordList"])
+            collected.extend(fish_list)
+            records[i]["recordList"] = list(set(collected))
+    with Path(assets_dir / "fishRecord.json").open("w", encoding="utf-8") as f:
+        f.write(json.dumps({"singleRecords": records}))
+    write_lock.release()
+
+
+def get_fish_by_code(code):
+    return list(filter(lambda fish: fish["code"] == code, FISHING_LIST))[0]
+
+
 def load_fishing_list():
     with Path(assets_dir / "FishingList.json").open("r", encoding="utf-8") as f:
-        return json.loads(f.read())
+        return json.loads(f.read())["fishingList"]
+
+
+def load_fishing_records():
+    with Path(assets_dir / "fishRecord.json").open("r", encoding="utf-8") as f:
+        return json.loads(f.read())["singleRecords"]
+
+
+def get_image(fish_list):
+    fish_block = PIL.Image.new("RGBA", (32 * len(fish_list) + 20, 32 + 20), (12, 24, 30))
+    fish_block_draw = ImageDraw.ImageDraw(fish_block)
+    fish_block_draw.rectangle(((0, 0), (32 * len(fish_list) + 20, 3)), fill="#FFCB48")
+    fish_block_draw.rectangle(((0, 32 + 20 - 3), (32 * len(fish_list) + 20, 32 + 20)), fill="#FFCB48")
+    fish_block = fish_block.convert("RGBA")
+    for index, code in enumerate(fish_list):
+        fish_image = PIL.Image.open(assets_dir / "NormalFish" / f"{code}.png", ).convert('RGBA')
+        fish_block.paste(fish_image, (index * 32 + 10, 10), mask=fish_image.split()[3])  # mask 透明通道
+    fish_block = fish_block.resize((int(fish_block.size[0] * 2.5), int(fish_block.size[1] * 2.5)),
+                                   resample=PIL.Image.AFFINE)
+    bytes_io = BytesIO()
+    fish_block.save(bytes_io, format="png")
+    return bytes_io.getvalue()
+
+
+def get_records(record_id):
+    records = load_fishing_records()
+    for i, record in enumerate(records):
+        if record["ID"] == record_id:
+            return list(records[i]["recordList"])
+    return []
+
+
+def get_collected(record_id):
+    collected = []
+    records = get_records(record_id)
+    for fish in FISHING_LIST:
+        collected.append(fish["code"] in records)
+    return collected
+
+
+def get_handbook(record_id):
+    handbook_template = PIL.Image.open(assets_dir / "handbookTemplate.png")
+    handbooks = PIL.Image.new("RGBA", (32 * 8, 32 * 9), (62, 73, 72))
+    vertical_count = 0
+    horizontal_count = 0
+    collected_list = get_collected(record_id)
+    for index, fish_collected in enumerate(collected_list):
+        fish_img_path = assets_dir / f"{'NormalFish' if fish_collected else 'DarkFish'}" / f"{FISHING_LIST[index]['code']}.png"
+        fish_img = PIL.Image.open(fish_img_path).convert("RGBA")
+        handbooks.paste(fish_img, (vertical_count * 32, horizontal_count * 32), mask=fish_img.split()[3])
+        vertical_count = vertical_count + 1
+        if vertical_count == 8:
+            vertical_count = 0
+            horizontal_count = horizontal_count + 1
+    handbook_template.paste(handbooks, (45, 269))
+    size = handbook_template.size
+    handbook_template = handbook_template.resize((int(size[0] * 2.5), int(size[1] * 2.5)), resample=PIL.Image.AFFINE)
+    bytes_io = BytesIO()
+    handbook_template.save(bytes_io, format="png")
+    return bytes_io.getvalue()
 
 
 assets_dir = Path(Path(__file__).parent / "assets" / "fishing")
 FISHING_LIST = load_fishing_list()
 FISHING_COST = 800
 fishing_record = []  # 为了计算过去一小时内的钓鱼人数，存时间戳
-
-if __name__ == '__main__':
-    calculate_daytime()
+write_lock = Lock()
