@@ -10,7 +10,6 @@ from graia.ariadne.message.parser.twilight import Twilight, WildcardMatch, Eleme
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .utils.blacklist import blacklist
 from .utils.config import config
 from .utils.depends import BlacklistControl
 
@@ -91,7 +90,7 @@ async def chitung_nudge_event_handler(
         app: Ariadne,
         event: NudgeEvent
 ):
-    if event.target != config.botID or event.context_type != "group" or event.supplicant in blacklist.remoteBlacklist:
+    if event.target != app.account or event.context_type != "group":
         return
     await app.sendNudge(event.supplicant, event.group_id)
     await app.sendGroupMessage(event.group_id, MessageChain(config.cc.nudgeText))
@@ -116,6 +115,6 @@ async def chitung_nudge_at_handler(
         at: ElementResult
 ):
     assert isinstance(at.result, At)
-    if at.result.target != config.botID:
+    if at.result.target != app.account:
         return
     await app.sendNudge(event.sender)
