@@ -18,7 +18,7 @@ from graia.saya.builtins.broadcast import ListenerSchema
 from graia.scheduler import timers
 from graia.scheduler.saya import SchedulerSchema
 
-from ..utils.depends import BlacklistControl
+from ..utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
 
@@ -41,7 +41,10 @@ c4_activation_flags = []
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("lottery")
+        ]
     )
 )
 async def chitung_lottery_handler(

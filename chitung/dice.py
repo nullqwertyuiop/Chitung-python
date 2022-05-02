@@ -7,7 +7,7 @@ from graia.ariadne.message.parser.twilight import Twilight, RegexMatch, RegexRes
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .utils.depends import BlacklistControl
+from .utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
 
@@ -27,7 +27,10 @@ channel.description("Dice")
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("responder")
+        ]
     )
 )
 async def chitung_single_dice_handler(

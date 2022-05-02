@@ -10,7 +10,7 @@ from graia.ariadne.model import MemberPerm, MemberInfo
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .utils.depends import BlacklistControl
+from .utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
 
@@ -33,7 +33,10 @@ shuffle_flags = {}
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("lottery")
+        ]
     )
 )
 async def chitung_shuffle_handler(

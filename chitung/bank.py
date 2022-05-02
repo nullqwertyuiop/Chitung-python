@@ -15,7 +15,7 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
 from .utils.config import config
-from .utils.depends import BlacklistControl
+from .utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
 
@@ -104,7 +104,10 @@ vault = Vault()
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("casino")
+        ]
     )
 )
 async def chitung_bank_handler(
@@ -126,7 +129,10 @@ async def chitung_bank_handler(
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("casino")
+        ]
     )
 )
 async def chitung_bank_set_handler(
@@ -152,7 +158,10 @@ async def chitung_bank_set_handler(
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("casino")
+        ]
     )
 )
 async def chitung_bank_laundry_handler(

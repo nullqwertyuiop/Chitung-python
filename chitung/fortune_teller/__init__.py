@@ -13,7 +13,7 @@ from graia.ariadne.model import Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from ..utils.depends import BlacklistControl
+from ..utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
 
@@ -34,7 +34,10 @@ channel.description("这就是你今天的签")
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("responder")
+        ]
     )
 )
 async def chitung_fortune_teller_handler(
