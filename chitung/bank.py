@@ -90,6 +90,12 @@ class Vault:
         self.store_bank()
         return self.vault[str(supplicant)][c.value[0]]
 
+    def has_enough_money(self, member: Member, c: Currency, amount: int) -> bool:
+        if str(member.id) in self.vault.keys():
+            return self.vault[str(member.id)].get(c.value[0]) >= amount
+        else:
+            return False
+
 
 vault = Vault()
 
