@@ -72,3 +72,15 @@ class UniversalRespondList(BaseModel):
 class BlacklistModel(BaseModel):
     friendBlacklist: List[int] = []
     groupBlacklist: List[int] = []
+
+
+class UniversalImageResponder(BaseModel):
+    keyword: List[str]
+    directoryName: str
+    text: str
+    triggerType: Literal['Equal', 'Contain']
+    responseType: Literal["Friend", "Group", "Any"]
+
+
+class UniversalImageResponderList(BaseModel):
+    dataList: List[UniversalImageResponder]
