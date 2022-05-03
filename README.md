@@ -10,7 +10,7 @@ This project aims to provide users with a lite and open version of Chitung.
 
 ### - 基于Mirai框架的QQ机器人
 
-本项目基于七筒开放版与七筒本体开发，由七筒爱好者 Nullqwertyuiop 维护，旨在为用户提供可于 Python 环境使用的开放版七筒插件。
+本项目基于七筒开放版与七筒本体开发，由七筒爱好者维护，旨在为用户提供可于 Python 环境使用的开放版七筒插件。
 
 ## 已移植的功能
 
@@ -20,10 +20,6 @@ Chitung-python 已完成以下功能的移植：
     - 插件位置：`chitung.help`
     - 可用范围：群聊
     - 仅已移植 v0.1.3 的 /funct 功能，v0.1.4 使用的动态生成待移植
-
-- /discl
-    - 插件位置：`chitung.help`
-    - 可用范围：群聊
 
 - /bummer
     - 插件位置：`chitung.lottery`
@@ -53,16 +49,7 @@ Chitung-python 已完成以下功能的移植：
 - /bank
     - 插件位置：`chitung.bank`
     - 可用范围：群聊
-    - **不建议卸载**
-
-- /set
-    - 插件位置：`chitung.bank`
-    - 可用范围：群聊
-    - **不建议卸载**
-
-- /laundry
-    - 插件位置：`chitung.bank`
-    - 可用范围：群聊
+    - 附属功能：`/laundry` `/set`
     - **不建议卸载**
 
 - /shuffle
@@ -90,6 +77,12 @@ Chitung-python 已完成以下功能的移植：
 - /dice
     - 插件位置：`chitung.dice`
     - 可用范围：群聊
+    - 附属功能：`.d1` `.1d1`
+
+- /fish
+    - 插件位置：`chitung.fish`
+    - 可用范围：群聊
+    - 附属功能：`/endfish` `/collection` `/fishhelp` `/handbook`
 
 - 黑名单
     - 组件位置：`chitung.utils.blacklist`
@@ -115,8 +108,6 @@ Chitung-python 已完成以下功能的移植：
 - 意见反馈
 
 - 掷骰子
-
-- /fish
 
 - /blackjack
 

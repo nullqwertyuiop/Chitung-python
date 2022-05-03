@@ -25,7 +25,7 @@ from ..utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
 
-channel.name("ChitungLottery")
+channel.name("ChitungFishing")
 channel.author("角川烈&白门守望者 (Chitung-public)，IshikawaKaito (Chitung-python)")
 channel.description("七筒")
 
