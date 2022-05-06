@@ -110,7 +110,7 @@ class BlackJackData:
         return hash(self.id)
 
     def create_card_pile(self):
-        for deck in range(DECK_NUM):
+        for _ in range(DECK_NUM):
             for i in range(52):
                 number = i // 4
                 suit = PokerSuit.get(i % 4)
@@ -215,7 +215,7 @@ class BlackJackData:
         bookmaker = self.get_player(0)
         while bookmaker.calculate_point() < 17:
             self.deal(0)
-        msg = f"庄家开的牌组是：\n"
+        msg = "庄家开的牌组是：\n"
         for card in bookmaker.cards:
             msg += f" {card}"
         return msg

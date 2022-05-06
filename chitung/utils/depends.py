@@ -1,7 +1,7 @@
-from typing import NoReturn, Literal
+from typing import NoReturn
 
 from graia.ariadne.event.message import MessageEvent, FriendMessage, GroupMessage
-from graia.broadcast import ExecutionStop, PropagationCancelled
+from graia.broadcast import ExecutionStop
 from graia.broadcast.builtin.decorators import Depend
 
 from . import config

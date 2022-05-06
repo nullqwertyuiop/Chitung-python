@@ -10,7 +10,7 @@ from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchRes
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .blackjack import BlackJackData, BlackJackPhase, PokerSuit
+from .blackjack import BlackJackData, BlackJackPhase
 from ..bank import vault, Currency
 from ..utils.depends import BlacklistControl, FunctionControl
 from ..utils.priority import priority
