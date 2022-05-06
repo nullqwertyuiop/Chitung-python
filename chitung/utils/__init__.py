@@ -8,7 +8,7 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
 from .config import config, group_config, save_group_config, save_config, reset_config
-from .models import UserPerm, GroupSwitch
+from .models import UserPerm
 from ..utils.depends import BlacklistControl, Permission
 
 channel = Channel.current()
