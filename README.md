@@ -18,7 +18,7 @@ Chitung-python 已完成以下功能的移植：
 
 - /funct
     - 插件位置：`chitung.help`
-    - 可用范围：群聊
+    - 可用范围：全局
     - 仅已移植 v0.1.3 的 /funct 功能，v0.1.4 使用的动态生成待移植
 
 - /bummer
@@ -37,18 +37,18 @@ Chitung-python 已完成以下功能的移植：
 
 - OK Animal
     - 插件位置：`chitung.lovely_image`
-    - 可用范围：群聊
+    - 可用范围：全局
 
 - 求签
     - 插件位置：`chitung.fortune_teller`
-    - 可用范围：群聊
+    - 可用范围：全局
     - 使用注意：
         - 由于随机函数算法不同，可能得出与官方版七筒不同的结果
         - 可能包含 Chitung-python 作者的恶趣味，如需保持和官方版七筒一致的使用效果，请注释 `chitung.fortune_teller` 中 `random.seed(...)` 下的第一个 `if` 代码块
 
 - /bank
     - 插件位置：`chitung.bank`
-    - 可用范围：群聊
+    - 可用范围：全局
     - 附属功能：`/laundry` `/set`
     - **不建议卸载**
 
@@ -76,13 +76,18 @@ Chitung-python 已完成以下功能的移植：
 
 - /dice
     - 插件位置：`chitung.dice`
-    - 可用范围：群聊
+    - 可用范围：全局
     - 附属功能：`.d1` `.1d1`
 
 - /fish
     - 插件位置：`chitung.fish`
     - 可用范围：群聊
     - 附属功能：`/endfish` `/collection` `/fishhelp` `/handbook`
+
+- /blackjack
+    - 插件位置：`chitung.blackjack`
+    - 可用范围：全局
+    - 附属功能：`/bet (BlackJack)`
 
 - 黑名单
     - 组件位置：`chitung.utils.blacklist`
@@ -109,8 +114,6 @@ Chitung-python 已完成以下功能的移植：
 
 - 掷骰子
 
-- /blackjack
-
 - /roulette
 
 - 骰宝
@@ -119,13 +122,7 @@ Chitung-python 已完成以下功能的移植：
 
 - 支持设置最低群组人数
 
-- 引入依赖注入
-    - 群插件开关
-    - 全局插件开关
-
 - 支持热加载、卸载插件
-
-- 支持私聊使用
 
 ## 部署使用
 

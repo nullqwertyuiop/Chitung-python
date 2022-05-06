@@ -1,6 +1,8 @@
 from enum import Enum
-from typing import List, Literal
+from typing import List, Literal, Union
 
+from graia.ariadne import get_running, Ariadne
+from graia.ariadne.model import Group, Member
 from pydantic import BaseModel
 
 
@@ -41,6 +43,15 @@ class Config(BaseModel):
     cc: CustomizedConfig = CustomizedConfig()
 
 
+class GroupSwitch(Enum):
+    globalControl = "globalControl"
+    fish = "fish"
+    casino = "casino"
+    responder = "responder"
+    lottery = "lottery"
+    game = "game"
+
+
 class GroupConfig(BaseModel):
     groupID: int
     globalControl: bool = True
@@ -54,6 +65,63 @@ class GroupConfig(BaseModel):
 
 class GroupConfigList(BaseModel):
     groupConfigList: List[GroupConfig]
+
+    async def check(self):
+        if group_list := await get_running(Ariadne).getGroupList():
+            for group in group_list:
+                assert isinstance(group, Group)
+                if _ := self.get(group.id, create_if_none=False):
+                    continue
+                self.groupConfigList.append(GroupConfig(groupID=group.id))
+
+    def get(
+            self,
+            group_id: int,
+            *,
+            create_if_none: bool = True
+    ):
+        if group_config := list(filter(
+            lambda cfg:
+            cfg.groupID == group_id,
+            self.groupConfigList
+        )):
+            return group_config[0]
+        elif create_if_none:
+            self.groupConfigList.append(GroupConfig(groupID=group_id))
+            return self.get(group_id, create_if_none=False)
+
+    def block_member(
+            self,
+            group: Union[Group, int],
+            target: Union[Member, int]
+    ):
+        group = group.id if isinstance(group, Group) else group
+        target = target.id if isinstance(target, Member) else target
+        if cfg := self.get(group):
+            cfg.blockedUser.append(target)
+
+    def unblock_member(
+            self,
+            group: Union[Group, int],
+            target: Union[Member, int]
+    ):
+        group = group.id if isinstance(group, Group) else group
+        target = target.id if isinstance(target, Member) else target
+        if cfg := self.get(group):
+            if target in cfg.blockedUser:
+                cfg.blockedUser.remove(target)
+                return True
+            return False
+
+    def alt_setting(
+            self,
+            group: Union[Group, int],
+            setting: GroupSwitch,
+            new_value: bool
+    ):
+        group = group.id if isinstance(group, Group) else group
+        if cfg := self.get(group):
+            setattr(cfg, setting.value, new_value)
 
 
 class UniversalRespond(BaseModel):

@@ -1,14 +1,15 @@
-from pathlib import Path
-
 from graia.ariadne import Ariadne
-from graia.ariadne.event.message import GroupMessage, MessageEvent
+from graia.ariadne.event.lifecycle import ApplicationLaunched
+from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
+from graia.ariadne.exception import UnknownTarget, AccountMuted
 from graia.ariadne.message.chain import MessageChain
-from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, FullMatch
+from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, FullMatch, RegexMatch, RegexResult
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .config import config
-from ..utils.depends import BlacklistControl
+from .config import config, group_config, save_group_config, save_config, reset_config
+from .models import UserPerm, GroupSwitch
+from ..utils.depends import BlacklistControl, Permission
 
 channel = Channel.current()
 
@@ -16,13 +17,13 @@ channel.name("ChitungAdminTools")
 channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
-winner_dir = Path(Path(__file__).parent / "assets")
-c4_activation_flags = []
-
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -30,7 +31,10 @@ c4_activation_flags = []
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER)
+        ]
     )
 )
 async def chitung_admin_help_handler(
@@ -39,8 +43,10 @@ async def chitung_admin_help_handler(
 ):
     if event.sender.id not in config.adminID:
         return
-    await app.sendGroupMessage(
-        event.sender.group,
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
         MessageChain("Bank：\n"
                      "/laundry 空格 金额：为自己增加/减少钱\n"
                      "/set 空格 QQ号 空格 钱：设置用户的钱的数量\n"
@@ -66,7 +72,10 @@ async def chitung_admin_help_handler(
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -74,7 +83,10 @@ async def chitung_admin_help_handler(
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER)
+        ]
     )
 )
 async def chitung_admin_tools_handler(
@@ -82,17 +94,19 @@ async def chitung_admin_tools_handler(
         event: MessageEvent,
         func: MatchResult
 ):
-    if event.sender.id not in config.adminID:
-        return
     func = func.result.asDisplay()
     if func == "/num -f":
-        return await app.sendGroupMessage(
-            event.sender.group,
+        return await app.sendMessage(
+            event.sender.group
+            if isinstance(event, GroupMessage)
+            else event.sender,
             MessageChain(f"七筒目前的好友数量是：{len(await app.getFriendList())}")
         )
     elif func == "/num -g":
-        return await app.sendGroupMessage(
-            event.sender.group,
+        return await app.sendMessage(
+            event.sender.group
+            if isinstance(event, GroupMessage)
+            else event.sender,
             MessageChain(f"七筒目前的群数量是：{len(await app.getGroupList())}")
         )
     else:
@@ -100,7 +114,137 @@ async def chitung_admin_tools_handler(
         member_list = []
         for group in group_list:
             member_list.extend(await app.getMemberList(group))
-        return await app.sendGroupMessage(
-            event.sender.group,
+        return await app.sendMessage(
+            event.sender.group
+            if isinstance(event, GroupMessage)
+            else event.sender,
             MessageChain(f"七筒目前的覆盖人数是：{len(member_list)}")
         )
+
+
+@channel.use(
+    ListenerSchema(
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
+        inline_dispatchers=[
+            Twilight(
+                [
+                    FullMatch("/config"),
+                    UnionMatch("-h", "1", "2", "3", "4", "5") @ "option",
+                    RegexMatch(r"[Tt]rue|[Ff]alse") @ "value"
+                ]
+            )
+        ],
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER)
+        ]
+    )
+)
+async def chitung_config_tools_handler(
+        app: Ariadne,
+        event: MessageEvent,
+        option: MatchResult,
+        value: RegexResult
+):
+    if all([not option.matched,
+            not value.matched]):
+        await app.sendMessage(
+            event.sender.group
+            if isinstance(event, GroupMessage)
+            else event.sender,
+            MessageChain(
+                f"addFriend: {config.rc.addFriend}"
+                f"addGroup: {config.rc.addGroup}"
+                f"answerFriend: {config.rc.answerFriend}"
+                f"answerGroup: {config.rc.answerGroup}"
+                f"autoAnswer: {config.rc.autoAnswer}"
+            )
+        )
+        return
+    option = option.result.asDisplay()
+    value = True if value.result.asDisplay().upper()[0] == "T" else False
+    if option == "-h":
+        await app.sendMessage(
+            event.sender.group
+            if isinstance(event, GroupMessage)
+            else event.sender,
+            MessageChain(
+                "使用/config+空格+数字序号+空格+true/false来开关配置。\n\n"
+                "1:addFriend\n"
+                "2:addGroup\n"
+                "3:answerFriend\n"
+                "4:answerGroup\n"
+                "5:autoAnswer"
+            )
+        )
+        return
+    elif option == "1":
+        config.rc.addFriend = value
+        msg = MessageChain(f"已设置addFriend为{value}")
+    elif option == "2":
+        config.rc.addGroup = value
+        msg = MessageChain(f"已设置addGroup为{value}")
+    elif option == "3":
+        config.rc.answerFriend = value
+        msg = MessageChain(f"已设置answerFriend为{value}")
+    elif option == "4":
+        config.rc.answerGroup = value
+        msg = MessageChain(f"已设置answerGroup为{value}")
+    else:
+        config.rc.autoAnswer = value
+        msg = MessageChain(f"已设置autoAnswer为{value}")
+    save_config()
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        msg
+    )
+
+
+@channel.use(
+    ListenerSchema(
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
+        inline_dispatchers=[
+            Twilight(
+                [
+                    FullMatch("/reset"),
+                    RegexMatch(r"\s*config")
+                ]
+            )
+        ],
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER)
+        ]
+    )
+)
+async def chitung_reset_config_handler(
+        app: Ariadne,
+        event: MessageEvent
+):
+    reset_config()
+    save_config()
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        MessageChain("已经重置 Config 配置文件。")
+    )
+
+
+@channel.use(ListenerSchema(listening_events=[ApplicationLaunched]))
+async def chitung_init_handler(app: Ariadne):
+    await group_config.check()
+    save_group_config()
+    for group in config.devGroupID:
+        try:
+            await app.sendGroupMessage(group, MessageChain(config.cc.onlineText))
+        except (UnknownTarget, AccountMuted):
+            continue
