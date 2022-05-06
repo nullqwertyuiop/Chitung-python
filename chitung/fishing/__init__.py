@@ -26,7 +26,7 @@ from ..utils.depends import BlacklistControl, FunctionControl
 channel = Channel.current()
 
 channel.name("ChitungFishing")
-channel.author("角川烈&白门守望者 (Chitung-public)，IshikawaKaito (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), IshikawaKaito (Chitung-python)")
 channel.description("七筒")
 
 fishing_process_flag = []
@@ -45,7 +45,7 @@ fishing_process_flag = []
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("fish")
+            FunctionControl.enable(FunctionControl.Fish)
         ]
     )
 )
@@ -109,30 +109,31 @@ async def chitung_fish_tool_handler(
         inline_dispatchers=[
             Twilight(
                 [
-                    RegexMatch(r"/fish\s*[AaBbCc]?") @ "fish_command",
+                    FullMatch("/fish"),
+                    RegexMatch(r"\s*[AaBbCc]?") @ "pool",
                 ]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("fish")
+            FunctionControl.enable(FunctionControl.Fish)
         ]
     )
 )
 async def chitung_fish_handler(
         app: Ariadne,
         event: MessageEvent,
-        fish_command: MatchResult,
+        pool: MatchResult,
 ):
     global fishing_record
-    water = fish_command.result.asDisplay().replace("/fish", "").strip().upper()
+    water = pool.result.asDisplay().strip().upper()
     if event.sender.id in fishing_process_flag:
         await app.sendGroupMessage(event.sender.group, MessageChain("上次抛竿还在进行中。"))
     else:
         w = get_water(water)
         reply_msg = MessageChain.create(At(event.sender.id))
         if w != Waters.General:  # 非常规水域扣费
-            if vault.has_enough_money(event.sender, Currency.PUMPKIN_PESO, FISHING_COST):
+            if vault.has_enough_money(event.sender, Currency.CUCUMBER_PESO, FISHING_COST):
                 reply_msg = reply_msg + Plain(text=f"已收到您的捕鱼费用{FISHING_COST}南瓜比索。")
             else:
                 await app.sendGroupMessage(event.sender.group, MessageChain.create(
@@ -174,8 +175,15 @@ async def chitung_fish_handler(
         total_value = int(time_fix_coeff * total_value)
         reply_msg += f"\n时间修正系数为{time_fix_coeff}，共值{total_value}南瓜比索。\n\n"
         reply_msg += Image(data_bytes=fish_img)
-        vault.update_bank(event.sender.id, Currency.PUMPKIN_PESO, total_value)
-        await save_record(event.sender.id, fish_map.keys())
+        vault.update_bank(
+            event.sender.id,
+            total_value,
+            Currency.CUCUMBER_PESO
+        )
+        await save_record(
+            event.sender.id,
+            fish_map.keys()
+        )
         fishing_process_flag.remove(event.sender.id)
         await app.sendGroupMessage(
             event.sender.group,

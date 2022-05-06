@@ -1,7 +1,7 @@
 import random
 
 from graia.ariadne.app import Ariadne
-from graia.ariadne.event.message import GroupMessage, MessageEvent
+from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.parser.twilight import Twilight, RegexMatch, RegexResult, SpacePolicy, UnionMatch
 from graia.saya import Channel
@@ -12,7 +12,7 @@ from .utils.depends import BlacklistControl, FunctionControl
 channel = Channel.current()
 
 channel.name("ChitungDice")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("Dice")
 
 
@@ -39,12 +39,22 @@ async def chitung_single_dice_handler(
         faces: RegexResult
 ):
     faces = int(faces.result.asDisplay())
-    await app.sendGroupMessage(event.sender.group, MessageChain(f"您掷出的点数是:{random.randint(1, faces)}"))
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        MessageChain(
+            f"您掷出的点数是:{random.randint(1, faces)}"
+        )
+    )
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -55,7 +65,10 @@ async def chitung_single_dice_handler(
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable(FunctionControl.Responder)
+        ]
     )
 )
 async def chitung_dnd_dice_handler(
@@ -66,7 +79,15 @@ async def chitung_dnd_dice_handler(
 ):
     times = int(times.result.asDisplay())
     faces = int(faces.result.asDisplay())
-    await app.sendGroupMessage(
-        event.sender.group,
-        MessageChain("您掷出的点数是:" + " ".join([str(random.randint(1, faces)) for _ in range(times)]))
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        MessageChain(
+            "您掷出的点数是:"
+            + " ".join(
+                [str(random.randint(1, faces))
+                 for _ in range(times)]
+            )
+        )
     )

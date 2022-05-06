@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from graia.ariadne.app import Ariadne
-from graia.ariadne.event.message import GroupMessage, MessageEvent
+from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image
 from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, FullMatch
@@ -9,18 +9,21 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
 from ..utils.config import config
-from ..utils.depends import BlacklistControl
+from ..utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
 
 channel.name("ChitungHelp")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -28,21 +31,32 @@ channel.description("七筒")
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable(FunctionControl.Responder)
+        ]
     )
 )
 async def chitung_help_image_handler(
         app: Ariadne,
         event: MessageEvent
 ):
-    await app.sendGroupMessage(event.sender.group, MessageChain.create([
-        Image(path=Path(Path(__file__).parent / "assets" / "help" / "funct.png"))
-    ]))
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        MessageChain.create([
+            Image(path=Path(Path(__file__).parent / "assets" / "help" / "funct.png"))
+        ])
+    )
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -50,7 +64,10 @@ async def chitung_help_image_handler(
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable()]
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable(FunctionControl.Responder)
+        ]
     )
 )
 async def chitung_help_desk_handler(
@@ -80,4 +97,9 @@ async def chitung_help_desk_handler(
                            f"如需要联系七筒的开发者和体验七筒功能，请添加公众聊天群：932617537。"
                            f"如需要获得七筒的最新消息，请添加通知群：948979109。"
                            f"如需要获得 Chitung-python 的最新消息，请添加群：719381570。")
-    await app.sendGroupMessage(event.sender.group, msg)
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        msg
+    )

@@ -58,7 +58,7 @@ class BlackJackPlayer:
         self.has_busted: bool = False
         self.has_surrendered: bool = False
 
-    def draw_card(self, cards: Union[Poker, list[Poker]]):
+    def draw_card(self, cards: Union[Poker, List[Poker]]):
         if isinstance(cards, Poker):
             self.cards.append(cards)
         elif isinstance(cards, list):
@@ -68,7 +68,7 @@ class BlackJackPlayer:
         return self.calculate_cards_point(self.cards)
 
     @staticmethod
-    def calculate_cards_point(cards: Union[list[Poker], Poker]):
+    def calculate_cards_point(cards: Union[List[Poker], Poker]):
         point = 0
         if isinstance(cards, Poker):
             cards = [cards]
@@ -94,10 +94,10 @@ class BlackJackPlayer:
 class BlackJackData:
     def __init__(self, game_id):
         self.id = game_id
-        self.black_jack_players: list[BlackJackPlayer] = []
+        self.black_jack_players: List[BlackJackPlayer] = []
         self.phase: BlackJackPhase = BlackJackPhase.Callin
         self.card_number: int = 0
-        self.card_pile: list[Poker] = []
+        self.card_pile: List[Poker] = []
         self.create_card_pile()
         self.shuffle_card_pile()
 

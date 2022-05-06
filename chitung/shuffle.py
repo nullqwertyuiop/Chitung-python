@@ -15,7 +15,7 @@ from .utils.depends import BlacklistControl, FunctionControl
 channel = Channel.current()
 
 channel.name("ChitungShuffle")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
 lock = False
@@ -35,7 +35,7 @@ shuffle_flags = {}
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("lottery")
+            FunctionControl.enable(FunctionControl.Lottery)
         ]
     )
 )

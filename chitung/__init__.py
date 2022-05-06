@@ -7,7 +7,7 @@ saya = Saya.current()
 channel = Channel.current()
 
 channel.name("ChitungVanilla")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
 ignore_list = ["data", "__init__.py", "__pycache__"]

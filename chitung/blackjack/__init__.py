@@ -1,28 +1,33 @@
 import asyncio
 from pathlib import Path
+from typing import List
 
 from graia.ariadne import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image, At
-from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, RegexMatch
+from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, RegexMatch, FullMatch
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .blackjack import BlackJackData, BlackJackPhase, Poker, PokerSuit
+from .blackjack import BlackJackData, BlackJackPhase, PokerSuit
 from ..bank import vault, Currency
 from ..utils.depends import BlacklistControl, FunctionControl
+from ..utils.priority import priority
 
 channel = Channel.current()
 
 channel.name("ChitungBlackJack")
-channel.author("角川烈&白门守望者 (Chitung-public)，IshikawaKaito (Chitung-python)")
-channel.description("七筒")
+channel.author("角川烈&白门守望者 (Chitung-public), IshikawaKaito (Chitung-python)")
+channel.description("您爆牌了。")
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage, FriendMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -35,8 +40,10 @@ channel.description("七筒")
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("casino")
-        ]
+            FunctionControl.enable(FunctionControl.Casino)
+        ],
+        priority=priority.Function,
+
     )
 )
 async def chitung_blackjack_ops_handler(
@@ -61,7 +68,7 @@ async def chitung_blackjack_ops_handler(
         elif function.result.asDisplay() in ["/surrender", "投降"]:
             await surrender(app, event, game_id)
 
-        bjd, player = get_valid_game_and_player(event, game_id)
+        bjd, _ = get_valid_game_and_player(event, game_id)
         if bjd.check_all_fold():
             await checkout_game(app, event, game_id)
     except ValueError:
@@ -70,37 +77,44 @@ async def chitung_blackjack_ops_handler(
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage, FriendMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
-                    RegexMatch(r"/bet\s*[0-9]*") @ "bet_command",
+                    FullMatch("/bet"),
+                    RegexMatch(r"\s*[0-9]*") @ "amount",
                 ]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("casino")
+            FunctionControl.enable(FunctionControl.Casino)
         ]
     )
 )
 async def chitung_blackjack_bet_handler(
         app: Ariadne,
         event: MessageEvent,
-        bet_command: MatchResult,
+        amount: MatchResult,
 ):
     if isinstance(event, GroupMessage):
         game_id = event.sender.group.id
     else:
         game_id = event.sender.id
 
-    bets = int(bet_command.result.asDisplay().replace("/bet", "").strip())
+    bets = int(amount.result.asDisplay().strip())
     await bet(app, event, game_id, bets)
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage, FriendMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -110,7 +124,7 @@ async def chitung_blackjack_bet_handler(
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("fish")
+            FunctionControl.enable(FunctionControl.Casino)
         ]
     )
 )
@@ -309,15 +323,23 @@ def get_valid_game_and_player(event, game_id):
 
 
 def purchase(sender, cost) -> bool:
-    if vault.has_enough_money(sender, Currency.PUMPKIN_PESO, cost):
-        vault.update_bank(sender.id, Currency.PUMPKIN_PESO, -cost)
+    if vault.has_enough_money(sender, Currency.CUCUMBER_PESO, cost):
+        vault.update_bank(
+            sender.id,
+            -cost,
+            Currency.CUCUMBER_PESO
+        )
         return True
     else:
         return False
 
 
 def exchange(player_id, num):
-    vault.update_bank(player_id, Currency.PUMPKIN_PESO, num)
+    vault.update_bank(
+        player_id,
+        num,
+        Currency.CUCUMBER_PESO
+    )
 
 
 async def send_message(app, event, msg, at=True):
@@ -343,4 +365,4 @@ def get_game_data(game_id):
 
 
 assets_dir = Path(Path(__file__).parent / "assets")
-blackjack_game_data: list[BlackJackData] = []
+blackjack_game_data: List[BlackJackData] = []

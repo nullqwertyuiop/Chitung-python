@@ -23,7 +23,7 @@ from ..utils.depends import BlacklistControl, FunctionControl
 channel = Channel.current()
 
 channel.name("ChitungLottery")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
 winner_dir = Path(Path(__file__).parent / "assets")
@@ -43,7 +43,7 @@ c4_activation_flags = []
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("lottery")
+            FunctionControl.enable(FunctionControl.Lottery)
         ]
     )
 )

@@ -1,7 +1,7 @@
 from graia.ariadne import get_running
 from graia.ariadne.adapter import Adapter
 from graia.ariadne.app import Ariadne
-from graia.ariadne.event.message import GroupMessage, MessageEvent
+from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image
 from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, SpacePolicy
@@ -13,7 +13,7 @@ from .utils.depends import BlacklistControl, FunctionControl
 channel = Channel.current()
 
 channel.name("ChitungLovelyImage")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("OK Animal")
 
 urls = {
@@ -43,7 +43,10 @@ cord = {
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -58,7 +61,7 @@ cord = {
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("responder")
+            FunctionControl.enable(FunctionControl.Responder)
         ]
     )
 )
@@ -68,8 +71,18 @@ async def chitung_animal_handler(
         animal: MatchResult
 ):
     key, animal_name = get_animal_name(animal.result.asDisplay())
-    await app.sendGroupMessage(event.sender.group, MessageChain(f"正在获取{animal_name}>>>>>>>"))
-    await app.sendGroupMessage(event.sender.group, await get_animal_image(key))
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        MessageChain(f"正在获取{animal_name}>>>>>>>")
+    )
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        await get_animal_image(key)
+    )
 
 
 async def get_animal_image(animal: str, retry_count: int = 0):

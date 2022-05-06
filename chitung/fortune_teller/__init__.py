@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 from graia.ariadne.app import Ariadne
-from graia.ariadne.event.message import GroupMessage, MessageEvent
+from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image
 from graia.ariadne.message.element import Plain, At
@@ -18,13 +18,16 @@ from ..utils.depends import BlacklistControl, FunctionControl
 channel = Channel.current()
 
 channel.name("ChitungFortuneTeller")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("这就是你今天的签")
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[GroupMessage],
+        listening_events=[
+            GroupMessage,
+            FriendMessage
+        ],
         inline_dispatchers=[
             Twilight(
                 [
@@ -36,7 +39,7 @@ channel.description("这就是你今天的签")
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable("responder")
+            FunctionControl.enable(FunctionControl.Responder)
         ]
     )
 )
@@ -48,11 +51,17 @@ async def chitung_fortune_teller_handler(
     now = datetime.now()
     random.seed(int(f"{supplicant.id}{now.year * 1000}{now.month * 100}{now.day}"))
     if random.random() <= 0.02:
-        await app.sendGroupMessage(event.sender.group, MessageChain.create([
-            At(supplicant) if isinstance(supplicant, Member) else Plain(text=f"@{supplicant.nickname}"),
-            Plain(text="\n今天的占卜麻将牌是: 寄\n运势是: 寄吧\n是寄吧，寄吧寄吧寄吧"),
-            Image(path=Path(assets_dir / "寄.jpg"))
-        ]))
+        await app.sendMessage(
+            event.sender.group
+            if isinstance(event, GroupMessage)
+            else event.sender,
+            MessageChain.create([
+                At(supplicant) if isinstance(supplicant, Member) else Plain(text=f"@{supplicant.nickname}"),
+                Plain(text="\n今天的占卜麻将牌是: 寄\n运势是: "
+                           "寄吧\n是寄吧，寄吧寄吧寄吧"),
+                Image(path=Path(assets_dir / "寄.jpg"))
+            ])
+        )
     mahjong_of_the_day = random.randint(1, 144)
     if mahjong_of_the_day < 36:
         mahjong_numero = mahjong_of_the_day % 9
@@ -74,11 +83,17 @@ async def chitung_fortune_teller_handler(
         mahjong = f"花牌（{hua_pai[mahjong_of_the_day - 136]}）"
     colour = "Red" if random.randrange(2) else "Yellow"
     image_path = Path(assets_dir / colour / f"{mahjong}.png")
-    await app.sendGroupMessage(event.sender.group, MessageChain.create([
-        At(supplicant) if isinstance(supplicant, Member) else f"@{supplicant.nickname}",
-        Plain(text=f"\n今天的占卜麻将牌是: {mahjong}\n运势是: {luck[mahjong_numero]}\n{saying[mahjong_numero]}"),
-        Image(path=image_path),
-    ]))
+    await app.sendMessage(
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
+        MessageChain.create([
+            At(supplicant) if isinstance(supplicant, Member) else f"@{supplicant.nickname}",
+            Plain(text=f"\n今天的占卜麻将牌是: {mahjong}\n运势是: "
+                       f"{luck[mahjong_numero]}\n{saying[mahjong_numero]}"),
+            Image(path=image_path),
+        ])
+    )
 
 
 # <editor-fold desc="Texts">

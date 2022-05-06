@@ -16,7 +16,7 @@ from .utils.depends import BlacklistControl
 channel = Channel.current()
 
 channel.name("ChitungEventListener")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
 

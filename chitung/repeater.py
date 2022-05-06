@@ -6,17 +6,24 @@ from graia.ariadne.message.element import Image, Plain, At, Quote, AtAll, Face, 
 from graia.saya import Saya, Channel
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 
+from .utils.depends import FunctionControl
+
 saya = Saya.current()
 channel = Channel.current()
 
 channel.name("ChitungRepeater")
-channel.author("角川烈&白门守望者 (Chitung-public)，nullqwertyuiop (Chitung-python)")
+channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("Repeater")
 
 group_repeat = {}
 
 
-@channel.use(ListenerSchema(listening_events=[GroupMessage]))
+@channel.use(
+    ListenerSchema(
+        listening_events=[GroupMessage],
+        decorators=[FunctionControl.enable(FunctionControl.Responder)]
+    )
+)
 async def chitung_repeater_handler(app: Ariadne, message: MessageChain, group: Group):
     global group_repeat
     if message.has(Forward) or message.has(App) or message.has(Json) or message.has(Xml) or message.has(MarketFace):
