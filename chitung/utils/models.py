@@ -74,37 +74,22 @@ class GroupConfigList(BaseModel):
                     continue
                 self.groupConfigList.append(GroupConfig(groupID=group.id))
 
-    def get(
-            self,
-            group_id: int,
-            *,
-            create_if_none: bool = True
-    ):
-        if group_config := list(filter(
-            lambda cfg:
-            cfg.groupID == group_id,
-            self.groupConfigList
-        )):
+    def get(self, group_id: int, *, create_if_none: bool = True):
+        if group_config := list(
+            filter(lambda cfg: cfg.groupID == group_id, self.groupConfigList)
+        ):
             return group_config[0]
         elif create_if_none:
             self.groupConfigList.append(GroupConfig(groupID=group_id))
             return self.get(group_id, create_if_none=False)
 
-    def block_member(
-            self,
-            group: Union[Group, int],
-            target: Union[Member, int]
-    ):
+    def block_member(self, group: Union[Group, int], target: Union[Member, int]):
         group = group.id if isinstance(group, Group) else group
         target = target.id if isinstance(target, Member) else target
         if cfg := self.get(group):
             cfg.blockedUser.append(target)
 
-    def unblock_member(
-            self,
-            group: Union[Group, int],
-            target: Union[Member, int]
-    ):
+    def unblock_member(self, group: Union[Group, int], target: Union[Member, int]):
         group = group.id if isinstance(group, Group) else group
         target = target.id if isinstance(target, Member) else target
         if cfg := self.get(group):
@@ -114,10 +99,7 @@ class GroupConfigList(BaseModel):
             return False
 
     def alt_setting(
-            self,
-            group: Union[Group, int],
-            setting: GroupSwitch,
-            new_value: bool
+        self, group: Union[Group, int], setting: GroupSwitch, new_value: bool
     ):
         group = group.id if isinstance(group, Group) else group
         if cfg := self.get(group):
@@ -147,7 +129,7 @@ class UniversalImageResponder(BaseModel):
     keyword: List[str]
     directoryName: str
     text: str
-    triggerType: Literal['Equal', 'Contain']
+    triggerType: Literal["Equal", "Contain"]
     responseType: Literal["Friend", "Group", "Any"]
 
 
@@ -162,5 +144,10 @@ class UserPerm(Enum):
     BOT_OWNER = "BOT_OWNER"
 
     def __lt__(self, other: "UserPerm"):
-        lv_map = {UserPerm.MEMBER: 1, UserPerm.ADMINISTRATOR: 2, UserPerm.OWNER: 3, UserPerm.BOT_OWNER: 4}
+        lv_map = {
+            UserPerm.MEMBER: 1,
+            UserPerm.ADMINISTRATOR: 2,
+            UserPerm.OWNER: 3,
+            UserPerm.BOT_OWNER: 4,
+        }
         return lv_map[self] < lv_map[other]

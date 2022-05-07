@@ -20,11 +20,13 @@ class PokerSuit(Enum):
 
     @staticmethod
     def get(index: int):
-        return [PokerSuit.Diamond, PokerSuit.Club, PokerSuit.Heart, PokerSuit.Spade][index]
+        return [PokerSuit.Diamond, PokerSuit.Club, PokerSuit.Heart, PokerSuit.Spade][
+            index
+        ]
 
 
 class Poker:
-    _poker_name = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    _poker_name = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
     def __init__(self, number: int, suit: PokerSuit):
         self.number = number
@@ -44,7 +46,6 @@ class Poker:
 
 
 class BlackJackPlayer:
-
     def __init__(self, player_id, bet=0, is_bookmaker=False):
         self.player_id = player_id
         self.is_bookmaker = is_bookmaker
@@ -203,9 +204,16 @@ class BlackJackData:
         player.has_busted = True
 
     def check_all_fold(self):
-        return len(
-            [player for player in self.black_jack_players if player.player_id != 0 and player.can_operate]
-        ) == 0
+        return (
+            len(
+                [
+                    player
+                    for player in self.black_jack_players
+                    if player.player_id != 0 and player.can_operate
+                ]
+            )
+            == 0
+        )
 
     def fold_all(self):
         for p in self.black_jack_players:
@@ -231,11 +239,12 @@ class BlackJackData:
     def calculate_bet(self, player_id):
         """计算赌局结果"""
         player = self.get_player(player_id)
-        coefficient = ((1 - int(player.has_assurance) * 0.5) * self.normal_point(player_id) +
-                       self.pair_point(player_id) +
-                       self.special_pattern_point(player_id) +
-                       int(player.has_assurance) * self.assurance_point(player_id)
-                       )
+        coefficient = (
+            (1 - int(player.has_assurance) * 0.5) * self.normal_point(player_id)
+            + self.pair_point(player_id)
+            + self.special_pattern_point(player_id)
+            + int(player.has_assurance) * self.assurance_point(player_id)
+        )
         return player.bet * coefficient
 
     def normal_point(self, player_id):
@@ -250,7 +259,9 @@ class BlackJackData:
             point_2 = player.calculate_cards_point(player.cards[1])
             if point_2 > 21:
                 point_2 = 0
-            return self.compare_with_bookmaker(point_1) + self.compare_with_bookmaker(point_2)
+            return self.compare_with_bookmaker(point_1) + self.compare_with_bookmaker(
+                point_2
+            )
         if player.has_busted:
             return 0
         return self.compare_with_bookmaker(player.calculate_point())

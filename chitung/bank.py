@@ -9,7 +9,12 @@ from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import At, Plain
-from graia.ariadne.message.parser.twilight import Twilight, FullMatch, RegexMatch, RegexResult
+from graia.ariadne.message.parser.twilight import (
+    Twilight,
+    FullMatch,
+    RegexMatch,
+    RegexResult,
+)
 from graia.ariadne.model import Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
@@ -28,7 +33,7 @@ vault_dir = Path(data_dir / "bank_record.json")
 
 
 class Currency(Enum):
-    """ 货币类型，记得用 CUCUMBER_PESO """
+    """货币类型，记得用 CUCUMBER_PESO"""
 
     CUCUMBER_PESO = ("cp", "黄瓜比索")
     PUMPKIN_PESO = ("pk", "南瓜比索")
@@ -52,10 +57,7 @@ class Vault:
             self.load_bank()
 
     def get_bank_msg(
-            self,
-            member: Member,
-            c_list: List[Currency] = None,
-            is_group: bool = True
+        self, member: Member, c_list: List[Currency] = None, is_group: bool = True
     ) -> MessageChain:
         """
         依据传入的 `member` 与 `c_list` 生成包含特定用户就某货币类型余额信息的消息链
@@ -73,17 +75,16 @@ class Vault:
             c_list = [Currency.DEFAULT]
 
         user_bank = self.get_bank(member, c_list, chs=True)
-        msg_chain = ([At(member), Plain(text=" ")] if is_group else []) + [Plain(text="您的余额为")]
+        msg_chain = ([At(member), Plain(text=" ")] if is_group else []) + [
+            Plain(text="您的余额为")
+        ]
         return MessageChain.create(
-            msg_chain + [Plain(text=f" {value} {key}") for key, value in user_bank.items()]
+            msg_chain
+            + [Plain(text=f" {value} {key}") for key, value in user_bank.items()]
         )
 
     def get_bank(
-            self,
-            member: Member,
-            c_list: List[Currency] = None,
-            *,
-            chs: bool = False
+        self, member: Member, c_list: List[Currency] = None, *, chs: bool = False
     ) -> Dict[str, int]:
         """
         依据传入的 `member` 与 `c_list` 获取特定用户就某货币类型的余额
@@ -101,7 +102,12 @@ class Vault:
             c_list = [Currency.DEFAULT]
 
         if str(member.id) in self.vault.keys():
-            user_bank = {c.value[0 if not chs else 1]: int(self.vault[str(member.id)].get(c.value[0])) for c in c_list}
+            user_bank = {
+                c.value[0 if not chs else 1]: int(
+                    self.vault[str(member.id)].get(c.value[0])
+                )
+                for c in c_list
+            }
         else:
             for c in c_list:
                 self.set_bank(member.id, 0, c)
@@ -109,20 +115,17 @@ class Vault:
         return user_bank
 
     def store_bank(self) -> NoReturn:
-        """ 写入 vault 至 json """
+        """写入 vault 至 json"""
         with open(vault_dir, "w", encoding="utf-8") as f:
             f.write(json.dumps(self.vault, indent=4))
 
     def load_bank(self) -> NoReturn:
-        """ 读取 json 至 vault """
+        """读取 json 至 vault"""
         with open(vault_dir, "r", encoding="utf-8") as f:
             self.vault = json.loads(f.read())
 
     def update_bank(
-            self,
-            supplicant: int,
-            amount: int,
-            c: Currency = Currency.DEFAULT
+        self, supplicant: int, amount: int, c: Currency = Currency.DEFAULT
     ) -> int:
         """
         依据传入的 `supplicant`, `amount` 与 `c` 更新特定用户就某货币类型的余额
@@ -143,10 +146,7 @@ class Vault:
         return self.vault[str(supplicant)][c.value[0]]
 
     def set_bank(
-            self,
-            supplicant: int,
-            amount: int,
-            c: Currency = Currency.DEFAULT
+        self, supplicant: int, amount: int, c: Currency = Currency.DEFAULT
     ) -> int:
         """
         依据传入的 `supplicant`, `amount` 与 `c` 设置特定用户就某货币类型的余额
@@ -167,10 +167,7 @@ class Vault:
         return self.vault[str(supplicant)][c.value[0]]
 
     def has_enough_money(
-            self,
-            supplicant: Member,
-            amount: int,
-            c: Currency = Currency.DEFAULT
+        self, supplicant: Member, amount: int, c: Currency = Currency.DEFAULT
     ) -> bool:
         """
         依据传入的 `supplicant`, `amount` 与 `c` 检查特定用户是否有某货币类型的足够余额
@@ -194,39 +191,23 @@ vault = Vault()
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
-        inline_dispatchers=[
-            Twilight(
-                [
-                    FullMatch("/bank")
-                ]
-            )
-        ],
+        listening_events=[GroupMessage, FriendMessage],
+        inline_dispatchers=[Twilight([FullMatch("/bank")])],
         decorators=[
             Permission.require(UserPerm.OWNER),
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Casino)
-        ]
+            FunctionControl.enable(FunctionControl.Casino),
+        ],
     )
 )
-async def chitung_bank_handler(
-        app: Ariadne,
-        event: MessageEvent
-):
+async def chitung_bank_handler(app: Ariadne, event: MessageEvent):
     await app.sendMessage(
-        event.sender.group
-        if isinstance(event, GroupMessage)
-        else event.sender,
+        event.sender.group if isinstance(event, GroupMessage) else event.sender,
         vault.get_bank_msg(
             event.sender,
             [Currency.CUCUMBER_PESO],
-            is_group=True
-            if isinstance(event, GroupMessage)
-            else False
-        )
+            is_group=True if isinstance(event, GroupMessage) else False,
+        ),
     )
 
 
@@ -238,66 +219,42 @@ async def chitung_bank_handler(
                 [
                     FullMatch("/set"),
                     RegexMatch(r"\d+ ") @ "target",
-                    RegexMatch(r"\d+") @ "amount"
+                    RegexMatch(r"\d+") @ "amount",
                 ]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
-            Permission.require(UserPerm.BOT_OWNER)
-        ]
+            Permission.require(UserPerm.BOT_OWNER),
+        ],
     )
 )
 async def chitung_bank_set_handler(
-        app: Ariadne,
-        event: MessageEvent,
-        target: RegexResult,
-        amount: RegexResult
+    app: Ariadne, event: MessageEvent, target: RegexResult, amount: RegexResult
 ):
     target = int(target.result.asDisplay().strip())
     amount = int(amount.result.asDisplay())
-    vault.set_bank(
-        target,
-        amount,
-        Currency.CUCUMBER_PESO
-    )
+    vault.set_bank(target, amount, Currency.CUCUMBER_PESO)
     await app.sendMessage(
-        event.sender.group
-        if isinstance(event, GroupMessage)
-        else event.sender,
-        MessageChain("已设置成功。")
+        event.sender.group if isinstance(event, GroupMessage) else event.sender,
+        MessageChain("已设置成功。"),
     )
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
+        listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[
-            Twilight(
-                [
-                    FullMatch("/laundry"),
-                    RegexMatch(r"\d+") @ "amount"
-                ]
-            )
+            Twilight([FullMatch("/laundry"), RegexMatch(r"\d+") @ "amount"])
         ],
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
-            Permission.require(UserPerm.BOT_OWNER)
-        ]
+            Permission.require(UserPerm.BOT_OWNER),
+        ],
     )
 )
-async def chitung_bank_laundry_handler(
-        event: MessageEvent,
-        amount: RegexResult
-):
+async def chitung_bank_laundry_handler(event: MessageEvent, amount: RegexResult):
     amount = int(amount.result.asDisplay())
-    vault.update_bank(
-        event.sender.id,
-        amount,
-        Currency.CUCUMBER_PESO
-    )
+    vault.update_bank(event.sender.id, amount, Currency.CUCUMBER_PESO)

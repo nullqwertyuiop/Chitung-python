@@ -18,9 +18,11 @@ class BlacklistControl(object):
                 if event.sender.id in bl.friendBlacklist:
                     raise ExecutionStop
             elif isinstance(event, GroupMessage):
-                if (event.sender.group in bl.groupBlacklist
-                        or event.sender.id in group_config
-                                .get(event.sender.group.id).blockedUser):
+                if (
+                    event.sender.group in bl.groupBlacklist
+                    or event.sender.id
+                    in group_config.get(event.sender.group.id).blockedUser
+                ):
                     raise ExecutionStop
 
         return Depend(blacklist)
@@ -37,14 +39,19 @@ class FunctionControl(object):
     def enable(function: str) -> Depend:
         async def switch(event: MessageEvent) -> NoReturn:
             if isinstance(event, FriendMessage):
-                if any([not getattr(config.friendFC, function),
-                        not config.rc.answerFriend]):
+                if any(
+                    [not getattr(config.friendFC, function), not config.rc.answerFriend]
+                ):
                     raise ExecutionStop
             elif isinstance(event, GroupMessage):
-                if any([not getattr(config.groupFC, function),
+                if any(
+                    [
+                        not getattr(config.groupFC, function),
                         not config.rc.answerGroup,
                         not group_config.get(event.sender.group.id).globalControl,
-                        not getattr(group_config.get(event.sender.group.id), function)]):
+                        not getattr(group_config.get(event.sender.group.id), function),
+                    ]
+                ):
                     raise ExecutionStop
 
         return Depend(switch)

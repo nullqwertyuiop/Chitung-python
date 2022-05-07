@@ -11,7 +11,11 @@ if not os.path.isdir(Path(Path(__file__).parent.parent) / "data"):
 
 def load_blacklist() -> BlacklistModel:
     if os.path.isfile(Path(Path(__file__).parent.parent) / "data" / "Blacklist.json"):
-        with open(Path(Path(__file__).parent.parent) / "data" / "Blacklist.json", "r", encoding="utf-8") as f:
+        with open(
+            Path(Path(__file__).parent.parent) / "data" / "Blacklist.json",
+            "r",
+            encoding="utf-8",
+        ) as f:
             bl = BlacklistModel(**json.loads(f.read()))
     else:
         bl = BlacklistModel()
@@ -19,7 +23,11 @@ def load_blacklist() -> BlacklistModel:
 
 
 def store_blacklist():
-    with open(Path(Path(__file__).parent.parent) / "data" / "Blacklist.json", "w", encoding="utf-8") as f:
+    with open(
+        Path(Path(__file__).parent.parent) / "data" / "Blacklist.json",
+        "w",
+        encoding="utf-8",
+    ) as f:
         f.write(json.dumps(blacklist.dict(), indent=4, ensure_ascii=False))
 
 

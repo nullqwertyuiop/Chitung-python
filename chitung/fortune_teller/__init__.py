@@ -24,43 +24,34 @@ channel.description("这就是你今天的签")
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
+        listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[
             Twilight(
-                [
-                    WildcardMatch().flags(re.S),
-                    UnionMatch("求签", "麻将"),
-                    WildcardMatch()
-                ]
+                [WildcardMatch().flags(re.S), UnionMatch("求签", "麻将"), WildcardMatch()]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Responder)
-        ]
+            FunctionControl.enable(FunctionControl.Responder),
+        ],
     )
 )
-async def chitung_fortune_teller_handler(
-        app: Ariadne,
-        event: MessageEvent
-):
+async def chitung_fortune_teller_handler(app: Ariadne, event: MessageEvent):
     supplicant = event.sender
     now = datetime.now()
     random.seed(int(f"{supplicant.id}{now.year * 1000}{now.month * 100}{now.day}"))
     if random.random() <= 0.02:
         await app.sendMessage(
-            event.sender.group
-            if isinstance(event, GroupMessage)
-            else event.sender,
-            MessageChain.create([
-                At(supplicant) if isinstance(supplicant, Member) else Plain(text=f"@{supplicant.nickname}"),
-                Plain(text="\n今天的占卜麻将牌是: 寄\n运势是: "
-                           "寄吧\n是寄吧，寄吧寄吧寄吧"),
-                Image(path=Path(assets_dir / "寄.jpg"))
-            ])
+            event.sender.group if isinstance(event, GroupMessage) else event.sender,
+            MessageChain.create(
+                [
+                    At(supplicant)
+                    if isinstance(supplicant, Member)
+                    else Plain(text=f"@{supplicant.nickname}"),
+                    Plain(text="\n今天的占卜麻将牌是: 寄\n运势是: " "寄吧\n是寄吧，寄吧寄吧寄吧"),
+                    Image(path=Path(assets_dir / "寄.jpg")),
+                ]
+            ),
         )
     mahjong_of_the_day = random.randint(1, 144)
     if mahjong_of_the_day < 36:
@@ -84,15 +75,19 @@ async def chitung_fortune_teller_handler(
     colour = "Red" if random.randrange(2) else "Yellow"
     image_path = Path(assets_dir / colour / f"{mahjong}.png")
     await app.sendMessage(
-        event.sender.group
-        if isinstance(event, GroupMessage)
-        else event.sender,
-        MessageChain.create([
-            At(supplicant) if isinstance(supplicant, Member) else f"@{supplicant.nickname}",
-            Plain(text=f"\n今天的占卜麻将牌是: {mahjong}\n运势是: "
-                       f"{luck[mahjong_numero]}\n{saying[mahjong_numero]}"),
-            Image(path=image_path),
-        ])
+        event.sender.group if isinstance(event, GroupMessage) else event.sender,
+        MessageChain.create(
+            [
+                At(supplicant)
+                if isinstance(supplicant, Member)
+                else f"@{supplicant.nickname}",
+                Plain(
+                    text=f"\n今天的占卜麻将牌是: {mahjong}\n运势是: "
+                    f"{luck[mahjong_numero]}\n{saying[mahjong_numero]}"
+                ),
+                Image(path=image_path),
+            ]
+        ),
     )
 
 
@@ -143,7 +138,7 @@ luck = [
     "大吉",
     "中吉",
     "大吉",
-    "中吉"
+    "中吉",
 ]
 saying = [
     "别出门了，今天注意安全。",
@@ -187,7 +182,7 @@ saying = [
     "是仅次于大大吉的超级好运！",
     "非常好的运气！",
     "是仅次于大大吉的超级好运！",
-    "非常好的运气！姻缘不错！"
+    "非常好的运气！姻缘不错！",
 ]
 # </editor-fold>
 assets_dir = Path(Path(__file__).parent / "assets" / "mahjong")

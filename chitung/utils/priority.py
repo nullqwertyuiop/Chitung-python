@@ -1,5 +1,6 @@
 class Priority:
-    """ 优先级 """
+    """优先级"""
+
     Fursona = 16
     FortuneTeller = 16
     C4 = 16

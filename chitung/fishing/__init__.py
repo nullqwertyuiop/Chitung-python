@@ -14,7 +14,14 @@ from graia.ariadne import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image, Plain, At
-from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, SpacePolicy, RegexMatch, FullMatch
+from graia.ariadne.message.parser.twilight import (
+    Twilight,
+    UnionMatch,
+    MatchResult,
+    SpacePolicy,
+    RegexMatch,
+    FullMatch,
+)
 from graia.ariadne.model import Group, Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
@@ -39,27 +46,24 @@ fishing_process_flag = []
             Twilight(
                 [
                     FullMatch("/").space(SpacePolicy.NOSPACE),
-                    UnionMatch("endfish", "collection", "fishhelp", "handbook") @ "function",
+                    UnionMatch("endfish", "collection", "fishhelp", "handbook")
+                    @ "function",
                 ]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Fish)
-        ]
+            FunctionControl.enable(FunctionControl.Fish),
+        ],
     )
 )
 async def chitung_fish_tool_handler(
-        app: Ariadne,
-        event: MessageEvent,
-        function: MatchResult,
+    app: Ariadne,
+    event: MessageEvent,
+    function: MatchResult,
 ):
     if function.result.asDisplay() == "endfish":
-        reply_msg = MessageChain.create(
-            [
-                At(event.sender.id)
-            ]
-        )
+        reply_msg = MessageChain.create([At(event.sender.id)])
         if event.sender.id in fishing_process_flag:
             reply_msg = reply_msg + Plain(text="已经停止钓鱼。")
             fishing_process_flag.remove(event.sender.id)
@@ -73,7 +77,7 @@ async def chitung_fish_tool_handler(
         reply_msg = MessageChain.create(
             [
                 At(event.sender.id),
-                Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n")
+                Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n"),
             ]
         )
         handbook_img = await async_get_handbook(event.sender.id)
@@ -83,23 +87,13 @@ async def chitung_fish_tool_handler(
     elif function.result.asDisplay() == "fishhelp":
         image_path = Path(assets_dir / "fishinfo.png")
         await app.sendGroupMessage(
-            event.sender.group,
-            MessageChain.create(
-                [
-                    Image(path=image_path)
-                ]
-            )
+            event.sender.group, MessageChain.create([Image(path=image_path)])
         )
 
     elif function.result.asDisplay() == "handbook":
         image_path = Path(assets_dir / "handbook.png")
         await app.sendGroupMessage(
-            event.sender.group,
-            MessageChain.create(
-                [
-                    Image(path=image_path)
-                ]
-            )
+            event.sender.group, MessageChain.create([Image(path=image_path)])
         )
 
 
@@ -116,14 +110,14 @@ async def chitung_fish_tool_handler(
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Fish)
-        ]
+            FunctionControl.enable(FunctionControl.Fish),
+        ],
     )
 )
 async def chitung_fish_handler(
-        app: Ariadne,
-        event: MessageEvent,
-        pool: MatchResult,
+    app: Ariadne,
+    event: MessageEvent,
+    pool: MatchResult,
 ):
     global fishing_record
     water = pool.result.asDisplay().strip().upper()
@@ -133,16 +127,21 @@ async def chitung_fish_handler(
         w = get_water(water)
         reply_msg = MessageChain.create(At(event.sender.id))
         if w != Waters.General:  # 非常规水域扣费
-            if vault.has_enough_money(event.sender, Currency.CUCUMBER_PESO, FISHING_COST):
+            if vault.has_enough_money(
+                event.sender, Currency.CUCUMBER_PESO, FISHING_COST
+            ):
                 reply_msg = reply_msg + Plain(text=f"已收到您的捕鱼费用{FISHING_COST}南瓜比索。")
             else:
-                await app.sendGroupMessage(event.sender.group, MessageChain.create(
-                    reply_msg + Plain(text="您的南瓜比索数量不够，请检查。")
-                ))
+                await app.sendGroupMessage(
+                    event.sender.group,
+                    MessageChain.create(reply_msg + Plain(text="您的南瓜比索数量不够，请检查。")),
+                )
                 return
 
         now_ts = int(time.time())  # 精确到秒
-        fishing_record = [start_time for start_time in fishing_record if start_time - now_ts < 3600]
+        fishing_record = [
+            start_time for start_time in fishing_record if start_time - now_ts < 3600
+        ]
         record_in_one_hour = len(fishing_record)
         _time = 3 + random.randint(0, 3) + record_in_one_hour  # 线性增加时间
         item_number = 3 + random.randint(0, 1)
@@ -150,12 +149,9 @@ async def chitung_fish_handler(
         fishing_process_flag.append(event.sender.id)
         reply_msg = reply_msg + Plain(
             text=f"本次钓鱼预计时间为{_time}分钟。"
-                 f"麦氏渔业公司提醒您使用/fishhelp查询钓鱼功能的相关信息，如果长时间钓鱼未收杆，请使用/endfish 强制停止钓鱼。"
+            f"麦氏渔业公司提醒您使用/fishhelp查询钓鱼功能的相关信息，如果长时间钓鱼未收杆，请使用/endfish 强制停止钓鱼。"
         )
-        await app.sendGroupMessage(
-            event.sender.group,
-            MessageChain.create(reply_msg)
-        )
+        await app.sendGroupMessage(event.sender.group, MessageChain.create(reply_msg))
         # 这就是钓鱼开始了，在这躺下，躺够了起来
         await asyncio.sleep(_time * 60)
         # 起来一看，flag没了，被end了。
@@ -167,7 +163,7 @@ async def chitung_fish_handler(
         total_value = 0
         for fish_code, count in fish_map.items():
             fish = get_fish_by_code(fish_code)
-            value = fish['price'] * count
+            value = fish["price"] * count
             total_value += value
             reply_msg += f"{fish['name']}x{count}，价值{value}南瓜比索\n"
         fish_img = await async_get_image(fish_map.keys())
@@ -175,30 +171,17 @@ async def chitung_fish_handler(
         total_value = int(time_fix_coeff * total_value)
         reply_msg += f"\n时间修正系数为{time_fix_coeff}，共值{total_value}南瓜比索。\n\n"
         reply_msg += Image(data_bytes=fish_img)
-        vault.update_bank(
-            event.sender.id,
-            total_value,
-            Currency.CUCUMBER_PESO
-        )
-        await save_record(
-            event.sender.id,
-            fish_map.keys()
-        )
+        vault.update_bank(event.sender.id, total_value, Currency.CUCUMBER_PESO)
+        await save_record(event.sender.id, fish_map.keys())
         fishing_process_flag.remove(event.sender.id)
-        await app.sendGroupMessage(
-            event.sender.group,
-            MessageChain.create(reply_msg)
-        )
+        await app.sendGroupMessage(event.sender.group, MessageChain.create(reply_msg))
 
 
 async def collection(app: Ariadne, group: Group, member: Member):
     collected = get_collected(member.id)
     collected = sum(fish_collected for fish_collected in collected)
     reply_msg = MessageChain.create(
-        [
-            At(member.id),
-            Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n")
-        ]
+        [At(member.id), Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n")]
     )
     handbook_img = await async_get_handbook(member.id)
     reply_msg += Image(data_bytes=handbook_img)
@@ -266,13 +249,16 @@ def calculate_daytime() -> tuple:
     now = datetime.datetime.now()
     # 是否过了春分
     equinox = datetime.datetime.strptime(
-        f"{now.year if now.month * 100 + now.day >= 321 else now.year - 1}-3-21", '%Y-%m-%d'
+        f"{now.year if now.month * 100 + now.day >= 321 else now.year - 1}-3-21",
+        "%Y-%m-%d",
     ).date()
 
     gap_days = (datetime.datetime.now().date() - equinox).days.real
     days_of_year = 366 if now.year % 4 == 0 else 365
     theta1 = math.asin(
-        math.sin(math.radians(360.0 * gap_days / days_of_year)) * math.sin(math.radians(23 + 26.0 / 60 + 21.0 / 3600)))
+        math.sin(math.radians(360.0 * gap_days / days_of_year))
+        * math.sin(math.radians(23 + 26.0 / 60 + 21.0 / 3600))
+    )
     theta2 = math.asin(math.tan(math.radians(31.23)) * math.tan(theta1))
     time_sunrise = 6 - math.degrees(theta2) / 360 * 24 - (121.474 - 120) / 15
     time_sunset = 18 + math.degrees(theta2) / 360 * 24 - (121.474 - 120) / 15
@@ -323,16 +309,26 @@ def load_fishing_records():
 
 
 def get_image(fish_list):
-    fish_block = PillowImage.new("RGBA", (32 * len(fish_list) + 20, 32 + 20), (12, 24, 30))
+    fish_block = PillowImage.new(
+        "RGBA", (32 * len(fish_list) + 20, 32 + 20), (12, 24, 30)
+    )
     fish_block_draw = ImageDraw.ImageDraw(fish_block)
     fish_block_draw.rectangle(((0, 0), (32 * len(fish_list) + 20, 3)), fill="#FFCB48")
-    fish_block_draw.rectangle(((0, 32 + 20 - 3), (32 * len(fish_list) + 20, 32 + 20)), fill="#FFCB48")
+    fish_block_draw.rectangle(
+        ((0, 32 + 20 - 3), (32 * len(fish_list) + 20, 32 + 20)), fill="#FFCB48"
+    )
     fish_block = fish_block.convert("RGBA")
     for index, code in enumerate(fish_list):
-        fish_image = PillowImage.open(assets_dir / "NormalFish" / f"{code}.png", ).convert('RGBA')
-        fish_block.paste(fish_image, (index * 32 + 10, 10), mask=fish_image.split()[3])  # mask 透明通道
-    fish_block = fish_block.resize((int(fish_block.size[0] * 2.5), int(fish_block.size[1] * 2.5)),
-                                   resample=PillowImage.AFFINE)
+        fish_image = PillowImage.open(
+            assets_dir / "NormalFish" / f"{code}.png",
+        ).convert("RGBA")
+        fish_block.paste(
+            fish_image, (index * 32 + 10, 10), mask=fish_image.split()[3]
+        )  # mask 透明通道
+    fish_block = fish_block.resize(
+        (int(fish_block.size[0] * 2.5), int(fish_block.size[1] * 2.5)),
+        resample=PillowImage.AFFINE,
+    )
     bytes_io = BytesIO()
     fish_block.save(bytes_io, format="png")
     return bytes_io.getvalue()
@@ -367,19 +363,25 @@ def get_handbook(record_id):
     collected_list = get_collected(record_id)
     for index, fish_collected in enumerate(collected_list):
         fish_img_path = (
-                assets_dir /
-                f"{'NormalFish' if fish_collected else 'DarkFish'}" /
-                f"{FISHING_LIST[index]['code']}.png"
+            assets_dir
+            / f"{'NormalFish' if fish_collected else 'DarkFish'}"
+            / f"{FISHING_LIST[index]['code']}.png"
         )
         fish_img = PillowImage.open(fish_img_path).convert("RGBA")
-        handbooks.paste(fish_img, (vertical_count * 32, horizontal_count * 32), mask=fish_img.split()[3])
+        handbooks.paste(
+            fish_img,
+            (vertical_count * 32, horizontal_count * 32),
+            mask=fish_img.split()[3],
+        )
         vertical_count = vertical_count + 1
         if vertical_count == 8:
             vertical_count = 0
             horizontal_count = horizontal_count + 1
     handbook_template.paste(handbooks, (45, 269))
     size = handbook_template.size
-    handbook_template = handbook_template.resize((int(size[0] * 2.5), int(size[1] * 2.5)), resample=PillowImage.AFFINE)
+    handbook_template = handbook_template.resize(
+        (int(size[0] * 2.5), int(size[1] * 2.5)), resample=PillowImage.AFFINE
+    )
     bytes_io = BytesIO()
     handbook_template.save(bytes_io, format="png")
     return bytes_io.getvalue()
@@ -399,4 +401,6 @@ write_lock = Lock()
 
 if not os.path.isfile(record_dir):
     with Path(record_dir).open("w", encoding="utf-8") as _:
-        _.write(json.dumps({"singleRecords": [{"ID": 0, "recordList": [101]}]}, indent=4))
+        _.write(
+            json.dumps({"singleRecords": [{"ID": 0, "recordList": [101]}]}, indent=4)
+        )

@@ -19,7 +19,6 @@ Chitung-python 已完成以下功能的移植：
 - /funct
     - 插件位置：`chitung.help`
     - 可用范围：全局
-    - 仅已移植 v0.1.3 的 /funct 功能，v0.1.4 使用的动态生成待移植
 
 - /bummer
     - 插件位置：`chitung.lottery`
@@ -122,8 +121,6 @@ Chitung-python 已完成以下功能的移植：
 
 - 支持设置最低群组人数
 
-- 支持热加载、卸载插件
-
 ## 部署使用
 
 ### 作为插件使用
@@ -131,12 +128,6 @@ Chitung-python 已完成以下功能的移植：
 若正在使用基于 `Ariadne` 框架开发的机器人，且已安装 `Saya` 及 `GraiaScheduler` 支持，可直接克隆本仓库并复制仓库中 `chitung` 文件夹至目标机器人的自定义插件目录
 
 ### 直接使用
-
-<! Placeholder !>
-
-### 特性
-
-得益于本项目使用的插件管理器 Saya，用户可灵活控制机器人使用的插件。
 
 <! Placeholder !>
 

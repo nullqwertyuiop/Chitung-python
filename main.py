@@ -16,8 +16,7 @@ app = Ariadne(
 saya = app.create(Saya)
 app.create(GraiaScheduler)
 saya.install_behaviours(
-    app.create(BroadcastBehaviour),
-    app.create(GraiaSchedulerBehaviour)
+    app.create(BroadcastBehaviour), app.create(GraiaSchedulerBehaviour)
 )
 
 with saya.module_context():

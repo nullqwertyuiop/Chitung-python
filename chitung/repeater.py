@@ -1,8 +1,20 @@
 from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import Group, GroupMessage, ActiveGroupMessage
 from graia.ariadne.message.chain import MessageChain
-from graia.ariadne.message.element import Image, Plain, At, Quote, AtAll, Face, Poke, Forward, App, Json, Xml, \
-    MarketFace
+from graia.ariadne.message.element import (
+    Image,
+    Plain,
+    At,
+    Quote,
+    AtAll,
+    Face,
+    Poke,
+    Forward,
+    App,
+    Json,
+    Xml,
+    MarketFace,
+)
 from graia.saya import Saya, Channel
 from graia.saya.builtins.broadcast.schema import ListenerSchema
 
@@ -21,16 +33,19 @@ group_repeat = {}
 @channel.use(
     ListenerSchema(
         listening_events=[GroupMessage],
-        decorators=[FunctionControl.enable(FunctionControl.Responder)]
+        decorators=[FunctionControl.enable(FunctionControl.Responder)],
     )
 )
 async def chitung_repeater_handler(app: Ariadne, message: MessageChain, group: Group):
     global group_repeat
-    if message.has(Forward) or message.has(App) or message.has(Json) or message.has(Xml) or message.has(MarketFace):
-        group_repeat[group.id] = {
-            "msg": message.asPersistentString(),
-            "count": -1
-        }
+    if (
+        message.has(Forward)
+        or message.has(App)
+        or message.has(Json)
+        or message.has(Xml)
+        or message.has(MarketFace)
+    ):
+        group_repeat[group.id] = {"msg": message.asPersistentString(), "count": -1}
         return
     message_serialization = message.asPersistentString()
     if group.id not in group_repeat.keys():
@@ -46,7 +61,7 @@ async def chitung_repeater_handler(app: Ariadne, message: MessageChain, group: G
                 if msg.asDisplay() == "<! 不支持的消息类型 !>":
                     group_repeat[group.id] = {
                         "msg": msg.asPersistentString(),
-                        "count": -1
+                        "count": -1,
                     }
                     return
                 return await app.sendGroupMessage(group, msg.asSendable())
@@ -63,5 +78,5 @@ async def chitung_repeater_flush_handler(event: ActiveGroupMessage):
     global group_repeat
     group_repeat[event.subject.id] = {
         "msg": event.messageChain.asPersistentString(),
-        "count": -1
-        }
+        "count": -1,
+    }

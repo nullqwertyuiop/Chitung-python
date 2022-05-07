@@ -18,22 +18,14 @@ channel.description("七筒")
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
+        listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[Twilight([FullMatch("/optimize")])],
-        decorators=[Permission.require(UserPerm.BOT_OWNER)]
+        decorators=[Permission.require(UserPerm.BOT_OWNER)],
     )
 )
-async def chitung_optimize_handler(
-        app: Ariadne,
-        event: MessageEvent
-):
+async def chitung_optimize_handler(app: Ariadne, event: MessageEvent):
     init_priority()
     await app.sendMessage(
-        event.sender.group
-        if isinstance(event, GroupMessage)
-        else event.sender,
-        MessageChain("<! Placeholder !>")
+        event.sender.group if isinstance(event, GroupMessage) else event.sender,
+        MessageChain("<! Placeholder !>"),
     )

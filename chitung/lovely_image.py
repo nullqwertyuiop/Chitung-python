@@ -4,7 +4,12 @@ from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image
-from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, SpacePolicy
+from graia.ariadne.message.parser.twilight import (
+    Twilight,
+    UnionMatch,
+    MatchResult,
+    SpacePolicy,
+)
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
@@ -37,51 +42,79 @@ cord = {
     "malamute": ["阿拉斯加"],
     "gsd": ["德牧", "黑背"],
     "doberman": ["杜宾", "dobermann"],
-    "samoyed": ["萨摩耶"]
+    "samoyed": ["萨摩耶"],
 }
 
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
+        listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[
             Twilight(
                 [
                     UnionMatch("ok ", "Ok ", "OK ", "/").space(SpacePolicy.NOSPACE),
-                    UnionMatch("Shiba", "shiba", "狗", "柴犬", "伯恩山", "Bernese", "bernese", "狗子", "柴柴",
-                               "Husky", "husky", "Doberman", "doberman", "Gsd", "gsd", "GSD", "Dobermann",
-                               "dobermann", "喵喵", "猫猫", "二哈", "黑背", "狗狗", "德牧", "萨摩耶", "哈士奇",
-                               "Malamute", "malamute", "杜宾", "猫", "伯恩山犬", "阿拉斯加", "Dog", "dog",
-                               "Samoyed", "samoyed", "Cat", "cat", "猫咪") @ "animal"
+                    UnionMatch(
+                        "Shiba",
+                        "shiba",
+                        "狗",
+                        "柴犬",
+                        "伯恩山",
+                        "Bernese",
+                        "bernese",
+                        "狗子",
+                        "柴柴",
+                        "Husky",
+                        "husky",
+                        "Doberman",
+                        "doberman",
+                        "Gsd",
+                        "gsd",
+                        "GSD",
+                        "Dobermann",
+                        "dobermann",
+                        "喵喵",
+                        "猫猫",
+                        "二哈",
+                        "黑背",
+                        "狗狗",
+                        "德牧",
+                        "萨摩耶",
+                        "哈士奇",
+                        "Malamute",
+                        "malamute",
+                        "杜宾",
+                        "猫",
+                        "伯恩山犬",
+                        "阿拉斯加",
+                        "Dog",
+                        "dog",
+                        "Samoyed",
+                        "samoyed",
+                        "Cat",
+                        "cat",
+                        "猫咪",
+                    )
+                    @ "animal",
                 ]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Responder)
-        ]
+            FunctionControl.enable(FunctionControl.Responder),
+        ],
     )
 )
 async def chitung_animal_handler(
-        app: Ariadne,
-        event: MessageEvent,
-        animal: MatchResult
+    app: Ariadne, event: MessageEvent, animal: MatchResult
 ):
     key, animal_name = get_animal_name(animal.result.asDisplay())
     await app.sendMessage(
-        event.sender.group
-        if isinstance(event, GroupMessage)
-        else event.sender,
-        MessageChain(f"正在获取{animal_name}>>>>>>>")
+        event.sender.group if isinstance(event, GroupMessage) else event.sender,
+        MessageChain(f"正在获取{animal_name}>>>>>>>"),
     )
     await app.sendMessage(
-        event.sender.group
-        if isinstance(event, GroupMessage)
-        else event.sender,
-        await get_animal_image(key)
+        event.sender.group if isinstance(event, GroupMessage) else event.sender,
+        await get_animal_image(key),
     )
 
 
@@ -100,13 +133,17 @@ async def get_animal_image(animal: str, retry_count: int = 0):
             img_url = data["message"]
         else:
             return MessageChain(f"非常抱歉，获取{cord.get(animal)[0]}图的渠道好像出了一些问题，图片获取失败")
-    if all([not img_url.endswith("jpg"), not img_url.endswith("jpeg"), not img_url.endswith("png")]):
+    if all(
+        [
+            not img_url.endswith("jpg"),
+            not img_url.endswith("jpeg"),
+            not img_url.endswith("png"),
+        ]
+    ):
         if retry_count >= 5:
             return MessageChain(f"非常抱歉，获取{cord.get(animal)[0]}图的渠道好像出了一些问题，图片获取失败")
         return await get_animal_image(animal, retry_count + 1)
-    return MessageChain.create([
-        Image(url=img_url)
-    ])
+    return MessageChain.create([Image(url=img_url)])
 
 
 def get_animal_name(animal: str):

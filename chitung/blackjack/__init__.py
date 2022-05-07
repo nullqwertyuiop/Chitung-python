@@ -6,7 +6,13 @@ from graia.ariadne import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.element import Image, At
-from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchResult, RegexMatch, FullMatch
+from graia.ariadne.message.parser.twilight import (
+    Twilight,
+    UnionMatch,
+    MatchResult,
+    RegexMatch,
+    FullMatch,
+)
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
@@ -24,34 +30,43 @@ channel.description("您爆牌了。")
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
+        listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[
             Twilight(
                 [
                     UnionMatch(
-                        "/deal", "/fold", "/split", "/double", "/pair", "/assurance", "/surrender",
-                        "要牌", "停牌", "分牌", "双倍下注", "下注对子", "买保险", "投降"
-                    ) @ "function",
+                        "/deal",
+                        "/fold",
+                        "/split",
+                        "/double",
+                        "/pair",
+                        "/assurance",
+                        "/surrender",
+                        "要牌",
+                        "停牌",
+                        "分牌",
+                        "双倍下注",
+                        "下注对子",
+                        "买保险",
+                        "投降",
+                    )
+                    @ "function",
                 ]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Casino)
+            FunctionControl.enable(FunctionControl.Casino),
         ],
         priority=priority.Function,
-
     )
 )
 async def chitung_blackjack_ops_handler(
-        app: Ariadne,
-        event: MessageEvent,
-        function: MatchResult
+    app: Ariadne, event: MessageEvent, function: MatchResult
 ):
-    game_id = event.sender.group.id if isinstance(event, GroupMessage) else event.sender.id
+    game_id = (
+        event.sender.group.id if isinstance(event, GroupMessage) else event.sender.id
+    )
     try:
         if function.result.asDisplay() in ["/deal", "要牌"]:
             await deal(app, event, game_id)
@@ -77,10 +92,7 @@ async def chitung_blackjack_ops_handler(
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
+        listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[
             Twilight(
                 [
@@ -91,14 +103,14 @@ async def chitung_blackjack_ops_handler(
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Casino)
-        ]
+            FunctionControl.enable(FunctionControl.Casino),
+        ],
     )
 )
 async def chitung_blackjack_bet_handler(
-        app: Ariadne,
-        event: MessageEvent,
-        amount: MatchResult,
+    app: Ariadne,
+    event: MessageEvent,
+    amount: MatchResult,
 ):
     if isinstance(event, GroupMessage):
         game_id = event.sender.group.id
@@ -111,26 +123,23 @@ async def chitung_blackjack_bet_handler(
 
 @channel.use(
     ListenerSchema(
-        listening_events=[
-            GroupMessage,
-            FriendMessage
-        ],
+        listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[
             Twilight(
                 [
-                    UnionMatch('/blackjack', '二十一点'),
+                    UnionMatch("/blackjack", "二十一点"),
                 ]
             )
         ],
         decorators=[
             BlacklistControl.enable(),
-            FunctionControl.enable(FunctionControl.Casino)
-        ]
+            FunctionControl.enable(FunctionControl.Casino),
+        ],
     )
 )
 async def chitung_blackjack_handler(
-        app: Ariadne,
-        event: MessageEvent,
+    app: Ariadne,
+    event: MessageEvent,
 ):
     if isinstance(event, GroupMessage):
         game_id = event.sender.group.id
@@ -166,7 +175,9 @@ async def bet(app, event, game_id, bets):
             if event.sender.id == bjd.id:
                 asyncio.create_task(end_bet_phase(app, event, game_id, 0))
             else:
-                await send_message(app, event, "Bet 阶段已经开始，预计在60秒之内结束。可以通过/bet+金额反复追加 bet。", False)
+                await send_message(
+                    app, event, "Bet 阶段已经开始，预计在60秒之内结束。可以通过/bet+金额反复追加 bet。", False
+                )
                 asyncio.create_task(end_bet_phase(app, event, game_id))
         if bjd.get_player(event.sender.id) is None:
             # 新玩家
@@ -224,7 +235,9 @@ async def checkout_game(app, event, game_id):
         if event.sender.id == bjd.id:
             reply_msg += f"\n您获得了{result[p.player_id]}南瓜比索。"
         else:
-            reply_msg += MessageChain.create("\n", At(p.player_id), f" 获得了{result[p.player_id]}南瓜比索。")
+            reply_msg += MessageChain.create(
+                "\n", At(p.player_id), f" 获得了{result[p.player_id]}南瓜比索。"
+            )
         exchange(p.player_id, result[p.player_id])
     blackjack_game_data.remove(bjd)
     await send_message(app, event, reply_msg, at=False)
@@ -259,7 +272,9 @@ async def split(app, event, game_id):
         await send_message(app, event, "操作失败，请检查您的南瓜比索数量。")
         return
     raw_cards, piles = bjd.split(player.player_id)
-    reply_msg = MessageChain.create(f"您的原始牌堆为：\n{raw_cards[0]}{raw_cards[1]}\n您两个牌堆抽到的牌分别是：\n牌堆I：")
+    reply_msg = MessageChain.create(
+        f"您的原始牌堆为：\n{raw_cards[0]}{raw_cards[1]}\n您两个牌堆抽到的牌分别是：\n牌堆I："
+    )
     for card in piles[0]:
         reply_msg += f" {card}"
     reply_msg += "\n牌堆II："
@@ -324,37 +339,23 @@ def get_valid_game_and_player(event, game_id):
 
 def purchase(sender, cost) -> bool:
     if vault.has_enough_money(sender, Currency.CUCUMBER_PESO, cost):
-        vault.update_bank(
-            sender.id,
-            -cost,
-            Currency.CUCUMBER_PESO
-        )
+        vault.update_bank(sender.id, -cost, Currency.CUCUMBER_PESO)
         return True
     else:
         return False
 
 
 def exchange(player_id, num):
-    vault.update_bank(
-        player_id,
-        num,
-        Currency.CUCUMBER_PESO
-    )
+    vault.update_bank(player_id, num, Currency.CUCUMBER_PESO)
 
 
 async def send_message(app, event, msg, at=True):
     if isinstance(event, GroupMessage):
         if at:
             msg = MessageChain.create(At(event.sender), msg)
-        await app.sendGroupMessage(
-            event.sender.group,
-            MessageChain.create(msg)
-        )
+        await app.sendGroupMessage(event.sender.group, MessageChain.create(msg))
     else:
-        await app.sendFriendMessage(
-            event.sender,
-            MessageChain.create(msg)
-        )
+        await app.sendFriendMessage(event.sender, MessageChain.create(msg))
 
 
 def get_game_data(game_id):
