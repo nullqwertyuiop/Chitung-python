@@ -1,5 +1,7 @@
+from io import BytesIO
 from pathlib import Path
 
+from PIL import Image as PillowImage
 from graia.ariadne.app import Ariadne
 from graia.ariadne.event.message import GroupMessage, MessageEvent, FriendMessage
 from graia.ariadne.message.chain import MessageChain
@@ -8,7 +10,7 @@ from graia.ariadne.message.parser.twilight import Twilight, UnionMatch, MatchRes
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from ..utils.config import config
+from ..utils.config import config, group_config
 from ..utils.depends import BlacklistControl, FunctionControl
 
 channel = Channel.current()
@@ -46,7 +48,7 @@ async def chitung_help_image_handler(
         if isinstance(event, GroupMessage)
         else event.sender,
         MessageChain.create([
-            Image(path=Path(Path(__file__).parent / "assets" / "help" / "funct.png"))
+            Image(data_bytes=await assemble_funct_pic(event))
         ])
     )
 
@@ -103,3 +105,58 @@ async def chitung_help_desk_handler(
         else event.sender,
         msg
     )
+
+
+def get_enabled_functions(event):
+    if isinstance(event, GroupMessage):
+        rc = config.groupFC
+        gc = group_config.get(event.sender.group.id)
+        return [
+            True,
+            rc.responder and gc.responder,
+            rc.game and gc.game,
+            rc.responder and gc.responder,
+            True,
+            rc.lottery and gc.lottery,
+            rc.casino and rc.game and gc.casino and gc.game,
+            rc.fish and rc.game and gc.fish and gc.game
+        ]
+    else:
+        rc = config.friendFC
+        return [
+            True,
+            rc.responder,
+            False,
+            rc.responder,
+            False,
+            False,
+            rc.casino and rc.game,
+            rc.fish and rc.game
+        ]
+
+
+async def assemble_funct_pic(event):
+    function_status = get_enabled_functions(event)
+    img_path = [assets_dir / f"help-0{i}{'' if function_status[i] else '-closed'}.png" for i in range(8)]
+    result = PillowImage.open(img_path[0])
+    for i in range(1, 8):
+        img = img_path[i]
+        current_img = PillowImage.open(img)
+        result.paste(current_img, (int(funct_pos[i][0] * result.width / funct_pos[0][0]),
+                                   int(funct_pos[i][1] * result.height / funct_pos[0][1])))
+    bytes_io = BytesIO()
+    result.save(bytes_io, format="png")
+    return bytes_io.getvalue()
+
+
+funct_pos = [
+    (788, 1352),  # size of the background pic 0
+    (34, 233),  # responder 1
+    (34, 1135),  # mahjong 2
+    (285, 146),  # ir/ur 3
+    (286, 395),  # groupconfig 4
+    (286, 933),  # lottery 5
+    (536, 145),  # casino 6
+    (536, 491)  # fish 7
+]
+assets_dir = Path(Path(__file__).parent / "assets" / "help")

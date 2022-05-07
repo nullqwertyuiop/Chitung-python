@@ -3,7 +3,7 @@ from typing import List, Literal, Union
 
 from graia.ariadne import get_running, Ariadne
 from graia.ariadne.model import Group, Member
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class FunctionControl(BaseModel):
@@ -54,7 +54,7 @@ class GroupSwitch(Enum):
 
 class GroupConfig(BaseModel):
     groupID: int
-    globalControl: bool = True
+    globalControl: bool = Field(True, alias="global")
     fish: bool = True
     casino: bool = True
     responder: bool = True

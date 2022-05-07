@@ -41,8 +41,7 @@ save_config()
 
 def load_group_config() -> GroupConfigList:
     if group_config_path.is_file():
-        with group_config_path.open(mode="r", encoding="utf-8") as f:
-            cfg_list = GroupConfigList(**json.loads(f.read()))
+        cfg_list = GroupConfigList.parse_file(group_config_path)
     else:
         cfg_list = GroupConfigList()
     return cfg_list
@@ -50,7 +49,7 @@ def load_group_config() -> GroupConfigList:
 
 def save_group_config():
     with group_config_path.open(mode="w", encoding="utf-8") as f:
-        f.write(json.dumps(group_config.dict(), indent=4, ensure_ascii=False))
+        f.write(group_config.json(by_alias=True, indent=4, ensure_ascii=False))
 
 
 def reload_group_config():
