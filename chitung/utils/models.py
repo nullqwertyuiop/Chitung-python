@@ -64,7 +64,7 @@ class GroupConfig(BaseModel):
 
 
 class GroupConfigList(BaseModel):
-    groupConfigList: List[GroupConfig]
+    groupConfigList: List[GroupConfig] = []
 
     async def check(self):
         if group_list := await get_running(Ariadne).getGroupList():
