@@ -26,9 +26,11 @@ from graia.ariadne.model import Group, Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from chitung.bank import vault, Currency
 from .FishEnum import Waters, Time
-from ..utils.depends import BlacklistControl, FunctionControl
+from ..bank import vault, Currency
+from ..utils.depends import BlacklistControl, FunctionControl, FunctionRecord
+from ..utils.models import FuncName
+from ..utils.priority import Priority
 
 channel = Channel.current()
 
@@ -54,7 +56,9 @@ fishing_process_flag = []
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Fish),
+            FunctionRecord.add(FuncName.Function),
         ],
+        priority=Priority.Function,
     )
 )
 async def chitung_fish_tool_handler(
@@ -111,7 +115,9 @@ async def chitung_fish_tool_handler(
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Fish),
+            FunctionRecord.add(FuncName.Function),
         ],
+        priority=Priority.Function,
     )
 )
 async def chitung_fish_handler(

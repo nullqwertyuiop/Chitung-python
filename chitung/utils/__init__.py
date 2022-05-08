@@ -16,8 +16,9 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
 from .config import config, group_config, save_group_config, save_config, reset_config
-from .models import UserPerm
-from ..utils.depends import BlacklistControl, Permission
+from .models import UserPerm, FuncName
+from .priority import Priority
+from ..utils.depends import BlacklistControl, Permission, FunctionRecord
 
 channel = Channel.current()
 
@@ -32,7 +33,12 @@ channel.description("七筒")
     ListenerSchema(
         listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[Twilight([FullMatch("/adminhelp")])],
-        decorators=[BlacklistControl.enable(), Permission.require(UserPerm.BOT_OWNER)],
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER),
+            FunctionRecord.add(FuncName.Function),
+        ],
+        priority=Priority.Function,
     )
 )
 async def chitung_admin_help_handler(
@@ -74,7 +80,12 @@ async def chitung_admin_help_handler(
         inline_dispatchers=[
             Twilight([UnionMatch("/coverage", "/num -f", "/num -g") @ "func"])
         ],
-        decorators=[BlacklistControl.enable(), Permission.require(UserPerm.BOT_OWNER)],
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER),
+            FunctionRecord.add(FuncName.Function),
+        ],
+        priority=Priority.Function,
     )
 )
 async def chitung_admin_tools_handler(
@@ -114,7 +125,12 @@ async def chitung_admin_tools_handler(
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable(), Permission.require(UserPerm.BOT_OWNER)],
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER),
+            FunctionRecord.add(FuncName.Function),
+        ],
+        priority=Priority.Function,
     )
 )
 async def chitung_config_tools_handler(
@@ -173,7 +189,12 @@ async def chitung_config_tools_handler(
     ListenerSchema(
         listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[Twilight([FullMatch("/reset"), RegexMatch(r"\s*config")])],
-        decorators=[BlacklistControl.enable(), Permission.require(UserPerm.BOT_OWNER)],
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER),
+            FunctionRecord.add(FuncName.Function),
+        ],
+        priority=Priority.Function,
     )
 )
 async def chitung_reset_config_handler(app: Ariadne, event: MessageEvent):
@@ -206,7 +227,12 @@ async def chitung_reset_config_handler(app: Ariadne, event: MessageEvent):
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable(), Permission.require(UserPerm.BOT_OWNER)],
+        decorators=[
+            BlacklistControl.enable(),
+            Permission.require(UserPerm.BOT_OWNER),
+            FunctionRecord.add(FuncName.Function),
+        ],
+        priority=Priority.Function,
     )
 )
 async def chitung_group_config_handler(

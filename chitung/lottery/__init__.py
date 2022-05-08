@@ -14,16 +14,18 @@ from graia.ariadne.message.element import Plain, At
 from graia.ariadne.message.parser.twilight import (
     Twilight,
     UnionMatch,
-    MatchResult,
     SpacePolicy,
+    FullMatch,
 )
-from graia.ariadne.model import Group, Member, MemberPerm
+from graia.ariadne.model import MemberPerm
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 from graia.scheduler import timers
 from graia.scheduler.saya import SchedulerSchema
 
-from ..utils.depends import BlacklistControl, FunctionControl
+from ..utils.depends import BlacklistControl, FunctionControl, FunctionRecord
+from ..utils.models import FuncName
+from ..utils.priority import Priority
 
 channel = Channel.current()
 
@@ -42,7 +44,7 @@ c4_activation_flags = []
             Twilight(
                 [
                     UnionMatch("ok ", "Ok ", "OK ", "/").space(SpacePolicy.NOSPACE),
-                    UnionMatch("winner", "bummer", "c4") @ "function",
+                    FullMatch("winner"),
                 ]
             )
         ],
@@ -50,20 +52,60 @@ c4_activation_flags = []
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Lottery),
         ],
+        priority=Priority.Winner,
     )
 )
-async def chitung_lottery_handler(
-    app: Ariadne, event: MessageEvent, function: MatchResult
-):
-    if function.result.asDisplay() == "bummer":
-        await bummer(app, event.sender.group, event.sender)
-    elif function.result.asDisplay() == "winner":
-        await winner(app, event.sender.group)
-    else:
-        await c4(app, event.sender.group, event.sender)
+async def chitung_winner_handler(app: Ariadne, event: MessageEvent):
+    if member_list := await app.getMemberList(event.sender.group):
+        now = datetime.now()
+        guy_of_the_day = member_list[
+            int(
+                (now.year + now.month * 10000 + now.day * 1000000)
+                * 100000000000
+                / event.sender.group.id
+                % len(member_list)
+            )
+        ]
+        avatar = PillowImage.open(BytesIO(await guy_of_the_day.getAvatar())).resize(
+            (512, 512)
+        )
+        base = PillowImage.open(Path(winner_dir / "wanted.jpg"))
+        base.paste(avatar, (94, 251))
+        output = BytesIO()
+        base.save(output, "jpeg")
+        await app.sendGroupMessage(
+            event.sender.group,
+            MessageChain.create(
+                [
+                    Plain(text=f"Ok Winner! {guy_of_the_day.name}"),
+                    Image(data_bytes=output.getvalue()),
+                ]
+            ),
+        )
 
 
-async def bummer(app: Ariadne, group: Group, member: Member):
+@channel.use(
+    ListenerSchema(
+        listening_events=[GroupMessage],
+        inline_dispatchers=[
+            Twilight(
+                [
+                    UnionMatch("ok ", "Ok ", "OK ", "/").space(SpacePolicy.NOSPACE),
+                    FullMatch("bummer"),
+                ]
+            )
+        ],
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable(FunctionControl.Lottery),
+            FunctionRecord.add(FuncName.Bummer),
+        ],
+        priority=Priority.Bummer,
+    )
+)
+async def chitung_bummer_handler(app: Ariadne, event: GroupMessage):
+    group = event.sender.group
+    member = event.sender
     if group.accountPerm == MemberPerm.Member:
         await app.sendGroupMessage(group, MessageChain("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。"))
         return
@@ -117,36 +159,28 @@ async def bummer(app: Ariadne, group: Group, member: Member):
             return
 
 
-async def winner(app: Ariadne, group: Group):
-    if member_list := await app.getMemberList(group):
-        now = datetime.now()
-        guy_of_the_day = member_list[
-            int(
-                (now.year + now.month * 10000 + now.day * 1000000)
-                * 100000000000
-                / group.id
-                % len(member_list)
-            )
-        ]
-        avatar = PillowImage.open(BytesIO(await guy_of_the_day.getAvatar())).resize(
-            (512, 512)
-        )
-        base = PillowImage.open(Path(winner_dir / "wanted.jpg"))
-        base.paste(avatar, (94, 251))
-        output = BytesIO()
-        base.save(output, "jpeg")
-        await app.sendGroupMessage(
-            group,
-            MessageChain.create(
+@channel.use(
+    ListenerSchema(
+        listening_events=[GroupMessage],
+        inline_dispatchers=[
+            Twilight(
                 [
-                    Plain(text=f"Ok Winner! {guy_of_the_day.name}"),
-                    Image(data_bytes=output.getvalue()),
+                    UnionMatch("ok ", "Ok ", "OK ", "/").space(SpacePolicy.NOSPACE),
+                    FullMatch("c4"),
                 ]
-            ),
-        )
-
-
-async def c4(app: Ariadne, group: Group, member: Member):
+            )
+        ],
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable(FunctionControl.Lottery),
+            FunctionRecord.add(FuncName.C4),
+        ],
+        priority=Priority.C4,
+    )
+)
+async def chitung_c4_handler(app: Ariadne, event: MessageEvent):
+    group = event.sender.group
+    member = event.sender
     if group.accountPerm == MemberPerm.Member:
         await app.sendGroupMessage(group, MessageChain("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。"))
         return

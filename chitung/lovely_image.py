@@ -13,7 +13,9 @@ from graia.ariadne.message.parser.twilight import (
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .utils.depends import BlacklistControl, FunctionControl
+from .utils import FuncName
+from .utils.depends import BlacklistControl, FunctionControl, FunctionRecord
+from .utils.priority import Priority
 
 channel = Channel.current()
 
@@ -101,7 +103,9 @@ cord = {
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Responder),
+            FunctionRecord.add(FuncName.Function),
         ],
+        priority=Priority.Function,
     )
 )
 async def chitung_animal_handler(

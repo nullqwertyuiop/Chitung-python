@@ -10,17 +10,32 @@ channel.name("ChitungVanilla")
 channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chitung-python)")
 channel.description("七筒")
 
-ignore_list = ["data", "__init__.py", "__pycache__"]
-submodules = [
-    module.split(".")[0]
-    for module in os.listdir(str(Path(__file__).parent))
-    if module not in ignore_list
-]
 
-with saya.module_context():
-    for submodule in submodules:
-        saya.require(
-            os.path.relpath(Path(Path(__file__).parent) / submodule)
-            .replace("\\", ".")
-            .replace("/", ".")
-        )
+def load_all():
+    ignore_list = ["data", "__init__.py", "__pycache__"]
+    submodules = [
+        module.split(".")[0]
+        for module in os.listdir(str(Path(__file__).parent))
+        if module not in ignore_list
+    ]
+
+    with saya.module_context():
+        for submodule in submodules:
+            saya.require(
+                os.path.relpath(Path(Path(__file__).parent) / submodule)
+                .replace("\\", ".")
+                .replace("/", ".")
+            )
+
+
+def unload_all():
+    for _, saya_channel in dict(saya.channels).items():
+        if (
+            saya_channel.meta["name"]
+            and saya_channel.meta["name"].startswith("Chitung")
+            and saya_channel.meta["name"] != channel.meta["name"]
+        ):
+            saya.uninstall_channel(saya_channel)
+
+
+load_all()

@@ -3,6 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/08a8c365dd25419b811b0b77435c46ec)](https://app.codacy.com/gh/nullqwertyuiop/Chitung-python?utm_source=github.com&utm_medium=referral&utm_content=nullqwertyuiop/Chitung-python&utm_campaign=Badge_Grade_Settings)
 [![CodeQL](https://github.com/nullqwertyuiop/Chitung-python/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/nullqwertyuiop/Chitung-python/actions/workflows/codeql-analysis.yml)
 ![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 This project aims to provide users with a lite and open version of Chitung.
 

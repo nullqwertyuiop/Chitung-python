@@ -18,8 +18,9 @@ from graia.saya.builtins.broadcast import ListenerSchema
 
 from .blackjack import BlackJackData, BlackJackPhase
 from ..bank import vault, Currency
-from ..utils.depends import BlacklistControl, FunctionControl
-from ..utils.priority import priority
+from ..utils.depends import BlacklistControl, FunctionControl, FunctionRecord
+from ..utils.models import FuncName
+from ..utils.priority import Priority
 
 channel = Channel.current()
 
@@ -57,8 +58,9 @@ channel.description("您爆牌了。")
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
+            FunctionRecord.add(FuncName.Function),
         ],
-        priority=priority.Function,
+        priority=Priority.Function,
     )
 )
 async def chitung_blackjack_ops_handler(
@@ -104,7 +106,9 @@ async def chitung_blackjack_ops_handler(
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
+            FunctionRecord.add(FuncName.Function),
         ],
+        priority=Priority.Function,
     )
 )
 async def chitung_blackjack_bet_handler(
@@ -134,7 +138,9 @@ async def chitung_blackjack_bet_handler(
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
+            FunctionRecord.add(FuncName.Function),
         ],
+        priority=Priority.Function,
     )
 )
 async def chitung_blackjack_handler(

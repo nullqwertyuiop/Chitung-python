@@ -1,4 +1,4 @@
-class Priority:
+class PriorityClass:
     """优先级"""
 
     Fursona = 16
@@ -19,9 +19,9 @@ class Priority:
     Feedback = 16
 
 
-def init_priority():
-    global priority
-    priority = Priority()
+def reset_priority():
+    global Priority
+    Priority = PriorityClass()
 
 
-priority = Priority()
+Priority = PriorityClass()

@@ -13,7 +13,9 @@ from graia.ariadne.message.parser.twilight import (
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .utils.depends import BlacklistControl, FunctionControl
+from .utils import FuncName
+from .utils.depends import BlacklistControl, FunctionControl, FunctionRecord
+from .utils.priority import Priority
 
 channel = Channel.current()
 
@@ -33,7 +35,12 @@ channel.description("Dice")
                 ]
             )
         ],
-        decorators=[BlacklistControl.enable(), FunctionControl.enable("responder")],
+        decorators=[
+            BlacklistControl.enable(),
+            FunctionControl.enable("responder"),
+            FunctionRecord.add(FuncName.Dice),
+        ],
+        priority=Priority.Dice,
     )
 )
 async def chitung_single_dice_handler(
@@ -62,7 +69,9 @@ async def chitung_single_dice_handler(
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Responder),
+            FunctionRecord.add(FuncName.Dice),
         ],
+        priority=Priority.Dice,
     )
 )
 async def chitung_dnd_dice_handler(

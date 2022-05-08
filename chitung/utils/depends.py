@@ -6,11 +6,12 @@ from graia.broadcast.builtin.decorators import Depend
 
 from . import config
 from .config import group_config
-from .models import UserPerm
+from .models import UserPerm, FuncName
+from .priority import Priority
 from ..utils.blacklist import blacklist as bl
 
 
-class BlacklistControl(object):
+class BlacklistControl:
     @staticmethod
     def enable() -> Depend:
         async def blacklist(event: MessageEvent) -> NoReturn:
@@ -28,7 +29,7 @@ class BlacklistControl(object):
         return Depend(blacklist)
 
 
-class FunctionControl(object):
+class FunctionControl:
     Fish = "fish"
     Casino = "casino"
     Responder = "responder"
@@ -57,7 +58,7 @@ class FunctionControl(object):
         return Depend(switch)
 
 
-class Permission(object):
+class Permission:
     @staticmethod
     def require(permission: UserPerm) -> Depend:
         async def perm_check(event: MessageEvent) -> NoReturn:
@@ -71,3 +72,12 @@ class Permission(object):
                 raise ExecutionStop
 
         return Depend(perm_check)
+
+
+class FunctionRecord:
+    @staticmethod
+    def add(func: FuncName) -> Depend:
+        async def counter_plus_one() -> NoReturn:
+            setattr(Priority, func.value, getattr(Priority, func.value) + 1)
+
+        return Depend(counter_plus_one)

@@ -13,7 +13,9 @@ from graia.ariadne.model import Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from ..utils.depends import BlacklistControl, FunctionControl
+from ..utils.depends import BlacklistControl, FunctionControl, FunctionRecord
+from ..utils.models import FuncName
+from ..utils.priority import Priority
 
 channel = Channel.current()
 
@@ -33,7 +35,9 @@ channel.description("这就是你今天的签")
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Responder),
+            FunctionRecord.add(FuncName.FortuneTeller),
         ],
+        priority=Priority.FortuneTeller,
     )
 )
 async def chitung_fortune_teller_handler(app: Ariadne, event: MessageEvent):

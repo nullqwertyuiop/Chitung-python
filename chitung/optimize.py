@@ -2,13 +2,15 @@ from graia.ariadne import Ariadne
 from graia.ariadne.event.message import GroupMessage, FriendMessage, MessageEvent
 from graia.ariadne.message.chain import MessageChain
 from graia.ariadne.message.parser.twilight import Twilight, FullMatch
-from graia.saya import Channel
+from graia.saya import Channel, Saya
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from chitung.utils.depends import Permission
-from chitung.utils.models import UserPerm
-from chitung.utils.priority import init_priority
+from . import unload_all, load_all
+from .utils.depends import Permission, FunctionRecord
+from .utils.models import UserPerm, FuncName
+from .utils.priority import reset_priority, Priority
 
+saya = Saya.current()
 channel = Channel.current()
 
 channel.name("ChitungOptimize")
@@ -20,11 +22,17 @@ channel.description("七筒")
     ListenerSchema(
         listening_events=[GroupMessage, FriendMessage],
         inline_dispatchers=[Twilight([FullMatch("/optimize")])],
-        decorators=[Permission.require(UserPerm.BOT_OWNER)],
+        decorators=[
+            Permission.require(UserPerm.BOT_OWNER),
+            FunctionRecord.add(FuncName.Function),
+        ],
+        priority=Priority.Function,
     )
 )
 async def chitung_optimize_handler(app: Ariadne, event: MessageEvent):
-    init_priority()
+    unload_all()
+    load_all()
+    reset_priority()
     await app.sendMessage(
         event.sender.group if isinstance(event, GroupMessage) else event.sender,
         MessageChain("<! Placeholder !>"),
