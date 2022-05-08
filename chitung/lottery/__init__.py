@@ -23,9 +23,8 @@ from graia.saya.builtins.broadcast import ListenerSchema
 from graia.scheduler import timers
 from graia.scheduler.saya import SchedulerSchema
 
-from ..utils.depends import BlacklistControl, FunctionControl, FunctionRecord
-from ..utils.models import FuncName
-from ..utils.priority import Priority
+from ..utils.depends import BlacklistControl, FunctionControl
+
 
 channel = Channel.current()
 
@@ -52,7 +51,6 @@ c4_activation_flags = []
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Lottery),
         ],
-        priority=Priority.Winner,
     )
 )
 async def chitung_winner_handler(app: Ariadne, event: MessageEvent):
@@ -98,9 +96,7 @@ async def chitung_winner_handler(app: Ariadne, event: MessageEvent):
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Lottery),
-            FunctionRecord.add(FuncName.Bummer),
         ],
-        priority=Priority.Bummer,
     )
 )
 async def chitung_bummer_handler(app: Ariadne, event: GroupMessage):
@@ -173,9 +169,7 @@ async def chitung_bummer_handler(app: Ariadne, event: GroupMessage):
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Lottery),
-            FunctionRecord.add(FuncName.C4),
         ],
-        priority=Priority.C4,
     )
 )
 async def chitung_c4_handler(app: Ariadne, event: MessageEvent):

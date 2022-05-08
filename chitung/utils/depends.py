@@ -6,8 +6,7 @@ from graia.broadcast.builtin.decorators import Depend
 
 from . import config
 from .config import group_config
-from .models import UserPerm, FuncName
-from .priority import Priority
+from .models import UserPerm
 from ..utils.blacklist import blacklist as bl
 
 
@@ -72,12 +71,3 @@ class Permission:
                 raise ExecutionStop
 
         return Depend(perm_check)
-
-
-class FunctionRecord:
-    @staticmethod
-    def add(func: FuncName) -> Depend:
-        async def counter_plus_one() -> NoReturn:
-            setattr(Priority, func.value, getattr(Priority, func.value) + 1)
-
-        return Depend(counter_plus_one)

@@ -16,9 +16,8 @@ from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
 from ..utils.config import config, group_config
-from ..utils.depends import BlacklistControl, FunctionControl, FunctionRecord
-from ..utils.models import FuncName
-from ..utils.priority import Priority
+from ..utils.depends import BlacklistControl, FunctionControl
+
 
 channel = Channel.current()
 
@@ -34,9 +33,7 @@ channel.description("七筒")
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Responder),
-            FunctionRecord.add(FuncName.Function),
         ],
-        priority=Priority.Function,
     )
 )
 async def chitung_help_image_handler(app: Ariadne, event: MessageEvent):
@@ -55,9 +52,7 @@ async def chitung_help_image_handler(app: Ariadne, event: MessageEvent):
         decorators=[
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Responder),
-            FunctionRecord.add(FuncName.Function),
         ],
-        priority=Priority.Function,
     )
 )
 async def chitung_help_desk_handler(

@@ -151,24 +151,3 @@ class UserPerm(Enum):
             UserPerm.BOT_OWNER: 4,
         }
         return lv_map[self] < lv_map[other]
-
-
-class FuncName(Enum):
-    """优先级"""
-
-    Fursona = "Fursona"
-    FortuneTeller = "FortuneTeller"
-    C4 = "C4"
-    Pizza = "Pizza"
-    Function = "Function"
-    Dice = "Dice"
-    Winner = "Winner"
-    Bummer = "Bummer"
-    MilkTea = "MilkTea"
-    WhatToEat = "WhatToEat"
-    Goodbye = "Goodbye"
-    AntiOverWatch = "AntiOverWatch"
-    AntiDirty = "AntiDirty"
-    Greeting = "Greeting"
-    OverWatchScript = "OverWatchScript"
-    Feedback = "Feedback"

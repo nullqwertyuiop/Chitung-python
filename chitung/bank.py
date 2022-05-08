@@ -19,9 +19,9 @@ from graia.ariadne.model import Member
 from graia.saya import Channel
 from graia.saya.builtins.broadcast import ListenerSchema
 
-from .utils.depends import BlacklistControl, FunctionControl, Permission, FunctionRecord
-from .utils.models import UserPerm, FuncName
-from .utils.priority import Priority
+from .utils.depends import BlacklistControl, FunctionControl, Permission
+from .utils.models import UserPerm
+
 
 channel = Channel.current()
 
@@ -198,9 +198,7 @@ vault = Vault()
             Permission.require(UserPerm.OWNER),
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
-            FunctionRecord.add(FuncName.Function),
         ],
-        priority=Priority.Function,
     )
 )
 async def chitung_bank_handler(app: Ariadne, event: MessageEvent):
@@ -230,9 +228,7 @@ async def chitung_bank_handler(app: Ariadne, event: MessageEvent):
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
             Permission.require(UserPerm.BOT_OWNER),
-            FunctionRecord.add(FuncName.Function),
         ],
-        priority=Priority.Function,
     )
 )
 async def chitung_bank_set_handler(
@@ -257,9 +253,7 @@ async def chitung_bank_set_handler(
             BlacklistControl.enable(),
             FunctionControl.enable(FunctionControl.Casino),
             Permission.require(UserPerm.BOT_OWNER),
-            FunctionRecord.add(FuncName.Function),
         ],
-        priority=Priority.Function,
     )
 )
 async def chitung_bank_laundry_handler(event: MessageEvent, amount: RegexResult):
