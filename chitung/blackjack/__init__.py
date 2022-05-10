@@ -180,13 +180,13 @@ async def bet(app, event, game_id, bets):
                 asyncio.create_task(end_bet_phase(app, event, game_id))
         if bjd.get_player(event.sender.id) is None:
             # 新玩家
-            prompt = f"已收到下注{bets}南瓜比索。"
+            prompt = f"已收到下注{bets}黄瓜比索。"
         else:
-            prompt = f"共收到下注{bets + bjd.get_player(event.sender.id).bet}南瓜比索。"
+            prompt = f"共收到下注{bets + bjd.get_player(event.sender.id).bet}黄瓜比索。"
         bjd.bet(event.sender.id, bets)
         await send_message(app, event, prompt)
     else:
-        await send_message(app, event, "操作失败，请检查您的南瓜比索数量。")
+        await send_message(app, event, "操作失败，请检查您的黄瓜比索数量。")
 
 
 async def end_bet_phase(app, event, game_id, time_out=60):
@@ -226,16 +226,16 @@ async def checkout_game(app, event, game_id):
     # 庄家操作
     bookmaker_pile_msg = bjd.bookmaker_operate()
     await send_message(app, event, bookmaker_pile_msg, False)
-    reply_msg = MessageChain.create("本局游戏已经结束，里格斯公司感谢您的参与。如下为本局玩家获得的南瓜比索：\n")
+    reply_msg = MessageChain.create("本局游戏已经结束，里格斯公司感谢您的参与。如下为本局玩家获得的黄瓜比索：\n")
     result = bjd.check()
     for p in bjd.black_jack_players:
         if p.is_bookmaker:
             continue
         if event.sender.id == bjd.id:
-            reply_msg += f"\n您获得了{result[p.player_id]}南瓜比索。"
+            reply_msg += f"\n您获得了{result[p.player_id]}黄瓜比索。"
         else:
             reply_msg += MessageChain.create(
-                "\n", At(p.player_id), f" 获得了{result[p.player_id]}南瓜比索。"
+                "\n", At(p.player_id), f" 获得了{result[p.player_id]}黄瓜比索。"
             )
         exchange(p.player_id, result[p.player_id])
     blackjack_game_data.remove(bjd)
@@ -268,7 +268,7 @@ async def split(app, event, game_id):
     if not player.can_split():
         return
     if not purchase(event.sender, player.bet):
-        await send_message(app, event, "操作失败，请检查您的南瓜比索数量。")
+        await send_message(app, event, "操作失败，请检查您的黄瓜比索数量。")
         return
     raw_cards, piles = bjd.split(player.player_id)
     reply_msg = MessageChain.create(
@@ -290,7 +290,7 @@ async def double_bet(app, event, game_id):
         await send_message(app, event, "您的牌无法双倍下注。")
         return
     if not purchase(event.sender, player.bet):
-        await send_message(app, event, "操作失败，请检查您的南瓜比索数量。")
+        await send_message(app, event, "操作失败，请检查您的黄瓜比索数量。")
         return
     bjd.double_bet(player.player_id)
 
@@ -310,7 +310,7 @@ async def pair(app, event, game_id):
     if not player.can_operate:
         return
     if not purchase(event.sender, player.bet):
-        await send_message(app, event, "操作失败，请检查您的南瓜比索数量。")
+        await send_message(app, event, "操作失败，请检查您的黄瓜比索数量。")
         return
     if bjd.bet_pair(player.player_id):
         await send_message(app, event, "您已经下注对子。")

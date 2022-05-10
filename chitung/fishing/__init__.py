@@ -131,11 +131,11 @@ async def chitung_fish_handler(
             if vault.has_enough_money(
                 event.sender, Currency.CUCUMBER_PESO, FISHING_COST
             ):
-                reply_msg = reply_msg + Plain(text=f"已收到您的捕鱼费用{FISHING_COST}南瓜比索。")
+                reply_msg = reply_msg + Plain(text=f"已收到您的捕鱼费用{FISHING_COST}黄瓜比索。")
             else:
                 await app.sendGroupMessage(
                     event.sender.group,
-                    MessageChain.create(reply_msg + Plain(text="您的南瓜比索数量不够，请检查。")),
+                    MessageChain.create(reply_msg + Plain(text="您的黄瓜比索数量不够，请检查。")),
                 )
                 return
 
@@ -166,11 +166,11 @@ async def chitung_fish_handler(
             fish = get_fish_by_code(fish_code)
             value = fish["price"] * count
             total_value += value
-            reply_msg += f"{fish['name']}x{count}，价值{value}南瓜比索\n"
+            reply_msg += f"{fish['name']}x{count}，价值{value}黄瓜比索\n"
         fish_img = await async_get_image(fish_map.keys())
         time_fix_coeff = 1.0 + record_in_one_hour * 0.05
         total_value = int(time_fix_coeff * total_value)
-        reply_msg += f"\n时间修正系数为{time_fix_coeff}，共值{total_value}南瓜比索。\n\n"
+        reply_msg += f"\n时间修正系数为{time_fix_coeff}，共值{total_value}黄瓜比索。\n\n"
         reply_msg += Image(data_bytes=fish_img)
         vault.update_bank(event.sender.id, total_value, Currency.CUCUMBER_PESO)
         await save_record(event.sender.id, fish_map.keys())
