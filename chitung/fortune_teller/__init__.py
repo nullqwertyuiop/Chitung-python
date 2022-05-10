@@ -15,7 +15,6 @@ from graia.saya.builtins.broadcast import ListenerSchema
 
 from ..utils.depends import BlacklistControl, FunctionControl
 
-
 channel = Channel.current()
 
 channel.name("ChitungFortuneTeller")
@@ -73,17 +72,18 @@ async def chitung_fortune_teller_handler(app: Ariadne, event: MessageEvent):
     else:
         mahjong_numero = mahjong_of_the_day - 102
         mahjong = f"花牌（{hua_pai[mahjong_of_the_day - 136]}）"
+    pre_chain = (
+        [At(supplicant), Plain(text="\n")] if isinstance(supplicant, Member) else []
+    )
     colour = "Red" if random.randrange(2) else "Yellow"
     image_path = Path(assets_dir / colour / f"{mahjong}.png")
     await app.sendMessage(
         event.sender.group if isinstance(event, GroupMessage) else event.sender,
         MessageChain.create(
-            [
-                At(supplicant)
-                if isinstance(supplicant, Member)
-                else f"@{supplicant.nickname}",
+            pre_chain
+            + [
                 Plain(
-                    text=f"\n今天的占卜麻将牌是: {mahjong}\n运势是: "
+                    text=f"今天的占卜麻将牌是: {mahjong}\n运势是: "
                     f"{luck[mahjong_numero]}\n{saying[mahjong_numero]}"
                 ),
                 Image(path=image_path),

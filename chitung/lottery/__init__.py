@@ -64,10 +64,13 @@ async def chitung_winner_handler(app: Ariadne, event: MessageEvent):
                 % len(member_list)
             )
         ]
+        await app.sendGroupMessage(
+            event.sender.group, MessageChain(f"Ok Winner! {guy_of_the_day.name}")
+        )
         avatar = PillowImage.open(BytesIO(await guy_of_the_day.getAvatar())).resize(
             (512, 512)
         )
-        base = PillowImage.open(Path(winner_dir / "wanted.jpg"))
+        base = PillowImage.open(Path(winner_dir / "winner" / "wanted.jpg"))
         base.paste(avatar, (94, 251))
         output = BytesIO()
         base.save(output, "jpeg")
@@ -75,7 +78,6 @@ async def chitung_winner_handler(app: Ariadne, event: MessageEvent):
             event.sender.group,
             MessageChain.create(
                 [
-                    Plain(text=f"Ok Winner! {guy_of_the_day.name}"),
                     Image(data_bytes=output.getvalue()),
                 ]
             ),
