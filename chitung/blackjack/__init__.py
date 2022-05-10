@@ -337,7 +337,7 @@ def get_valid_game_and_player(event, game_id):
 
 
 def purchase(sender, cost) -> bool:
-    if vault.has_enough_money(sender, Currency.CUCUMBER_PESO, cost):
+    if vault.has_enough_money(sender, cost, Currency.CUCUMBER_PESO):
         vault.update_bank(sender.id, -cost, Currency.CUCUMBER_PESO)
         return True
     else:

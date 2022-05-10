@@ -20,7 +20,7 @@ channel.author("角川烈&白门守望者 (Chitung-public), nullqwertyuiop (Chit
 channel.description("七筒")
 
 lock = False
-last_active = None
+last_active = datetime.fromtimestamp(0)
 shuffle_flags = {}
 
 
