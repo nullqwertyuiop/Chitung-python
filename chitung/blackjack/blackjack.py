@@ -37,9 +37,11 @@ class Poker:
         return str(self.suit.value) + self._poker_name[self.number]
 
     def __eq__(self, other):
-        if not isinstance(other, Poker):
-            return False
-        return self.point == other.point and self.suit == other.suit
+        return (
+            self.point == other.point and self.suit == other.suit
+            if isinstance(other, Poker)
+            else False
+        )
 
     def __hash__(self):
         return hash(self._poker_name)
@@ -75,7 +77,7 @@ class BlackJackPlayer:
             cards = [cards]
         for card in sorted(cards, key=lambda x: -x.point):
             if card.point == 1:
-                point += 11 if 11 + point <= 21 else 1
+                point += 11 if point <= 10 else 1
             else:
                 point += card.point
         return point
@@ -87,9 +89,7 @@ class BlackJackPlayer:
         return self.calculate_point() in [11, 21] and not self.is_double
 
     def can_split(self) -> bool:
-        if len(self.cards) != 2:
-            return False
-        return self.cards[0] == self.cards[1]
+        return False if len(self.cards) != 2 else self.cards[0] == self.cards[1]
 
 
 class BlackJackData:
@@ -103,9 +103,7 @@ class BlackJackData:
         self.shuffle_card_pile()
 
     def __eq__(self, other):
-        if isinstance(other, BlackJackData):
-            return False
-        return self.id == other.id
+        return False if isinstance(other, BlackJackData) else self.id == other.id
 
     def __hash__(self):
         return hash(self.id)
@@ -204,16 +202,11 @@ class BlackJackData:
         player.has_busted = True
 
     def check_all_fold(self):
-        return (
-            len(
-                [
-                    player
-                    for player in self.black_jack_players
-                    if player.player_id != 0 and player.can_operate
-                ]
-            )
-            == 0
-        )
+        return not [
+            player
+            for player in self.black_jack_players
+            if player.player_id != 0 and player.can_operate
+        ]
 
     def fold_all(self):
         for p in self.black_jack_players:
@@ -229,12 +222,11 @@ class BlackJackData:
         return msg
 
     def check(self):
-        result = {}
-        for p in self.black_jack_players:
-            if p.is_bookmaker:
-                continue
-            result[p.player_id] = self.calculate_bet(p.player_id)
-        return result
+        return {
+            p.player_id: self.calculate_bet(p.player_id)
+            for p in self.black_jack_players
+            if not p.is_bookmaker
+        }
 
     def calculate_bet(self, player_id):
         """计算赌局结果"""

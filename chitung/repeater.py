@@ -50,27 +50,26 @@ async def chitung_repeater_handler(app: Ariadne, message: MessageChain, group: G
     message_serialization = message.asPersistentString()
     if group.id not in group_repeat.keys():
         group_repeat[group.id] = {"msg": message_serialization, "count": 1}
-    else:
-        if message_serialization == group_repeat[group.id]["msg"]:
-            if group_repeat[group.id]["count"] == -1:
+    elif message_serialization == group_repeat[group.id]["msg"]:
+        if group_repeat[group.id]["count"] == -1:
+            return
+        count = group_repeat[group.id]["count"] + 1
+        if count == 3:
+            group_repeat[group.id]["count"] = count
+            msg = message.include(Plain, Image, At, Quote, AtAll, Face, Poke)
+            if msg.asDisplay() == "<! 不支持的消息类型 !>":
+                group_repeat[group.id] = {
+                    "msg": msg.asPersistentString(),
+                    "count": -1,
+                }
                 return
-            count = group_repeat[group.id]["count"] + 1
-            if count == 3:
-                group_repeat[group.id]["count"] = count
-                msg = message.include(Plain, Image, At, Quote, AtAll, Face, Poke)
-                if msg.asDisplay() == "<! 不支持的消息类型 !>":
-                    group_repeat[group.id] = {
-                        "msg": msg.asPersistentString(),
-                        "count": -1,
-                    }
-                    return
-                return await app.sendGroupMessage(group, msg.asSendable())
-            else:
-                group_repeat[group.id]["count"] = count
-                return
+            return await app.sendGroupMessage(group, msg.asSendable())
         else:
-            group_repeat[group.id]["msg"] = message_serialization
-            group_repeat[group.id]["count"] = 1
+            group_repeat[group.id]["count"] = count
+            return
+    else:
+        group_repeat[group.id]["msg"] = message_serialization
+        group_repeat[group.id]["count"] = 1
 
 
 @channel.use(ListenerSchema(listening_events=[ActiveGroupMessage]))

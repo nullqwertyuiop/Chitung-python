@@ -40,11 +40,11 @@ save_config()
 
 
 def load_group_config() -> GroupConfigList:
-    if group_config_path.is_file():
-        cfg_list = GroupConfigList.parse_file(group_config_path)
-    else:
-        cfg_list = GroupConfigList()
-    return cfg_list
+    return (
+        GroupConfigList.parse_file(group_config_path)
+        if group_config_path.is_file()
+        else GroupConfigList()
+    )
 
 
 def save_group_config():

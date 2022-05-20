@@ -62,10 +62,11 @@ async def chitung_shuffle_handler(app: Ariadne, event: MessageEvent):
         )[:20]
         shuffled_name = [
             member_info[1]
-            if member_info[1] != "null" and member_info[1] != "Null"
+            if member_info[1] not in ["null", "Null"]
             else "<! 不合法的名片 !>"
             for member_info in original_info
         ]
+
         random.shuffle(shuffled_name)
         shuffle_list = [
             (original_info[x][0], shuffled_name[x]) for x in range(len(original_info))

@@ -74,7 +74,7 @@ async def chitung_fish_tool_handler(
 
     elif function.result.asDisplay() == "collection":
         collected = get_collected(event.sender.id)
-        collected = sum(fish_collected for fish_collected in collected)
+        collected = sum(collected)
         reply_msg = MessageChain.create(
             [
                 At(event.sender.id),
@@ -180,7 +180,7 @@ async def chitung_fish_handler(
 
 async def collection(app: Ariadne, group: Group, member: Member):
     collected = get_collected(member.id)
-    collected = sum(fish_collected for fish_collected in collected)
+    collected = sum(collected)
     reply_msg = MessageChain.create(
         [At(member.id), Plain(text=f"您的图鉴完成度目前为{round(collected * 100 / 72)}%\n\n")]
     )
@@ -191,15 +191,14 @@ async def collection(app: Ariadne, group: Group, member: Member):
 
 def get_water(water: str):
     water = water.upper()
-    if len(water) == 0:
+    if not water:
         return Waters.General
-    else:
-        if water == "A":
-            return Waters.Amur
-        elif water == "B":
-            return Waters.Caroline
-        elif water == "C":
-            return Waters.Chishima
+    elif water == "A":
+        return Waters.Amur
+    elif water == "B":
+        return Waters.Caroline
+    elif water == "C":
+        return Waters.Chishima
 
 
 def get_item_id_randomly(amount, w: Waters):
@@ -270,8 +269,7 @@ def calculate_daytime() -> tuple:
         float_part = decimal_float - int_part
         hour = int_part
         minute = int(float_part * 60)
-        dt = datetime.datetime(now.year, now.month, now.day, hour, minute, 0, 0)
-        return dt
+        return datetime.datetime(now.year, now.month, now.day, hour, minute, 0, 0)
 
     return to_datetime(time_sunrise), to_datetime(time_sunset)
 
@@ -342,18 +340,19 @@ async def async_get_image(fish_list):
 
 def get_records(record_id):
     records = load_fishing_records()
-    for i, record in enumerate(records):
-        if record["ID"] == record_id:
-            return list(records[i]["recordList"])
-    return []
+    return next(
+        (
+            list(records[i]["recordList"])
+            for i, record in enumerate(records)
+            if record["ID"] == record_id
+        ),
+        [],
+    )
 
 
 def get_collected(record_id):
-    collected = []
     records = get_records(record_id)
-    for fish in FISHING_LIST:
-        collected.append(fish["code"] in records)
-    return collected
+    return [fish["code"] in records for fish in FISHING_LIST]
 
 
 def get_handbook(record_id):

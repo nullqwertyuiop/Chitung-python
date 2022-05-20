@@ -145,7 +145,7 @@ async def chitung_blackjack_handler(
     else:
         game_id = event.sender.id
 
-    if len([game for game in blackjack_game_data if game.id == game_id]) != 0:
+    if [game for game in blackjack_game_data if game.id == game_id]:
         await send_message(app, event, "游戏正在进行中。")
     else:
         reply_msg = "里格斯公司邀请您参与本局 Blackjack，请在60秒之内输入 /bet+数字 参与游戏。"
