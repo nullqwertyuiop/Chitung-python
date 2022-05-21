@@ -202,9 +202,7 @@ vault = Vault()
 )
 async def chitung_bank_handler(app: Ariadne, event: MessageEvent):
     await app.sendMessage(
-        event.sender.group
-        if isinstance(event, GroupMessage)
-        else event.sender,
+        event.sender.group if isinstance(event, GroupMessage) else event.sender,
         vault.get_bank_msg(
             event.sender,
             [Currency.CUCUMBER_PESO],
