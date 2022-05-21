@@ -29,7 +29,7 @@ def load_all():
 
 
 def unload_all():
-    for _, saya_channel in dict(saya.channels).items():
+    for saya_channel in dict(saya.channels).values():
         if (
             saya_channel.meta["name"]
             and saya_channel.meta["name"].startswith("Chitung")

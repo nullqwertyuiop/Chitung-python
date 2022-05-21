@@ -40,9 +40,9 @@ def add_blacklist(target_id: int, target_type: Literal["friend", "group"]) -> bo
         if target_id in blacklist.friendBlacklist:
             return False
         blacklist.friendBlacklist.append(target_id)
+    elif target_id in blacklist.groupBlacklist:
+        return False
     else:
-        if target_id in blacklist.groupBlacklist:
-            return False
         blacklist.groupBlacklist.append(target_id)
     store_blacklist()
     return True
@@ -53,9 +53,9 @@ def remove_blacklist(target_id: int, target_type: Literal["friend", "group"]):
         if target_id not in blacklist.friendBlacklist:
             return False
         blacklist.friendBlacklist.remove(target_id)
-    else:
-        if target_id not in blacklist.groupBlacklist:
-            return False
+    elif target_id in blacklist.groupBlacklist:
         blacklist.groupBlacklist.remove(target_id)
+    else:
+        return False
     store_blacklist()
     return True

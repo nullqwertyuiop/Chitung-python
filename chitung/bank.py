@@ -103,17 +103,16 @@ class Vault:
             c_list = [Currency.DEFAULT]
 
         if str(member.id) in self.vault.keys():
-            user_bank = {
-                c.value[0 if not chs else 1]: int(
+            return {
+                c.value[1 if chs else 0]: int(
                     self.vault[str(member.id)].get(c.value[0])
                 )
                 for c in c_list
             }
-        else:
-            for c in c_list:
-                self.set_bank(member.id, 0, c)
-            user_bank = self.get_bank(member, c_list, chs=chs)
-        return user_bank
+
+        for c in c_list:
+            self.set_bank(member.id, 0, c)
+        return self.get_bank(member, c_list, chs=chs)
 
     def store_bank(self) -> NoReturn:
         """写入 vault 至 json"""
@@ -203,11 +202,13 @@ vault = Vault()
 )
 async def chitung_bank_handler(app: Ariadne, event: MessageEvent):
     await app.sendMessage(
-        event.sender.group if isinstance(event, GroupMessage) else event.sender,
+        event.sender.group
+        if isinstance(event, GroupMessage)
+        else event.sender,
         vault.get_bank_msg(
             event.sender,
             [Currency.CUCUMBER_PESO],
-            is_group=True if isinstance(event, GroupMessage) else False,
+            is_group=isinstance(event, GroupMessage),
         ),
     )
 

@@ -151,10 +151,10 @@ async def chitung_bummer_handler(app: Ariadne, event: GroupMessage):
                     ]
                 ),
             )
-            return
         else:
             await app.sendGroupMessage(group, MessageChain("全都是管理员的群你让我抽一个普通成员禁言？别闹。"))
-            return
+
+        return
 
 
 @channel.use(

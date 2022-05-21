@@ -144,7 +144,7 @@ async def chitung_config_tools_handler(
         return
     option = option.result.asDisplay()
     if value.matched:
-        value = True if value.result.asDisplay().upper()[0] == "T" else False
+        value = value.result.asDisplay().upper()[0] == "T"
     if option == "-h":
         await app.sendMessage(
             event.sender.group if isinstance(event, GroupMessage) else event.sender,

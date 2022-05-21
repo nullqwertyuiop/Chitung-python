@@ -127,13 +127,12 @@ async def get_animal_image(animal: str, retry_count: int = 0):
         data = await resp.json()
     if isinstance(data, list):
         img_url = data[0]
+    elif "url" in data.keys():
+        img_url = data["url"]
+    elif "message" in data.keys():
+        img_url = data["message"]
     else:
-        if "url" in data.keys():
-            img_url = data["url"]
-        elif "message" in data.keys():
-            img_url = data["message"]
-        else:
-            return MessageChain(f"非常抱歉，获取{cord.get(animal)[0]}图的渠道好像出了一些问题，图片获取失败")
+        return MessageChain(f"非常抱歉，获取{cord.get(animal)[0]}图的渠道好像出了一些问题，图片获取失败")
     if all(
         [
             not img_url.endswith("jpg"),
@@ -143,7 +142,8 @@ async def get_animal_image(animal: str, retry_count: int = 0):
     ):
         if retry_count >= 5:
             return MessageChain(f"非常抱歉，获取{cord.get(animal)[0]}图的渠道好像出了一些问题，图片获取失败")
-        return await get_animal_image(animal, retry_count + 1)
+        else:
+            return await get_animal_image(animal, retry_count + 1)
     return MessageChain.create([Image(url=img_url)])
 
 
