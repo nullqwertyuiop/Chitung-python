@@ -2,6 +2,7 @@ import os.path
 from pathlib import Path
 
 from graia.saya import Saya, Channel
+from loguru import logger
 
 saya = Saya.current()
 channel = Channel.current()
@@ -21,11 +22,14 @@ def load_all():
 
     with saya.module_context():
         for submodule in submodules:
-            saya.require(
-                os.path.relpath(Path(Path(__file__).parent) / submodule)
-                .replace("\\", ".")
-                .replace("/", ".")
-            )
+            try:
+                saya.require(
+                    os.path.relpath(Path(Path(__file__).parent) / submodule)
+                    .replace("\\", ".")
+                    .replace("/", ".")
+                )
+            except Exception as err:
+                logger.error(err)
 
 
 def unload_all():

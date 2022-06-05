@@ -1,3 +1,10 @@
+"""Blackjack 存在较高冻结风险，暂时禁止加载"""
+raise NotImplementedError(
+    "Blackjack 存在较高冻结风险，暂时禁止加载\n"
+    f"如需使用，可注释 {__import__('pathlib').Path(__file__)} "
+    f"文件的 Line 1 - Line 6 并重新加载。"
+)
+
 import asyncio
 from pathlib import Path
 from typing import List
