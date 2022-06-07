@@ -1,0 +1,410 @@
+{
+  "ultimateAbilityHeroLines": [
+    {
+      "ANA": [
+        "释放你的怒火吧！",
+        "纳米激素已注入！",
+        "你被强化了！快上！",
+        "纳米激素已注射。把敌人全干掉吧！"
+      ]
+    },
+    {
+      "ASHE": [
+        "鲍勃，别傻愣着！",
+        "快冲上去，鲍勃！"
+      ]
+    },
+    {
+      "BAPTISTE": [
+        "矩阵启动，开火！",
+        "Vide bal sou yo!"
+      ]
+    },
+    {
+      "BASTION": [
+        "坦克模式启动！",
+        "Do Do Do Do!"
+      ]
+    },
+    {
+      "BRIGITTE": [
+        "英雄集结",
+        "Alla till mig!"
+      ]
+    },
+    {
+      "DVA": [
+        "这太imba了！",
+        "正在启动自毁程序！"
+      ]
+    },
+    {
+      "DOOMFIST": [
+        "毁！天！灭！地！！！",
+        "铁！拳！强！攻！！！"
+      ]
+    },
+    {
+      "ECHO": [
+        "适应性回路已启动"
+      ]
+    },
+    {
+      "GENJI": [
+        "竜神の剣を喰らえ！",
+        "人龙合一！",
+        "尝尝恶鬼之刃！",
+        "尝尝白虎之刃！",
+        "人鬼合一！"
+      ]
+    },
+    {
+      "HANZO": [
+        "让巨龙吞噬你",
+        "竜が我が敌を喰らう",
+        "狼が我が敵を喰らう！",
+        "白狼出击！无处可藏！"
+      ]
+    },
+    {
+      "JUNKRAT": [
+        "女士们先生们，请欣赏我的最新发明！",
+        "准备电击！",
+        "女士们先生们，炸弹轮胎滚起来啦！",
+        "Fire in the hole!"
+      ]
+    },
+    {
+      "LUCIO": [
+        "哦，在这停顿！",
+        "来点音乐！",
+        "尝尝我们的厉害！"
+      ]
+    },
+    {
+      "MCCREE": [
+        "午时已到！",
+        "都站好了。",
+        "巨浪已到！"
+      ]
+    },
+    {
+      "MEI": [
+        "冻住，不许走！",
+        "雪球，冻住他们！"
+      ]
+    },
+    {
+      "MERCY": [
+        "英雄不朽！",
+        "英雄不朽！但要付出代价。",
+        "我的奴仆是不死的！",
+        "Heroes never die!",
+        "Til Valhalla!",
+        "胜利女神降临！"
+      ]
+    },
+    {
+      "MOIRA": [
+        "听从我的意志！",
+        "屈服于我"
+      ]
+    },
+    {
+      "ORISA": [
+        "放弃抵抗！",
+        "武装起来，发动攻势！"
+      ]
+    },
+    {
+      "PHARAH": [
+        "天降正义！",
+        "天啊啊啊！",
+        "火箭弹幕来袭"
+      ]
+    },
+    {
+      "REAPER": [
+        "正在肃清敌人",
+        "死吧！死吧！死吧！"
+      ]
+    },
+    {
+      "REINHARDT": [
+        "吃我一锤！！！",
+        "触地得分！！！"
+      ]
+    },
+    {
+      "ROADHOG": [
+        "呜哈哈哈！"
+      ]
+    },
+    {
+      "SIGMA": [
+        "这是什么旋律？",
+        "宇宙在向我歌唱！"
+      ]
+    },
+    {
+      "SOLDIER_76": [
+        "我看到你们了！",
+        "战术目镜启动！",
+        "战术风镜启动！"
+      ]
+    },
+    {
+      "SOMBRA": [
+        "Apagando las luces!",
+        "电磁脉冲启动！",
+        "你玩了！"
+      ]
+    },
+    {
+      "SYMMETRA": [
+        "Yahi param vaastavikta hai!",
+        "现实由我的意志来掌控！"
+      ]
+    },
+    {
+      "TORBJORN": [
+        "熔火核心！",
+        "熔火圣诞！"
+      ]
+    },
+    {
+      "TRACER": [
+        "炸弹来咯！",
+        "正中目标！",
+        "拿好别掉了！",
+        "拿好你的礼物！别掉了！"
+      ]
+    },
+    {
+      "WIDOWMAKER": [
+        "没人可以躲过我的眼睛。",
+        "没人能躲过猎手的眼睛。"
+      ]
+    },
+    {
+      "WINSTON": [
+        "<猩猩咆哮>"
+      ]
+    },
+    {
+      "WRECKING_BALL": [
+        "制止进入",
+        "地雷禁区已部署"
+      ]
+    },
+    {
+      "ZARYA": [
+        "随意开火吧！",
+        "Огонь по готовности!"
+      ]
+    },
+    {
+      "ZENYATTA": [
+        "遁入智瞳。",
+        "感受宁静。",
+        "遁入虚无。",
+        "感受湮灭。",
+        "感受欢庆。"
+      ]
+    }
+  ],
+  "commonHeroLines": [
+    {
+      "ANA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "ASHE": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "BAPTISTE": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "BASTION": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "BRIGITTE": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "DVA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "DOOMFIST": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "ECHO": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "GENJI": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "HANZO": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "JUNKRAT": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "LUCIO": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "MCCREE": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "MEI": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "MERCY": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "MOIRA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "ORISA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "PHARAH": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "REAPER": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "REINHARDT": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "ROADHOG": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "SIGMA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "SOLDIER_76": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "SOMBRA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "SYMMETRA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "TORBJORN": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "TRACER": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "WIDOWMAKER": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "WINSTON": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "WRECKING_BALL": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "ZARYA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    },
+    {
+      "ZENYATTA": [
+        "PLACEHOLDER_1",
+        "PLACEHOLDER_2"
+      ]
+    }
+  ]
+}
