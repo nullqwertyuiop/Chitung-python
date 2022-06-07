@@ -1,0 +1,776 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.6">
+    
+    
+      
+        <title>Chitung-python Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.9d5733d3.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#public-version-of-chitung-python" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Chitung-python Docs" class="md-header__button md-logo" aria-label="Chitung-python Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Chitung-python Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Public Version of Chitung (Python)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="黑暗模式"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="黑暗模式" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="明亮模式"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="明亮模式" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Chitung-python Docs" class="md-nav__button md-logo" aria-label="Chitung-python Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Chitung-python Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Public Version of Chitung (Python)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Public Version of Chitung (Python)
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    七筒：开放版 (Python)
+  </a>
+  
+    <nav class="md-nav" aria-label="七筒：开放版 (Python)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-miraiqq" class="md-nav__link">
+    - 基于Mirai框架的QQ机器人
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    已移植的功能
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    正在开发
+  </a>
+  
+    <nav class="md-nav" aria-label="正在开发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    正在移植的功能
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    正在进行的改进
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    部署使用
+  </a>
+  
+    <nav class="md-nav" aria-label="部署使用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    作为插件使用
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    直接使用
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    版权
+  </a>
+  
+    <nav class="md-nav" aria-label="版权">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    美术素材
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    涉及项目
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    七筒：开放版 (Python)
+  </a>
+  
+    <nav class="md-nav" aria-label="七筒：开放版 (Python)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-miraiqq" class="md-nav__link">
+    - 基于Mirai框架的QQ机器人
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    已移植的功能
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    正在开发
+  </a>
+  
+    <nav class="md-nav" aria-label="正在开发">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    正在移植的功能
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    正在进行的改进
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    部署使用
+  </a>
+  
+    <nav class="md-nav" aria-label="部署使用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    作为插件使用
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    直接使用
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    版权
+  </a>
+  
+    <nav class="md-nav" aria-label="版权">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    美术素材
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    涉及项目
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="public-version-of-chitung-python">Public Version of Chitung (Python)<a class="headerlink" href="#public-version-of-chitung-python" title="Permanent link">🔗</a></h1>
+<p><a href="https://app.codacy.com/gh/nullqwertyuiop/Chitung-python?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nullqwertyuiop/Chitung-python&amp;utm_campaign=Badge_Grade_Settings"><img alt="Codacy Badge" src="https://api.codacy.com/project/badge/Grade/08a8c365dd25419b811b0b77435c46ec" /></a>
+<a href="https://github.com/nullqwertyuiop/Chitung-python/actions/workflows/codeql-analysis.yml"><img alt="CodeQL" src="https://github.com/nullqwertyuiop/Chitung-python/actions/workflows/codeql-analysis.yml/badge.svg" /></a>
+<img alt="Python 3.8+" src="https://img.shields.io/badge/Python-3.8+-blue.svg" />
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a></p>
+<p>This project aims to provide users with a lite and open version of Chitung.</p>
+<h2 id="python">七筒：开放版 (Python)<a class="headerlink" href="#python" title="Permanent link">🔗</a></h2>
+<h3 id="-miraiqq">- 基于Mirai框架的QQ机器人<a class="headerlink" href="#-miraiqq" title="Permanent link">🔗</a></h3>
+<p>本项目基于七筒开放版与七筒本体开发，由七筒爱好者维护，旨在为用户提供可于 Python 环境使用的开放版七筒插件。</p>
+<h2 id="_1">已移植的功能<a class="headerlink" href="#_1" title="Permanent link">🔗</a></h2>
+<p>Chitung-python 已完成以下功能的移植：</p>
+<ul>
+<li>
+<p>/funct</p>
+<ul>
+<li>插件位置：<code>chitung.help</code></li>
+<li>可用范围：全局</li>
+</ul>
+</li>
+<li>
+<p>/bummer</p>
+<ul>
+<li>插件位置：<code>chitung.lottery</code></li>
+<li>可用范围：群聊</li>
+<li>使用注意：使用本功能需要将七筒设置为管理员</li>
+</ul>
+</li>
+<li>
+<p>/c4</p>
+<ul>
+<li>插件位置：<code>chitung.lottery</code></li>
+<li>可用范围：群聊</li>
+<li>使用注意：使用本功能需要将七筒设置为管理员</li>
+</ul>
+</li>
+<li>
+<p>/winner</p>
+<ul>
+<li>插件位置：<code>chitung.lottery</code></li>
+<li>可用范围：群聊</li>
+</ul>
+</li>
+<li>
+<p>OK Animal</p>
+<ul>
+<li>插件位置：<code>chitung.lovely_image</code></li>
+<li>可用范围：全局</li>
+</ul>
+</li>
+<li>
+<p>求签</p>
+<ul>
+<li>插件位置：<code>chitung.fortune_teller</code></li>
+<li>可用范围：全局</li>
+<li>使用注意：<ul>
+<li>由于随机函数算法不同，可能得出与官方版七筒不同的结果</li>
+<li>可能包含 Chitung-python 作者的恶趣味，如需保持和官方版七筒一致的使用效果，请注释 <code>chitung.fortune_teller</code> 中 <code>random.seed(...)</code> 下的第一个 <code>if</code> 代码块</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>/bank</p>
+<ul>
+<li>插件位置：<code>chitung.bank</code></li>
+<li>可用范围：全局</li>
+<li>附属功能：<code>/laundry</code> <code>/set</code></li>
+<li><strong>不建议卸载</strong></li>
+</ul>
+</li>
+<li>
+<p>/shuffle</p>
+<ul>
+<li>插件位置：<code>chitung.shuffle</code></li>
+<li>可用范围：群聊</li>
+<li>使用注意：使用本功能需要将七筒设置为管理员</li>
+</ul>
+</li>
+<li>
+<p>/adminhelp</p>
+<ul>
+<li>插件位置：<code>chitung.utils</code></li>
+<li>可用范围：群聊</li>
+</ul>
+</li>
+<li>
+<p>/num</p>
+<ul>
+<li>插件位置：<code>chitung.utils</code></li>
+<li>必要参数：<code>-g</code>或<code>-f</code></li>
+<li>可用范围：群聊</li>
+</ul>
+</li>
+<li>
+<p>/coverage</p>
+<ul>
+<li>插件位置：<code>chitung.utils</code></li>
+<li>可用范围：群聊</li>
+</ul>
+</li>
+<li>
+<p>复读</p>
+<ul>
+<li>插件位置：<code>chitung.repeater</code></li>
+<li>可用范围：群聊</li>
+</ul>
+</li>
+<li>
+<p>/dice</p>
+<ul>
+<li>插件位置：<code>chitung.dice</code></li>
+<li>可用范围：全局</li>
+<li>附属功能：<code>.d1</code> <code>.1d1</code></li>
+</ul>
+</li>
+<li>
+<p>/fish</p>
+<ul>
+<li>插件位置：<code>chitung.fish</code></li>
+<li>可用范围：群聊</li>
+<li>附属功能：<code>/endfish</code> <code>/collection</code> <code>/fishhelp</code> <code>/handbook</code></li>
+</ul>
+</li>
+<li>
+<p>/blackjack</p>
+<ul>
+<li>插件位置：<code>chitung.blackjack</code></li>
+<li>可用范围：全局</li>
+<li>附属功能：<code>/bet (BlackJack)</code></li>
+</ul>
+</li>
+<li>
+<p>黑名单</p>
+<ul>
+<li>组件位置：<code>chitung.utils.blacklist</code></li>
+<li>生效范围：全局、好友、群聊</li>
+<li><strong>不可卸载</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="_2">正在开发<a class="headerlink" href="#_2" title="Permanent link">🔗</a></h2>
+<h3 id="_3">正在移植的功能<a class="headerlink" href="#_3" title="Permanent link">🔗</a></h3>
+<ul>
+<li>
+<p>Responder</p>
+</li>
+<li>
+<p>UniversalResponder</p>
+</li>
+<li>
+<p>兽设</p>
+</li>
+<li>
+<p>奶茶</p>
+</li>
+<li>
+<p>吃什么</p>
+</li>
+<li>
+<p>Pizza</p>
+</li>
+<li>
+<p>意见反馈</p>
+</li>
+<li>
+<p>掷骰子</p>
+</li>
+<li>
+<p>/roulette</p>
+</li>
+<li>
+<p>骰宝</p>
+</li>
+</ul>
+<h3 id="_4">正在进行的改进<a class="headerlink" href="#_4" title="Permanent link">🔗</a></h3>
+<ul>
+<li>支持设置最低群组人数</li>
+</ul>
+<h2 id="_5">部署使用<a class="headerlink" href="#_5" title="Permanent link">🔗</a></h2>
+<h3 id="_6">作为插件使用<a class="headerlink" href="#_6" title="Permanent link">🔗</a></h3>
+<p>若正在使用基于 <code>Ariadne</code> 框架开发的机器人，且已安装 <code>Saya</code> 及 <code>GraiaScheduler</code> 支持，可直接克隆本仓库并复制仓库中 <code>chitung</code> 文件夹至目标机器人的自定义插件目录</p>
+<h3 id="_7">直接使用<a class="headerlink" href="#_7" title="Permanent link">🔗</a></h3>
+<!-- Placeholder !-->
+<h2 id="_8">版权<a class="headerlink" href="#_8" title="Permanent link">🔗</a></h2>
+<h3 id="_9">美术素材<a class="headerlink" href="#_9" title="Permanent link">🔗</a></h3>
+<p><code>以下内容与 Chitung-public 一致</code></p>
+<p>七筒绝非是他的城市里唯一的居民。开发者为七筒设计了形象的同时，也为钓鱼场老板、赌场老板、以及未来其他功能出现的角色设计形象。我们感谢如下艺术创作者赋予七筒世界里的形象帅气的外表。</p>
+<ul>
+<li>
+<p>七筒角色设计：<a href="https://weibo.com/u/2843849155">青蛙奥利奥</a></p>
+</li>
+<li>
+<p>七筒头像：<a href="https://weibo.com/u/2843849155">青蛙奥利奥</a></p>
+</li>
+<li>
+<p>Maverick角色设计：<a href="https://weibo.com/u/5163824559">凹布瑞</a></p>
+</li>
+<li>
+<p>里格斯先生角色设计：<a href="https://weibo.com/u/5163824559">凹布瑞</a></p>
+</li>
+<li>
+<p>克莱因先生角色设计：<a href="https://weibo.com/u/5163824559">凹布瑞</a></p>
+</li>
+<li>
+<p>七筒开放版图标：<a href="https://weibo.com/u/3095618097">苟砳砳</a></p>
+</li>
+<li>
+<p>麻将牌图标：<a href="https://zh.wikipedia.org/wiki/%E9%BA%BB%E5%B0%86">维基百科-麻将</a></p>
+</li>
+<li>
+<p>其他美术素材：由七筒开发组购买或者设计。</p>
+</li>
+</ul>
+<p>我们允许用户自由在使用七筒开放版时，修改上述非开源美术素材；允许基于上述形象进行二次创作；不支持用户在其他渠道流通这些非开源美术素材。</p>
+<h3 id="_10">涉及项目<a class="headerlink" href="#_10" title="Permanent link">🔗</a></h3>
+<ul>
+<li>
+<p>基于 AGPLv3 协议的 <a href="https://github.com/mamoe/mirai">Mirai</a></p>
+</li>
+<li>
+<p>基于 AGPLv3 协议的 <a href="https://github.com/GraiaProject/Ariadne">Ariadne</a></p>
+</li>
+<li>
+<p>基于 AGPLv3 协议的 <a href="https://github.com/KadokawaR/Chitung-public">Chitung-public</a></p>
+</li>
+<li>
+<p>Shibes as a service <a href="">Shibe.online</a></p>
+</li>
+<li>
+<p>DaaS(Dog-as-a-Service) <a href="">Dog.ceo</a></p>
+</li>
+<li>
+<p>Hello World, This Is Dog <a href="">random.dog</a></p>
+</li>
+</ul>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": ".", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.5e67fbfe.min.js"}</script>
+    
+    
+      <script src="assets/javascripts/bundle.e87a5f81.min.js"></script>
+      
+    
+  </body>
+</html>
