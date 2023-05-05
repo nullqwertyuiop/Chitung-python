@@ -50,10 +50,10 @@ class RCConfig:
 
 @config("chitung.nest.cc")
 class CCConfig:
-    joinGroupText: str = "很高兴为您服务。"
-    rejectGroupText: str = "抱歉，机器人暂时不接受加群请求。"
-    onlineText: str = "机器人已经上线。"
-    welcomeText: str = "欢迎。"
-    permissionChangedText: str = "谢谢，各位将获得更多的乐趣。"
-    groupNameChangedText: str = "好名字。"
-    nudgeText: str = "啥事？"
+    join_group_text: str = "很高兴为您服务。"
+    reject_group_text: str = "抱歉，机器人暂时不接受加群请求。"
+    online_text: str = "机器人已经上线。"
+    welcome_text: str = "欢迎。"
+    permission_changed_text: str = "谢谢，各位将获得更多的乐趣。"
+    group_name_changed_text: str = "好名字。"
+    nudge_text: str = "啥事？"
