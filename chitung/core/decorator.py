@@ -1,4 +1,5 @@
-from typing import Literal, NoReturn, TypeVar
+from enum import Enum
+from typing import NoReturn, TypeVar
 
 from graia.broadcast import ExecutionStop
 from graia.broadcast.builtin.decorators import Depend
@@ -8,14 +9,21 @@ from loguru import logger
 
 from chitung.core.config import FriendFCConfig, GroupFCConfig, RCConfig
 
-FuncType = Literal["fish", "casino", "responder", "lottery", "game"]
 _T = TypeVar("_T", bound=MessageEvent)
+
+
+class FunctionType(Enum):
+    RESPONDER = "responder"
+    CASINO = "casino"
+    FISH = "fish"
+    LOTTERY = "lottery"
+    GAME = "game"
 
 
 class Switch:
     @classmethod
     def check(
-        cls, event_type: type[_T], category: FuncType, *, show_log: bool = True
+        cls, event_type: type[_T], category: FunctionType, *, show_log: bool = True
     ) -> Depend:
         is_group = event_type == GroupMessage
 
@@ -26,7 +34,7 @@ class Switch:
                 cls._check_fc(category, is_group)
             except ExecutionStop as e:
                 if show_log:
-                    logger.warning(f"[Switch] {category} 未开启")
+                    logger.warning(f"[Switch] {category.value} 未开启")
                 raise ExecutionStop() from e
 
         return Depend(judge)
@@ -39,7 +47,7 @@ class Switch:
             raise ExecutionStop()
 
     @staticmethod
-    def _check_fc(category: FuncType, is_group: bool) -> NoReturn:
+    def _check_fc(category: FunctionType, is_group: bool) -> NoReturn:
         fc_config = create(GroupFCConfig) if is_group else create(FriendFCConfig)
-        if not getattr(fc_config, category, False):
+        if not getattr(fc_config, category.value, False):
             raise ExecutionStop()
