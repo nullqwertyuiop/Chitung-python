@@ -48,7 +48,7 @@ def get_all_names() -> set[str]:
     return names
 
 
-REGEX_STR = rf"^/?[Oo][Kk] ({'|'.join(get_all_names())})$"
+REGEX_STR = rf"^(?:\/|(?:\/?[Oo][Kk] ?))({'|'.join(get_all_names())})$"
 
 
 @listen(GroupMessage)

@@ -1,4 +1,3 @@
-import re
 from io import BytesIO
 from pathlib import Path
 
@@ -21,7 +20,7 @@ channel = Channel.current()
 
 @listen(GroupMessage)
 @decorate(
-    MatchRegex(r"^/?[Oo][Kk] [Ww]inner", re.DOTALL),
+    MatchRegex(r"^(?:\/|(?:\/?[Oo][Kk] ?))winner$"),
     Switch.check(GroupMessage, FunctionType.LOTTERY),
 )
 async def winner_handler(client: Client, group: Group, member: Member):
