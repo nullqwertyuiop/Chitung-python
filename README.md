@@ -68,3 +68,5 @@ Chitung-public 项目的开发者们：
 本项目参考了以下项目：
 
 - [Melchior](https://github.com/nullqwertyuiop/Melchior)
+
+- [Eric](https://github.com/ProjectNu11/Eric)
