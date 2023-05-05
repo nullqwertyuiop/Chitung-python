@@ -11,6 +11,7 @@ dependencies = [
     "graia-broadcast>=0.19.2",
     "creart-graia>=0.1.5",
     "kayaku>=0.5.2",
+    "pillow>=9.5.0",
 ]
 requires-python = ">=3.10,<4.0"
 license = { text = "AGPL-3.0 License" }
