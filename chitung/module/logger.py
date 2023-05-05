@@ -1,5 +1,5 @@
 from graia.amnesia.message import MessageChain
-from graiax.shortcut import listen
+from graiax.shortcut import listen, priority
 from ichika.client import Client
 from ichika.core import Friend, Group, Member
 from ichika.graia.event import FriendMessage, GroupMessage, TempMessage
@@ -16,6 +16,7 @@ def _safe_display(content: str) -> str:
 
 
 @listen(GroupMessage, TempMessage)
+@priority(0)
 async def log_group_message(
     client: Client,
     group: Group,
@@ -31,6 +32,7 @@ async def log_group_message(
 
 
 @listen(FriendMessage)
+@priority(0)
 async def log_friend_message(client: Client, sender: Friend, content: MessageChain):
     seg = f"{ACCOUNT_SEG}: [RECV][{FRIEND_SEG}] -> {{content}}"
     logger.info(
