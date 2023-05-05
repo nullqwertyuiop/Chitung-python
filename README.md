@@ -39,9 +39,7 @@ This project aims to provide users with a lite and open version of Chitung.
 
 ### 涉及项目
 
-- 基于 AGPLv3 协议的 [Mirai](https://github.com/mamoe/mirai)
-
-- 基于 AGPLv3 协议的 [Ariadne](https://github.com/GraiaProject/Ariadne)
+- 基于 AGPLv3 协议的 [Ichika](https://github.com/BlueGlassBlock/Ichika)
 
 - 基于 AGPLv3 协议的 [Chitung-public](https://github.com/KadokawaR/Chitung-public)
 
@@ -50,3 +48,23 @@ This project aims to provide users with a lite and open version of Chitung.
 - DaaS(Dog-as-a-Service) [Dog.ceo]()
 
 - Hello World, This Is Dog [random.dog]()
+
+## 鸣谢
+
+Chitung-public 项目的开发者们：
+
+- [KadokawaR](https://github.com/KadokawaR)
+
+- [MarbleGateKeeper](https://github.com/MarbleGateKeeper)
+
+本项目的开发者们：
+
+- [nullqwertyuiop](https://github.com/nullqwertyuiop)
+
+- [Ishikawa_Kaito](https://github.com/Ishikawa-Kaito)
+
+- [霖念](https://github.com/Little-LinNian)
+
+本项目参考了以下项目：
+
+- [Melchior](https://github.com/nullqwertyuiop/Melchior)
