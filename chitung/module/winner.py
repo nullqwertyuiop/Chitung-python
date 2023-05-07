@@ -1,3 +1,4 @@
+from datetime import datetime
 from io import BytesIO
 from pathlib import Path
 
@@ -7,7 +8,7 @@ from graia.saya import Channel
 from graiax.shortcut import decorate, listen
 from graiax.shortcut.text_parser import MatchRegex
 from ichika.client import Client
-from ichika.core import Group, Member
+from ichika.core import Group
 from ichika.graia.event import GroupMessage
 from ichika.message.elements import Image
 from PIL import Image as PillowImage
@@ -23,12 +24,25 @@ channel = Channel.current()
     MatchRegex(r"^(?:\/|(?:\/?[Oo][Kk] ?))winner$"),
     Switch.check(GroupMessage, FunctionType.LOTTERY),
 )
-async def winner_handler(client: Client, group: Group, member: Member):
+async def winner_handler(client: Client, group: Group):
+    member_list = await client.get_member_list(group.uin)
+    now = datetime.now()
+    guy_of_the_day = member_list[
+        int(
+            (now.year + now.month * 10000 + now.day * 1000000)
+            * 100000000000
+            / group.uin
+            % len(member_list)
+        )
+    ]
+    name = guy_of_the_day.card_name or guy_of_the_day.nickname
     await client.send_group_message(
         group.uin,
-        MessageChain([Text(f"Ok Winner! {member.card_name}\n\n（框架还没支持获取群员列表所以先这样了）")]),
+        MessageChain([Text(f"Ok Winner! {name}")]),
     )
-    avatar = PillowImage.open(BytesIO(await get_avatar(member.uin))).resize((512, 512))
+    avatar = PillowImage.open(BytesIO(await get_avatar(guy_of_the_day.uin))).resize(
+        (512, 512)
+    )
     base = PillowImage.open(Path("chitung") / "assets" / "winner" / "wanted.jpg")
     base.paste(avatar, (94, 251))
     output = BytesIO()
