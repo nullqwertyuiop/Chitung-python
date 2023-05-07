@@ -5,6 +5,8 @@ import kayaku
 from creart import it
 from graia.broadcast import Broadcast
 from graia.saya import Saya
+from graia.saya.builtins.broadcast import BroadcastBehaviour
+from graia.scheduler.saya import GraiaSchedulerBehaviour
 from ichika.graia import IchikaComponent
 from ichika.login import PathCredentialStore
 from launart import Launart, Launchable
@@ -71,6 +73,7 @@ class ChitungServiceEssential(Launchable):
     @staticmethod
     def _saya_require():
         saya = it(Saya)
+        saya.install_behaviours(it(BroadcastBehaviour), it(GraiaSchedulerBehaviour))
         path = Path("chitung") / "module"
         with saya.module_context():
             for module in pkgutil.iter_modules([str(path)]):
