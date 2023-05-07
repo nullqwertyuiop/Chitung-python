@@ -11,6 +11,9 @@ This project aims to provide users with a lite and open version of Chitung.
 
 ### - 基于 Ichika 框架的QQ机器人
 
+⚠ 本项目目前依赖于 `Ichika` 的最新 CI 发布版，锁文件中的版本号可能不是最新的。
+如在目前使用出现问题，请尝试安装 `Ichika` 的最新 CI 发布版 wheel 包。
+
 本项目基于七筒开放版与七筒本体开发，由七筒爱好者维护，旨在为用户提供可于 Python 环境使用的开放版七筒插件。
 
 ## 版权
