@@ -25,8 +25,7 @@ class _C4FlagStore:
     Switch.check(GroupMessage, FunctionType.LOTTERY),
 )
 async def c4_handler(client: Client, group: Group, member: Member):
-    admins = await client.get_group_admins(group.uin)
-    if client.uin not in {x[0] for x in admins}:
+    if (await client.get_member(group.uin, client.uin)).permission == 0:
         return await client.send_group_message(
             group.uin, MessageChain([Text("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。")])
         )
