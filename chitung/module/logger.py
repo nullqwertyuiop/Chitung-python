@@ -7,7 +7,7 @@ from loguru import logger
 
 ACCOUNT_SEG = "{client.uin}"
 GROUP_SEG = "{group.name}({group.uin})"
-MEMBER_SEG = "{sender.card_name}({sender.uin})"
+MEMBER_SEG = "{name}({sender.uin})"
 FRIEND_SEG = "{sender.nick}({sender.uin})"
 
 
@@ -24,9 +24,12 @@ async def log_group_message(
     content: MessageChain,
 ):
     seg = f"{ACCOUNT_SEG}: [RECV][{GROUP_SEG}] {MEMBER_SEG} -> {{content}}"
+    name = sender.card_name or sender.nickname
     logger.info(
         _safe_display(
-            seg.format(client=client, group=group, sender=sender, content=content)
+            seg.format(
+                client=client, group=group, name=name, sender=sender, content=content
+            )
         )
     )
 
