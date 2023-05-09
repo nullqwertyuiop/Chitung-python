@@ -25,10 +25,10 @@ def seed(supplicant: int):
         random.seed()
 
 
-def build_chain(supplicant: int, is_group: bool) -> MessageChain:
+def build_chain(supplicant: int, display: str, is_group: bool) -> MessageChain:
     chain = []
     if is_group:
-        chain.extend([At(target=supplicant), Text(" ")])
+        chain.extend([At(target=supplicant, display=display), Text(" ")])
 
     if random.random() <= 0.02:
         chain.extend(
@@ -78,7 +78,9 @@ def build_chain(supplicant: int, is_group: bool) -> MessageChain:
     Switch.check(GroupMessage, FunctionType.RESPONDER),
 )
 async def fortune_teller_group_handler(client: Client, member: Member, group: Group):
-    await client.send_group_message(group.uin, build_chain(member.uin, True))
+    await client.send_group_message(
+        group.uin, build_chain(member.uin, member.card_name, True)
+    )
 
 
 @listen(FriendMessage)
@@ -87,7 +89,9 @@ async def fortune_teller_group_handler(client: Client, member: Member, group: Gr
     Switch.check(FriendMessage, FunctionType.RESPONDER),
 )
 async def fortune_teller_friend_handler(client: Client, friend: Friend):
-    await client.send_friend_message(friend.uin, build_chain(friend.uin, False))
+    await client.send_friend_message(
+        friend.uin, build_chain(friend.uin, friend.nick, False)
+    )
 
 
 # <editor-fold desc="Texts">
