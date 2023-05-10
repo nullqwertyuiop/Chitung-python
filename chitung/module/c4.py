@@ -42,7 +42,7 @@ async def c4_handler(client: Client, group: Group, member: Member):
             group.uin,
             MessageChain(
                 [
-                    At(target=member.uin, display=member.card_name or member.nickname),
+                    At(target=member.uin, display=f"@{member.card_name}"),
                     Text(text=" 成功触发了C4！大家一起恭喜TA！"),
                 ]
             ),

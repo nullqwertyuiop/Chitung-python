@@ -28,7 +28,7 @@ def seed(supplicant: int):
 def build_chain(supplicant: int, display: str, is_group: bool) -> MessageChain:
     chain = []
     if is_group:
-        chain.extend([At(target=supplicant, display=display), Text(" ")])
+        chain.extend([At(target=supplicant, display=f"@{display}"), Text(" ")])
 
     if random.random() <= 0.02:
         chain.extend(
