@@ -3,11 +3,12 @@ from typing import NoReturn, TypeVar
 
 from graia.broadcast import ExecutionStop
 from graia.broadcast.builtin.decorators import Depend
+from ichika.core import Friend, Member
 from ichika.graia.event import FriendMessage, GroupMessage, MessageEvent
 from kayaku import create
 from loguru import logger
 
-from chitung.core.config import FriendFCConfig, GroupFCConfig, RCConfig
+from chitung.core.config import ChitungConfig, FriendFCConfig, GroupFCConfig, RCConfig
 
 _T = TypeVar("_T", bound=MessageEvent)
 
@@ -47,3 +48,16 @@ class Switch:
         fc_config = create(GroupFCConfig) if is_group else create(FriendFCConfig)
         if not getattr(fc_config, category.value, False):
             raise ExecutionStop()
+
+
+class Permission:
+    @classmethod
+    def owner(cls, *, show_log: bool = True) -> Depend:
+        async def judge(sender: Member | Friend) -> NoReturn:
+            config: ChitungConfig = create(ChitungConfig)
+            if sender.uin not in config.admin_id:
+                if show_log:
+                    logger.warning(f"[Permission] {sender} 不是机器人所有者")
+                raise ExecutionStop()
+
+        return Depend(judge)
