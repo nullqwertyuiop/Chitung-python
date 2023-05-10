@@ -75,7 +75,7 @@ def build_chain(supplicant: int, display: str, is_group: bool) -> MessageChain:
 @listen(GroupMessage)
 @decorate(
     MatchRegex(r"^.*(求签|麻将).*$", re.DOTALL),
-    Switch.check(GroupMessage, FunctionType.RESPONDER),
+    Switch.check(FunctionType.RESPONDER),
 )
 async def fortune_teller_group_handler(client: Client, member: Member, group: Group):
     await client.send_group_message(
@@ -86,7 +86,7 @@ async def fortune_teller_group_handler(client: Client, member: Member, group: Gr
 @listen(FriendMessage)
 @decorate(
     MatchRegex(r"^.*(求签|麻将).*$", re.DOTALL),
-    Switch.check(FriendMessage, FunctionType.RESPONDER),
+    Switch.check(FunctionType.RESPONDER),
 )
 async def fortune_teller_friend_handler(client: Client, friend: Friend):
     await client.send_friend_message(

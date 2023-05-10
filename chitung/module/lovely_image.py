@@ -52,7 +52,7 @@ REGEX_STR = rf"^(?:\/|(?:\/?[Oo][Kk] ?))({'|'.join(get_all_names())})$"
 
 
 @listen(GroupMessage)
-@decorate(MatchRegex(REGEX_STR), Switch.check(GroupMessage, FunctionType.RESPONDER))
+@decorate(MatchRegex(REGEX_STR), Switch.check(FunctionType.RESPONDER))
 async def group_animal_handler(client: Client, group: Group, content: MessageChain):
     key, animal_name = get_animal_name(re.search(REGEX_STR, str(content))[1])
     await client.send_group_message(
@@ -62,7 +62,7 @@ async def group_animal_handler(client: Client, group: Group, content: MessageCha
 
 
 @listen(FriendMessage)
-@decorate(MatchRegex(REGEX_STR), Switch.check(FriendMessage, FunctionType.RESPONDER))
+@decorate(MatchRegex(REGEX_STR), Switch.check(FunctionType.RESPONDER))
 async def friend_animal_handler(client: Client, friend: Friend, content: MessageChain):
     key, animal_name = get_animal_name(re.search(REGEX_STR, str(content))[1])
     await client.send_group_message(

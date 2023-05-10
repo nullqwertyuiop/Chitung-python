@@ -22,7 +22,7 @@ class _C4FlagStore:
 @listen(GroupMessage)
 @decorate(
     MatchRegex(r"^(?:\/|(?:\/?[Oo][Kk] ?))c4"),
-    Switch.check(GroupMessage, FunctionType.LOTTERY),
+    Switch.check(FunctionType.LOTTERY),
 )
 async def c4_handler(client: Client, group: Group, member: Member):
     if (await client.get_member(group.uin, client.uin)).permission not in (1, 2):

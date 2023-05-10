@@ -3,7 +3,7 @@ from typing import NoReturn, TypeVar
 
 from graia.broadcast import ExecutionStop
 from graia.broadcast.builtin.decorators import Depend
-from ichika.graia.event import GroupMessage, MessageEvent
+from ichika.graia.event import FriendMessage, GroupMessage, MessageEvent
 from kayaku import create
 from loguru import logger
 
@@ -22,13 +22,9 @@ class FunctionType(Enum):
 
 class Switch:
     @classmethod
-    def check(
-        cls, event_type: type[_T], category: FunctionType, *, show_log: bool = True
-    ) -> Depend:
-        is_group = event_type == GroupMessage
-
-        async def judge(_: event_type) -> NoReturn:
-            # Doesn't support UnionType dispatching yet :(
+    def check(cls, category: FunctionType, *, show_log: bool = True) -> Depend:
+        async def judge(event: GroupMessage | FriendMessage) -> NoReturn:
+            is_group = isinstance(event, GroupMessage)
             try:
                 cls._check_rc(is_group)
                 cls._check_fc(category, is_group)

@@ -14,7 +14,7 @@ from chitung.core.decorator import FunctionType, Switch
 @listen(GroupMessage)
 @decorate(
     MatchRegex(r"^/help$"),
-    Switch.check(GroupMessage, FunctionType.RESPONDER),
+    Switch.check(FunctionType.RESPONDER),
 )
 async def group_help_image_handler(client: Client, group: Group):
     await client.send_group_message(
@@ -26,7 +26,7 @@ async def group_help_image_handler(client: Client, group: Group):
 @listen(FriendMessage)
 @decorate(
     MatchRegex(r"^/help$"),
-    Switch.check(FriendMessage, FunctionType.RESPONDER),
+    Switch.check(FunctionType.RESPONDER),
 )
 async def friend_help_image_handler(client: Client, friend: Friend):
     await client.send_friend_message(

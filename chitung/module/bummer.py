@@ -17,7 +17,7 @@ _lock = Lock()
 @listen(GroupMessage)
 @decorate(
     MatchRegex(r"^(?:\/|(?:\/?[Oo][Kk] ?))bummer"),
-    Switch.check(GroupMessage, FunctionType.LOTTERY),
+    Switch.check(FunctionType.LOTTERY),
 )
 async def bummer_handler(client: Client, group: Group, member: Member):
     async with _lock:

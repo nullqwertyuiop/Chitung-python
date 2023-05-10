@@ -16,7 +16,7 @@ SINGLE_REGEX_STR = r"(?:[./][Dd](?:ice)? ?)([1-9]\d{0,7})"
 @listen(GroupMessage)
 @decorate(
     MatchRegex(rf"^{SINGLE_REGEX_STR}$"),
-    Switch.check(GroupMessage, FunctionType.RESPONDER),
+    Switch.check(FunctionType.RESPONDER),
 )
 async def single_dice_handler(client: Client, group: Group, content: MessageChain):
     faces = int(re.search(SINGLE_REGEX_STR, str(content))[1])
@@ -32,7 +32,7 @@ DND_REGEX_STR = r"\.([1-9]\d{0,2})[Dd][1-9]\d{0,7}"
 @listen(GroupMessage)
 @decorate(
     MatchRegex(rf"^{DND_REGEX_STR}$"),
-    Switch.check(GroupMessage, FunctionType.RESPONDER),
+    Switch.check(FunctionType.RESPONDER),
 )
 async def dnd_dice_handler(client: Client, group: Group, content: MessageChain):
     times = int(re.search(DND_REGEX_STR, str(content))[1])

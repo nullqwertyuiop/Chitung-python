@@ -22,7 +22,7 @@ channel = Channel.current()
 @listen(GroupMessage)
 @decorate(
     MatchRegex(r"^(?:\/|(?:\/?[Oo][Kk] ?))winner$"),
-    Switch.check(GroupMessage, FunctionType.LOTTERY),
+    Switch.check(FunctionType.LOTTERY),
 )
 async def winner_handler(client: Client, group: Group):
     member_list = await client.get_member_list(group.uin)
