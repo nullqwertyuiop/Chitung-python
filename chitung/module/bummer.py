@@ -21,6 +21,9 @@ _lock = Lock()
 )
 async def bummer_handler(client: Client, group: Group, member: Member):
     async with _lock:
+        if (await client.get_member(group.uin, member.uin)).mute_timestamp != 0:
+            # 有人想玩霰弹枪，先给他 return 了
+            return
         if (await client.get_member(group.uin, client.uin)).permission not in (1, 2):
             return await client.send_group_message(
                 group.uin, MessageChain([Text("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。")])
