@@ -6,7 +6,7 @@ authors = [
     { name = "nullqwertyuiop", email = "null@member.fsf.org" },
 ]
 dependencies = [
-    "ichika>=0.0.5",
+    "ichika>=0.0.6",
     "graiax-shortcut>=0.2.1",
     "graia-broadcast>=0.19.2",
     "creart-graia>=0.1.5",
