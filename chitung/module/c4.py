@@ -11,6 +11,7 @@ from ichika.client import Client
 from ichika.core import Group, Member
 from ichika.graia.event import GroupMessage
 from ichika.message.elements import At
+from ichika.structs import GroupPermission
 
 from chitung.core.decorator import FunctionType, Switch
 from chitung.core.util import send_message
@@ -26,7 +27,9 @@ class _C4FlagStore:
     Switch.check(FunctionType.LOTTERY),
 )
 async def c4_handler(client: Client, group: Group, member: Member):
-    if (await client.get_member(group.uin, client.uin)).permission not in (1, 2):
+    if (
+        await client.get_member(group.uin, client.uin)
+    ).permission == GroupPermission.Member:
         return await send_message(
             client, group, MessageChain([Text("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。")])
         )
