@@ -15,6 +15,7 @@ from PIL import Image as PillowImage
 
 from chitung.core.decorator import FunctionType, Switch
 from chitung.core.session import SessionContainer
+from chitung.core.util import send_message
 
 channel = Channel.current()
 
@@ -36,8 +37,9 @@ async def winner_handler(client: Client, group: Group):
         )
     ]
     name = guy_of_the_day.card_name or guy_of_the_day.nickname
-    await client.send_group_message(
-        group.uin,
+    await send_message(
+        client,
+        group,
         MessageChain([Text(f"Ok Winner! {name}")]),
     )
     avatar = PillowImage.open(BytesIO(await get_avatar(guy_of_the_day.uin))).resize(
@@ -47,8 +49,9 @@ async def winner_handler(client: Client, group: Group):
     base.paste(avatar, (94, 251))
     output = BytesIO()
     base.save(output, "jpeg")
-    await client.send_group_message(
-        group.uin,
+    await send_message(
+        client,
+        group,
         MessageChain(
             [
                 Image.build(output.getvalue()),

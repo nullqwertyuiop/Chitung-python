@@ -13,6 +13,7 @@ from ichika.graia.event import GroupMessage
 from ichika.message.elements import At
 
 from chitung.core.decorator import FunctionType, Switch
+from chitung.core.util import send_message
 
 
 class _C4FlagStore:
@@ -26,20 +27,21 @@ class _C4FlagStore:
 )
 async def c4_handler(client: Client, group: Group, member: Member):
     if (await client.get_member(group.uin, client.uin)).permission not in (1, 2):
-        return await client.send_group_message(
-            group.uin, MessageChain([Text("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。")])
+        return await send_message(
+            client, group, MessageChain([Text("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。")])
         )
     if group.uin in _C4FlagStore.store:
-        return await client.send_group_message(
-            group.uin, MessageChain([Text("今日的C4已经被触发过啦！请明天再来尝试作死！")])
+        return await send_message(
+            client, group, MessageChain([Text("今日的C4已经被触发过啦！请明天再来尝试作死！")])
         )
     members = await client.get_member_list(group.uin)
     if random.random() < 1 / math.sqrt(len(members)):
         await client.mute_group(group.uin, True)
         _C4FlagStore.store.add(group.uin)
-        await client.send_group_message(group.uin, MessageChain([Text("中咧！")]))
-        await client.send_group_message(
-            group.uin,
+        await send_message(client, group, MessageChain([Text("中咧！")]))
+        await send_message(
+            client,
+            group,
             MessageChain(
                 [
                     At(target=member.uin, display=f"@{member.card_name}"),
@@ -50,7 +52,7 @@ async def c4_handler(client: Client, group: Group, member: Member):
         loop = asyncio.get_running_loop()
         loop.call_later(300, asyncio.create_task, _callback(client, group))
     else:
-        await client.send_group_message(group.uin, MessageChain([Text("没有中！")]))
+        await send_message(client, group, MessageChain([Text("没有中！")]))
 
 
 async def _callback(client: Client, group: Group):

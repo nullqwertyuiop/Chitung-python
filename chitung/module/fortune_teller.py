@@ -13,6 +13,7 @@ from ichika.graia.event import FriendMessage, GroupMessage
 from ichika.message.elements import At, Image
 
 from chitung.core.decorator import FunctionType, Switch
+from chitung.core.util import send_message
 
 
 @contextmanager
@@ -78,9 +79,7 @@ def build_chain(supplicant: int, display: str, is_group: bool) -> MessageChain:
     Switch.check(FunctionType.RESPONDER),
 )
 async def fortune_teller_group_handler(client: Client, member: Member, group: Group):
-    await client.send_group_message(
-        group.uin, build_chain(member.uin, member.card_name, True)
-    )
+    await send_message(client, group, build_chain(member.uin, member.card_name, True))
 
 
 @listen(FriendMessage)
@@ -89,9 +88,7 @@ async def fortune_teller_group_handler(client: Client, member: Member, group: Gr
     Switch.check(FunctionType.RESPONDER),
 )
 async def fortune_teller_friend_handler(client: Client, friend: Friend):
-    await client.send_friend_message(
-        friend.uin, build_chain(friend.uin, friend.nick, False)
-    )
+    await send_message(client, friend, build_chain(friend.uin, friend.nick, False))
 
 
 # <editor-fold desc="Texts">

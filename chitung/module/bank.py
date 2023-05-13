@@ -13,6 +13,7 @@ from ichika.graia.event import FriendMessage, GroupMessage
 from ichika.message.elements import At
 
 from chitung.core.decorator import FunctionType, Permission, Switch
+from chitung.core.util import send_message
 
 DATA_PATH = Path("data")
 VAULT_PATH = Path(DATA_PATH / "bank_record.json")
@@ -30,7 +31,7 @@ class Currency(Enum):
     DEFAULT = PUMPKIN_PESO
 
 
-class Vault:
+class SimpleVault:
     vault: dict[str, dict]
 
     def __init__(self):
@@ -176,7 +177,7 @@ class Vault:
             return False
 
 
-vault = Vault()
+vault = SimpleVault()
 
 
 @listen(GroupMessage)
@@ -185,8 +186,9 @@ vault = Vault()
     Switch.check(FunctionType.CASINO),
 )
 async def group_bank_handler(client: Client, member: Member, group: Group):
-    await client.send_group_message(
-        group.uin,
+    await send_message(
+        client,
+        group,
         vault.get_bank_msg(
             member,
             [Currency.PUMPKIN_PESO],
@@ -201,8 +203,9 @@ async def group_bank_handler(client: Client, member: Member, group: Group):
     Switch.check(FunctionType.CASINO),
 )
 async def friend_bank_handler(client: Client, friend: Friend):
-    await client.send_friend_message(
-        friend.uin,
+    await send_message(
+        client,
+        friend,
         vault.get_bank_msg(
             friend,
             [Currency.PUMPKIN_PESO],
@@ -211,32 +214,19 @@ async def friend_bank_handler(client: Client, friend: Friend):
     )
 
 
-@listen(GroupMessage)
+@listen(GroupMessage, FriendMessage)
 @decorate(
     MatchRegex(SET_PATTERN),
     Switch.check(FunctionType.CASINO),
     Permission.owner(),
 )
-async def group_bank_set_handler(client: Client, content: MessageChain, group: Group):
-    target = int(re.match(SET_PATTERN, str(content))[1])
-    amount = int(re.match(SET_PATTERN, str(content))[2])
-    vault.set_bank(target, amount, Currency.PUMPKIN_PESO)
-    await client.send_group_message(group.uin, MessageChain([Text("已设置成功。")]))
-
-
-@listen(FriendMessage)
-@decorate(
-    MatchRegex(SET_PATTERN),
-    Switch.check(FunctionType.CASINO),
-    Permission.owner(),
-)
-async def friend_bank_set_handler(
-    client: Client, content: MessageChain, friend: Friend
+async def group_bank_set_handler(
+    client: Client, content: MessageChain, target: Group | Friend
 ):
-    target = int(re.match(SET_PATTERN, str(content))[1])
+    supplicant = int(re.match(SET_PATTERN, str(content))[1])
     amount = int(re.match(SET_PATTERN, str(content))[2])
-    vault.set_bank(target, amount, Currency.PUMPKIN_PESO)
-    await client.send_friend_message(friend.uin, MessageChain([Text("已设置成功。")]))
+    vault.set_bank(supplicant, amount, Currency.PUMPKIN_PESO)
+    await send_message(client, target, MessageChain([Text("已设置成功。")]))
 
 
 @listen(GroupMessage, FriendMessage)
@@ -247,4 +237,4 @@ async def friend_bank_set_handler(
 )
 async def bank_laundry_handler(sender: Member | Friend, content: MessageChain):
     amount = int(re.match(LAUNDRY_PATTERN, str(content))[1])
-    vault.update_bank(sender.id, amount, Currency.PUMPKIN_PESO)
+    vault.update_bank(sender.uin, amount, Currency.PUMPKIN_PESO)

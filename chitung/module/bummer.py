@@ -10,6 +10,7 @@ from ichika.graia.event import GroupMessage
 from ichika.message.elements import At
 
 from chitung.core.decorator import FunctionType, Switch
+from chitung.core.util import send_message
 
 _lock = Lock()
 
@@ -25,23 +26,24 @@ async def bummer_handler(client: Client, group: Group, member: Member):
             # 有人想玩霰弹枪，先给他 return 了
             return
         if (await client.get_member(group.uin, client.uin)).permission not in (1, 2):
-            return await client.send_group_message(
-                group.uin, MessageChain([Text("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。")])
+            return await send_message(
+                client, group, MessageChain([Text("七筒目前还没有管理员权限，请授予七筒权限解锁更多功能。")])
             )
         member_list = await client.get_member_list(group.uin)
         if not (
             normal_members := [m for m in member_list if m.permission not in (1, 2)]
         ):
-            return await client.send_group_message(
-                group.uin, MessageChain([Text("全都是管理员的群你让我抽一个普通成员禁言？别闹。")])
+            return await send_message(
+                client, group, MessageChain([Text("全都是管理员的群你让我抽一个普通成员禁言？别闹。")])
             )
         victim: Member = random.choice(normal_members)
         await client.mute_member(group.uin, victim.uin, 120)
         if member.permission not in (1, 2):
             if member.uin != victim.uin:
                 await client.mute_member(group.uin, member.uin, 120)
-                await client.send_group_message(
-                    group.uin,
+                await send_message(
+                    client,
+                    group,
                     MessageChain(
                         [
                             Text(f"Ok Bummer! {victim.card_name}\n"),
@@ -52,8 +54,9 @@ async def bummer_handler(client: Client, group: Group, member: Member):
                     ),
                 )
                 return
-            return await client.send_group_message(
-                group.uin,
+            return await send_message(
+                client,
+                group,
                 MessageChain(
                     [
                         Text(
@@ -63,8 +66,9 @@ async def bummer_handler(client: Client, group: Group, member: Member):
                     ]
                 ),
             )
-        await client.send_group_message(
-            group.uin,
+        await send_message(
+            client,
+            group,
             MessageChain(
                 [
                     Text(f"Ok Bummer! {victim.card_name}\n管理员"),

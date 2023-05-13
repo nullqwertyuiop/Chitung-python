@@ -12,6 +12,7 @@ from ichika.message.elements import Image
 
 from chitung.core.decorator import FunctionType, Switch
 from chitung.core.session import SessionContainer
+from chitung.core.util import send_message
 
 channel = Channel.current()
 
@@ -51,24 +52,14 @@ def get_all_names() -> set[str]:
 REGEX_STR = rf"^(?:\/|(?:\/?[Oo][Kk] ?))({'|'.join(get_all_names())})$"
 
 
-@listen(GroupMessage)
+@listen(GroupMessage, FriendMessage)
 @decorate(MatchRegex(REGEX_STR), Switch.check(FunctionType.RESPONDER))
-async def group_animal_handler(client: Client, group: Group, content: MessageChain):
+async def animal_handler(client: Client, target: Group | Friend, content: MessageChain):
     key, animal_name = get_animal_name(re.search(REGEX_STR, str(content))[1])
-    await client.send_group_message(
-        group.uin, MessageChain([Text(f"正在获取{animal_name}>>>>>>>")])
+    await send_message(
+        client, target, MessageChain([Text(f"正在获取{animal_name}>>>>>>>")])
     )
-    await client.send_group_message(group.uin, await get_animal_image(key))
-
-
-@listen(FriendMessage)
-@decorate(MatchRegex(REGEX_STR), Switch.check(FunctionType.RESPONDER))
-async def friend_animal_handler(client: Client, friend: Friend, content: MessageChain):
-    key, animal_name = get_animal_name(re.search(REGEX_STR, str(content))[1])
-    await client.send_group_message(
-        friend.uin, MessageChain([Text(f"正在获取{animal_name}>>>>>>>")])
-    )
-    await client.send_group_message(friend.uin, await get_animal_image(key))
+    await send_message(client, target, await get_animal_image(key))
 
 
 class _GetImageFailed(Exception):
