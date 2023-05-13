@@ -20,7 +20,6 @@ class Currency(Enum):
     AKAONI = ("ak", "赤鬼金币")  # noqa
     ANTONINIANUS = ("an", "安东尼银币")  # noqa
     ADVENTURER_S = ("ad", "冒险家铜币")
-    DEFAULT = PUMPKIN_PESO
 
 
 class SimpleVault:
@@ -51,7 +50,7 @@ class SimpleVault:
             MessageChain: 包含用户余额信息的消息链
         """
 
-        c_list = c_list or [Currency.DEFAULT]
+        c_list = c_list or [Currency.PUMPKIN_PESO]
 
         user_bank = self.get_bank(sender, c_list, chs=True)
         msg_chain = (
@@ -83,7 +82,7 @@ class SimpleVault:
             dict[str, int]: 包含用户余额信息的字典
         """
 
-        c_list = c_list or [Currency.DEFAULT]
+        c_list = c_list or [Currency.PUMPKIN_PESO]
 
         if str(sender.uin) in self.vault.keys():
             return {
@@ -109,7 +108,7 @@ class SimpleVault:
             self.vault = json.loads(f.read())
 
     def update_bank(
-        self, supplicant: int, amount: int, c: Currency = Currency.DEFAULT
+        self, supplicant: int, amount: int, c: Currency = Currency.PUMPKIN_PESO
     ) -> int:
         """
         依据传入的 `supplicant`, `amount` 与 `c` 更新特定用户就某货币类型的余额
@@ -130,7 +129,7 @@ class SimpleVault:
         return self.vault[str(supplicant)][c.value[0]]
 
     def set_bank(
-        self, supplicant: int, amount: int, c: Currency = Currency.DEFAULT
+        self, supplicant: int, amount: int, c: Currency = Currency.PUMPKIN_PESO
     ) -> int:
         """
         依据传入的 `supplicant`, `amount` 与 `c` 设置特定用户就某货币类型的余额
@@ -151,7 +150,7 @@ class SimpleVault:
         return self.vault[str(supplicant)][c.value[0]]
 
     def has_enough_money(
-        self, sender: Member | Friend, amount: int, c: Currency = Currency.DEFAULT
+        self, sender: Member | Friend, amount: int, c: Currency = Currency.PUMPKIN_PESO
     ) -> bool:
         """
         依据传入的 `supplicant`, `amount` 与 `c` 检查特定用户是否有某货币类型的足够余额
