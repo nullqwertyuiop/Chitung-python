@@ -23,8 +23,8 @@ class ChitungServiceSession(Launchable):
     async def launch(self, _: Launart):
         async with self.stage("preparing"):
             it(SessionContainer).get()
-            logger.success("[ChitungService] 已保存配置文件")
+            logger.success(f"[{self.id}] 已初始化 Session 容器")
 
         async with self.stage("cleanup"):
             await it(SessionContainer).close_all()
-            logger.success("[ChitungService] 已保存配置文件")
+            logger.success(f"[{self.id}] 已关闭 Session 容器")

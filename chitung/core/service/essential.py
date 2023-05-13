@@ -83,8 +83,8 @@ class ChitungServiceEssential(Launchable):
         async with self.stage("preparing"):
             kayaku.bootstrap()
             kayaku.save_all()
-            logger.success("[ChitungService] 已保存配置文件")
+            logger.success(f"[{self.id}] 已保存配置文件")
 
         async with self.stage("cleanup"):
             kayaku.save_all()
-            logger.success("[ChitungService] 已保存配置文件")
+            logger.success(f"[{self.id}] 已保存配置文件")
