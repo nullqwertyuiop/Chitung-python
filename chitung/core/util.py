@@ -1,8 +1,12 @@
 from typing import overload
 
+from creart import it
 from graia.amnesia.message import MessageChain
+from graia.broadcast import Broadcast
 from ichika.client import Client
 from ichika.core import Friend, Group, RawMessageReceipt
+
+from chitung.core.event import ActiveMessage
 
 
 @overload
@@ -32,8 +36,12 @@ async def send_message(client, target, content) -> RawMessageReceipt:
         RawMessageReceipt: 消息回执
     """
     if isinstance(target, Group):
-        return await client.send_group_message(target.uin, content)
+        receipt = await client.send_group_message(target.uin, content)
     elif isinstance(target, Friend):
-        return await client.send_friend_message(target.uin, content)
+        receipt = await client.send_friend_message(target.uin, content)
     else:
         raise ValueError("target must be Group or Friend")
+    it(Broadcast).postEvent(
+        ActiveMessage(client=client, receipt=receipt, content=content)
+    )
+    return receipt
