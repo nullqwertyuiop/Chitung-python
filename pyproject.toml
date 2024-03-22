@@ -1,0 +1,46 @@
+[project]
+name = "Chitung"
+version = "0.1.0"
+description = "Public Version of Chitung rewritten in Python"
+authors = [
+    {name = "nullqwertyuiop", email = "null@member.fsf.org"},
+    {name = "yhluk", email = "luyinhao@outlook.com"},
+    {name = "MarbleGate", email = "marblegatekeeper@outlook.com"},
+]
+dependencies = [
+    "toml>=0.10.2",
+    "pydantic>=2.5.3",
+    "uvicorn>=0.24.0.post1",
+    "psutil>=5.9.6",
+    "graia-broadcast>=0.23.4",
+    "avilla-core>=1.0.0a17",
+    "graia-saya>=0.0.19",
+    "aiohttp>=3.9.1",
+    "avilla-twilight>=0.3.1",
+    "avilla-console>=1.0.0a19",
+    "kayaku>=0.5.4",
+    "avilla-onebot-v11>=1.0.0a19",
+    "richuru>=0.1.1",
+    "lxml>=5.1.0",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "AGPL-3.0 License"}
+
+[tool.pdm.build]
+includes = []
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.isort]
+profile = "black"
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit>=3.5.0",
+    "flake8>=6.1.0",
+    "isort>=5.12.0",
+    "black>=23.11.0",
+]

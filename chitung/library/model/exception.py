@@ -1,0 +1,2 @@
+class RequirementResolveFailed(Exception):
+    pass

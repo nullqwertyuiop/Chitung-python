@@ -1,0 +1,11 @@
+{
+    "identifier": "library.module.essential",
+    "name": "核心组件",
+    "version": "0.1.0",
+    "description": "维持 Chitung 的基本服务正常运行",
+    "author": [
+        "nullqwertyuiop"
+    ],
+    "dependencies": [],
+    "standards": []
+}
