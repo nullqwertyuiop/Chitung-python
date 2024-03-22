@@ -1,6 +1,7 @@
 from datetime import time
 from pathlib import Path
 
+import richuru
 from loguru import logger
 
 
@@ -20,3 +21,4 @@ def setup_logger(sink: Path, log_rotate: int, no_store_log: bool = False):
             encoding="utf-8",
             rotation=time(),
         )
+    richuru.install()

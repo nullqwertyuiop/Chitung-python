@@ -50,6 +50,9 @@ class VaultAccount(BaseModel):
     def set_balance(self, currency: Currency, amount: int):
         self.balance[currency] = amount
 
+    def has_enough(self, currency: Currency, amount: int) -> bool:
+        return self.get_balance(currency) >= amount
+
 
 class VaultLand(BaseModel):
     accounts: dict[str, VaultAccount]
@@ -94,6 +97,12 @@ class SimpleVault(BaseModel):
     async def set_balance(self, target: Selector, currency: Currency, amount: int):
         async with self._lock(target):
             self.get_account(target).set_balance(currency, amount)
+
+    async def has_enough(
+        self, target: Selector, currency: Currency, amount: int
+    ) -> bool:
+        async with self._lock(target):
+            return self.get_account(target).has_enough(currency, amount)
 
 
 class BankService(Service):
