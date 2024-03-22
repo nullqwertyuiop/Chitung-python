@@ -20,6 +20,6 @@ class ChitungAdvancedConfig:
 @config("library.main")
 class ChitungConfig:
     name: str = "Chitung"
-    description: str = "Yet another bot"
+    description: str = "Public Version of Chitung rewritten in Python"
     network: ChitungNetworkConfig = field(default_factory=ChitungNetworkConfig)
     advanced: ChitungAdvancedConfig = field(default_factory=ChitungAdvancedConfig)

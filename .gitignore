@@ -167,5 +167,5 @@ chitung/pyproject.toml
 chitung/log/
 chitung/config/
 chitung/data/
-chitung/module/
+module/
 chitung/standard/
